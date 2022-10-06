@@ -1,0 +1,9 @@
+{
+    "warehouse1" : {
+       "id" : "W01",
+       "designation" : "Anouca",
+       "address" : "R. Catassol 25, 4465-743",
+       "latitude": 41.216039,
+       "longitude": -8.614372
+    }
+ }
