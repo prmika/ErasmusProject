@@ -17,3 +17,9 @@ Warehouses and deliveries
 -Create
 -List
 -Edit
+-----------------------------
+Warehouses:
+-Identifier
+-Designation 
+-address
+-coordinates (latitude, longitude)
