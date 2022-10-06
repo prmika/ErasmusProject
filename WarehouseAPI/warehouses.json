@@ -2,8 +2,120 @@
     "warehouse1" : {
        "id" : "W01",
        "designation" : "Anouca",
-       "address" : "R. Catassol 25, 4465-743",
+       "address" : "R. Catassol 23, 4465-743",
        "latitude": 41.216039,
        "longitude": -8.614372
-    }
+    },
+    "warehouse2" : {
+      "id" : "W02",
+      "designation" : "Espinho",
+      "address" : "R. de Santa Cruz 100, 4500-646 Espinho, Portugal",
+      "latitude": 40.998238,
+      "longitude": -8.636043
+   },
+   "warehouse3" : {
+      "id" : "W03",
+      "designation" : "Gondomar",
+      "address" : "Av. Dr. Mário Soares 154, 4420-619 S. Cosme, Portugal",
+      "latitude": 41.145470,
+      "longitude": -8.528439
+   },
+   "warehouse4" : {
+      "id" : "W04",
+      "designation" : "Maia",
+      "address" : "Av. António Santos Leite 450, 4470-142 Maia, Portugal",
+      "latitude": 41.227782,
+      "longitude": -8.618974
+   },
+   "warehouse5" : {
+      "id" : "W05",
+      "designation" : "Matasinhos",
+      "address" : "R. Silva Cunha 120, 4450-222 Matosinhos, Portugal",
+      "latitude": 41.187135,
+      "longitude": -8.680835
+   },
+   "warehouse6" : {
+      "id" : "W06",
+      "designation" : "Oliveira de Azeméis",
+      "address" : "R. Dom Manuel II 84, 3720-230 Oliveira de Azeméis, Portugal",
+      "latitude": 40.839596,
+      "longitude": -8.480380
+   },
+   "warehouse7" : {
+      "id" : "W07",
+      "designation" : "Paredes",
+      "address" : "Pç de José Guilherme 37-7, 4580-130 Paredes, Portugal",
+      "latitude": 41.208515,
+      "longitude": -8.333023
+   },
+   "warehouse8" : {
+      "id" : "W08",
+      "designation" : "Porto",
+      "address" : "Rua da Boavista 242, 4050-041 Porto, Portugal",
+      "latitude": 41.155977,
+      "longitude": -8.617401
+   },
+   "warehouse9" : {
+      "id" : "W09",
+      "designation" : "Póvoa do Varzim",
+      "address" : "Praça Marquês de Pombal 71, 4490-442 Póvoa de Varzim, Portugal",
+      "latitude": 41.381653,
+      "longitude": -8.760906
+   },
+   "warehouse10" : {
+      "id" : "W010",
+      "designation" : "Santa Maria da Feira",
+      "address" : "R. Carvalhal 11, 4520-236 Santa Maria da Feira, Portugal",
+      "latitude": 40.921765,
+      "longitude": -8.547576
+   },
+   "warehouse11" : {
+      "id" : "W011",
+      "designation" : "Santo Tirso",
+      "address" : "Rua de Real 1, Santo Tirso, Portugal",
+      "latitude": 41.343246,
+      "longitude": -8.470299
+   },
+   "warehouse12" : {
+      "id" : "W012",
+      "designation" : "São João da Madeira",
+      "address" : "Av. Benjamim Araújo 242, 3700-059 São João da Madeira, Portugal",
+      "latitude": 40.900761,
+      "longitude": -8.490226
+   },
+   "warehouse13" : {
+      "id" : "W013",
+      "designation" : "Trofa",
+      "address" : "Av. Mosteiro 469, Trofa, Portugal",
+      "latitude": 41.330461,
+      "longitude": -8.555984
+   },
+   "warehouse14" : {
+      "id" : "W014",
+      "designation" : "Vale de Cambra",
+      "address" : "R. Rev. António Henriques Tavares 979, Vale de Cambra, Portugal",
+      "latitude": 40.840535,
+      "longitude": -8.394834
+   },
+   "warehouse15" : {
+      "id" : "W015",
+      "designation" : "Valongo",
+      "address" : "R. Padre Joaquim Lopes Reis 136, 4440-452 Valongo, Portugal",
+      "latitude": 41.188058,
+      "longitude": -8.498973
+   },
+   "warehouse16" : {
+      "id" : "W016",
+      "designation" : "Vila do Conde",
+      "address" : "R. Rainha Dona Leonor 61, 4480-754 Vila do Conde, Portugal",
+      "latitude": 41.355144,
+      "longitude": -8.746727
+   },
+   "warehouse17" : {
+      "id" : "W017",
+      "designation" : "Vila Nova de Gaia",
+      "address" : "R. Visc. das Devesas 794, 4430-999 Vila Nova de Gaia, Portugal",
+      "latitude": 41.123733,
+      "longitude": -8.615115
+   }
  }
