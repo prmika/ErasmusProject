@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "eed2819a-a813-4247-881e-9e68aa3ad8c5",
+		"name": "ElectricGo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Logistics (NodeJs)",
+			"item": [
+				{
+					"name": "GetAllTrucks",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "GetTruckById",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "AddTruck",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tare\": 29.70,\r\n    \"load_capacity\": 33.75,\r\n    \"max_battery_charge\": 43.7,\r\n    \"autonomy\": 32.74,\r\n    \"fast_charging_time\": 54.8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/trucks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"trucks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateTruck",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"f4c96eaa-4613-4b15-b138-2459f0849945\",\r\n    \"tare\": 29.70,\r\n    \"load_capacity\": 33.75,\r\n    \"max_battery_charge\": 43.7,\r\n    \"autonomy\": 32.74,\r\n    \"fast_charging_time\": 54.8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/trucks/f4c96eaa-4613-4b15-b138-2459f0849945",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"trucks",
+								"f4c96eaa-4613-4b15-b138-2459f0849945"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

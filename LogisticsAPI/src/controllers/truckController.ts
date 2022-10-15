@@ -23,7 +23,38 @@ export default class TruckController implements ITruckController {
             }
 
             const truckDTO = truckOrError.getValue();
-            return res.json(truckDTO).status(201);
+            return res.json(truckDTO).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
+
+    public async getAllTrucks(req: Request, res: Response, next: NextFunction) {
+        try {
+            const truckOrError = await this.truckServiceInstance.getAllTrucks() as Result<ITruckDTO[]>;
+
+            if (truckOrError.isFailure) {
+                return res.status(402).send();
+            }
+
+            const truckDTOs = truckOrError.getValue();
+            return res.json(truckDTOs).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
+
+    public async deleteAllTrucks(req: Request, res: Response, next: NextFunction) {
+        try {
+            const trueOrError = await this.truckServiceInstance.deleteAll() as Result<Boolean>;
+
+            if (trueOrError.isFailure) {
+                return res.status(400).send();
+            }
+
+            return res.json({"status": "All trucks are deleted"}).status(200);
         }
         catch (e) {
             return next(e);
@@ -47,7 +78,7 @@ export default class TruckController implements ITruckController {
 
     public async updateTruck(req: Request, res: Response, next: NextFunction) {
         try {
-            const truckOrError = await this.truckServiceInstance.updateTruck(req.body as ITruckDTO) as Result<ITruckDTO>;
+            const truckOrError = await this.truckServiceInstance.updateTruck(req.params.truckId, req.body as ITruckDTO) as Result<ITruckDTO>;
 
             if (truckOrError.isFailure) {
                 return res.status(404).send();

@@ -69,4 +69,16 @@ export default class TruckRepo implements ITruckRepo {
     else
       return null;
   }
+
+  public async findAll (): Promise<Truck[]> {
+    const truckRecords = await this.truckSchema.find({});
+    let truckRecordsMapped = [] as Truck[];
+    if( truckRecords != null) {
+      truckRecords.forEach(truck => truckRecordsMapped.push(TruckMap.toDomain(truck)))
+      return truckRecordsMapped;
+    }
+    else
+      return null;
+  }
+
 }

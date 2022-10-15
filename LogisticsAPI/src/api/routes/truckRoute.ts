@@ -2,16 +2,18 @@ import { Router } from 'express';
 import { celebrate, Joi } from 'celebrate';
 
 import { Container } from 'typedi';
-import ITruckController from '../../controllers/IControllers/ITruckController'; 
+import ITruckController from '../../controllers/IControllers/ITruckController';
 
 import config from "../../../config";
 
 const route = Router();
 
 export default (app: Router) => {
-  app.use('/trucks', route);
+  app.use('/v1/trucks', route);
 
   const ctrl = Container.get(config.controllers.truck.name) as ITruckController;
+
+  route.get('', (req, res, next) => ctrl.getAllTrucks(req, res, next));
 
   route.post('',
     celebrate({
@@ -23,9 +25,11 @@ export default (app: Router) => {
         fast_charging_time: Joi.number().required()
       })
     }),
-    (req, res, next) => ctrl.createTruck(req, res, next) );
+    (req, res, next) => ctrl.createTruck(req, res, next));
 
-  route.put('',
+  route.get('/:truckId', (req, res, next) => ctrl.getTruck(req, res, next));
+
+  route.put('/:truckId',
     celebrate({
       body: Joi.object({
         id: Joi.string().required(),
@@ -36,7 +40,7 @@ export default (app: Router) => {
         fast_charging_time: Joi.number().required()
       }),
     }),
-    (req, res, next) => ctrl.updateTruck(req, res, next) );
+    (req, res, next) => ctrl.updateTruck(req, res, next));
 
-  route.get('/:truckId',(req,res,next) => ctrl.getTruck(req,res,next))
+
 };
