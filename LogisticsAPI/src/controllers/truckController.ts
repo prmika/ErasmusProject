@@ -46,21 +46,6 @@ export default class TruckController implements ITruckController {
         }
     };
 
-    public async deleteAllTrucks(req: Request, res: Response, next: NextFunction) {
-        try {
-            const trueOrError = await this.truckServiceInstance.deleteAll() as Result<Boolean>;
-
-            if (trueOrError.isFailure) {
-                return res.status(400).send();
-            }
-
-            return res.json({"status": "All trucks are deleted"}).status(200);
-        }
-        catch (e) {
-            return next(e);
-        }
-    };
-
     public async createTruck(req: Request, res: Response, next: NextFunction) {
         try {
             const truckOrError = await this.truckServiceInstance.createTruck(req.body as ITruckDTO) as Result<ITruckDTO>;
