@@ -19,7 +19,7 @@ export default {
   /**
    * That long string from mlab
    */
-  databaseURL: process.env.MONGODB_URI || "mongodb://localhost:27017/electricgo",
+  databaseURL: process.env.MONGODB_URI || "mongodb+srv://dbAdmin:Lab5project2022@lab5project.9vyeml3.mongodb.net/electricgo",
   //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000/electricgo",
 
   /**
