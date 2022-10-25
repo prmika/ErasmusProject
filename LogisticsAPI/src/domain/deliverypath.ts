@@ -84,7 +84,7 @@ export class DeliveryPath extends AggregateRoot<DeliveryPathProps> {
         const used_battery = deliverypathDTO.used_battery;
         const extra_time_when_charging_required = deliverypathDTO.extra_time_when_charging_required;
 
-        if ((!!departure_warehouseId === false || departure_warehouseId === 0) && (!!destination_warehouseId === false || destination_warehouseId === 0) && (!!distance === false || distance === 0)
+        if ((!!departure_warehouseId === false || departure_warehouseId === "" || departure_warehouseId == undefined) && (!!destination_warehouseId === false || destination_warehouseId === "" || destination_warehouseId == undefined) && (!!distance === false || distance === 0)
             && (!!time === false || time === 0) && (!!used_battery === false || used_battery === 0) && (!!extra_time_when_charging_required === false || extra_time_when_charging_required === 0)) {
             return Result.fail<DeliveryPath>('Must provide all the delivery path properties!')
         } else {

@@ -16,6 +16,7 @@ export class DeliveryPathMap extends Mapper<DeliveryPath> {
             departure_warehouseId: deliverypath.departure_warehouseId,
             destination_warehouseId: deliverypath.destination_warehouseId,
             distance: deliverypath.distance,
+            time: deliverypath.time,
             used_battery: deliverypath.used_battery,
             extra_time_when_charging_required: deliverypath.extra_time_when_charging_required
         } as IDeliveryPathDTO;
@@ -35,11 +36,12 @@ export class DeliveryPathMap extends Mapper<DeliveryPath> {
     public static toPersistence (deliverypath: DeliveryPath): any {
         return {
             domainId: deliverypath.id.toString(),
-            tare: deliverypath.tare,
-            load_capacity: deliverypath.load_capacity,
-            max_battery_charge: deliverypath.max_battery_charge,
-            autonomy: deliverypath.autonomy,
-            fast_charging_time: deliverypath.fast_charging_time
+            departure_warehouseId: deliverypath.departure_warehouseId,
+            destination_warehouseId: deliverypath.destination_warehouseId,
+            distance: deliverypath.distance,
+            time: deliverypath.time,
+            used_battery: deliverypath.used_battery,
+            extra_time_when_charging_required: deliverypath.extra_time_when_charging_required
         }
     }
 }
