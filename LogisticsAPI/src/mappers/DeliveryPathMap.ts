@@ -4,7 +4,7 @@ import { Document, Model } from 'mongoose';
 import { IDeliveryPathPersistence } from '../dataschema/IDeliveryPathPersistence';
 
 import {IDeliveryPathDTO} from "../dto/IDeliveryPathDTO";
-import { DeliveryPath } from "../domain/DeliveryPath";
+import { DeliveryPath } from "../domain/deliverypath";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
