@@ -5,12 +5,11 @@ namespace DDDSample1.Domain.Warehouses
 {
     public class Warehouse : Entity<WarehouseId>, IAggregateRoot
     {
-
-        public string ID { get; private set; }
-        public string designaion { get; private set; }
-        public string address { get; private set; }
-        public double latitude { get; private set; }
-        public double longitude { get; private set; }
+        public string WarehouseNr { get; private set; }
+        public string Designation { get; private set; }
+        public string Address { get; private set; }
+        public double Latitude { get; private set; }
+        public double Longitude { get; private set; }
 
 
         private Warehouse()
@@ -18,13 +17,14 @@ namespace DDDSample1.Domain.Warehouses
             
         }
 
-        public Warehouse(string id, string des, string add, double lat, double longt)
+        public Warehouse(string warehouseNr, string des, string add, double lat, double longt)
         {
-            this.ID = id;
-            this.designaion = des;
-            this.address = add;
-            this.latitude = lat;
-            this.longitude = longt;
+            this.Id = new WarehouseId(Guid.NewGuid());
+            this.WarehouseNr = warehouseNr;
+            this.Designation = des;
+            this.Address = add;
+            this.Latitude = lat;
+            this.Longitude = longt;
         }
 
     }

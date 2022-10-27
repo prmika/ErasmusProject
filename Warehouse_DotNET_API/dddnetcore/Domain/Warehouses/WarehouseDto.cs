@@ -4,10 +4,11 @@ namespace DDDSample1.Domain.Warehouses
 {
     public class WarehouseDto
     {
-        public string ID { get; set; }
-        public string designaion { get; set; }
-        public string address { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
+        public Guid Id { get; set; }
+        public string WarehouseNr { get; set; }
+        public string Designation { get; set; }
+        public string Address { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

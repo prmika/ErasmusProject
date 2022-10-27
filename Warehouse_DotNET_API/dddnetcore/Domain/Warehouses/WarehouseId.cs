@@ -7,7 +7,9 @@ namespace DDDSample1.Domain.Warehouses
     public class WarehouseId : EntityId
     {
         [JsonConstructor]
-
+        public WarehouseId(Guid value) : base(value)
+        {
+        }
         public WarehouseId(String value) : base(value)
         {
         }

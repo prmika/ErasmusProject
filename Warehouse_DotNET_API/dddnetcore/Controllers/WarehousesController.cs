@@ -27,7 +27,7 @@ namespace DDDSample1.Controllers
 
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<WarehouseDto>> GetGetById(string id)
+        public async Task<ActionResult<WarehouseDto>> GetGetById(Guid id)
         {
             var war = await _service.GetByIdAsync(new WarehouseId(id));
 
@@ -41,19 +41,20 @@ namespace DDDSample1.Controllers
 
         // POST: api/Warehouses
         [HttpPost]
-        public async Task<ActionResult<WarehouseDto>> Create(CreatingWarehouseDto dto)
+        public async Task<ActionResult<WarehouseDto>> Create(WarehouseDto dto)
         {
+            
             var war = await _service.AddAsync(dto);
 
-            return CreatedAtAction(nameof(GetGetById), new { id = war.ID }, war);
+            return CreatedAtAction(nameof(GetGetById), new { Id = war.Id }, war);
         }
 
         
         // PUT: api/Warehouses/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<WarehouseDto>> Update(string id, WarehouseDto dto)
+        public async Task<ActionResult<WarehouseDto>> Update(Guid id, WarehouseDto dto)
         {
-            if (string.Compare(id,dto.ID)!=0)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
@@ -71,41 +72,6 @@ namespace DDDSample1.Controllers
             catch(BusinessRuleValidationException ex)
             {
                 return BadRequest(new {Message = ex.Message});
-            }
-        }
-
-        // Inactivate: api/Warehouses/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<WarehouseDto>> SoftDelete(string id)
-        {
-            var war = await _service.InactivateAsync(new WarehouseId(id));
-
-            if (war == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(war);
-        }
-        
-        // DELETE: api/Warehouses/5
-        [HttpDelete("{id}/hard")]
-        public async Task<ActionResult<WarehouseDto>> HardDelete(string id)
-        {
-            try
-            {
-                var war = await _service.DeleteAsync(new WarehouseId(id));
-
-                if (war == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(war);
-            }
-            catch(BusinessRuleValidationException ex)
-            {
-               return BadRequest(new {Message = ex.Message});
             }
         }
     }
