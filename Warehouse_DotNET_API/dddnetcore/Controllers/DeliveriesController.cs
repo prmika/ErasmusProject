@@ -27,7 +27,7 @@ namespace DDDSample1.Controllers
 
         // GET: api/Deliveries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DeliveryDto>> GetGetById(Guid id)
+        public async Task<ActionResult<DeliveryDto>> GetGetById(string id)
         {
             var deli = await _service.GetByIdAsync(new DeliveryId(id));
 
@@ -43,17 +43,25 @@ namespace DDDSample1.Controllers
         [HttpPost]
         public async Task<ActionResult<DeliveryDto>> Create(CreatingDeliveryDto dto)
         {
+            try
+            {
             var deli = await _service.AddAsync(dto);
 
             return CreatedAtAction(nameof(GetGetById), new { id = deli.Id }, deli);
+            }
+             catch(BusinessRuleValidationException ex)
+            {
+                return BadRequest(new {Message = ex.Message});
+            }
         }
 
         
         // PUT: api/Deliveries/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<DeliveryDto>> Update(Guid id, DeliveryDto dto)
+        public async Task<ActionResult<DeliveryDto>> Update(string id, DeliveryDto dto)
         {
-            if (id != dto.Id)
+            
+            if (id!= dto.Id)
             {
                 return BadRequest();
             }
@@ -76,7 +84,7 @@ namespace DDDSample1.Controllers
 
         // Inactivate: api/Deliveries/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<DeliveryDto>> SoftDelete(Guid id)
+        public async Task<ActionResult<DeliveryDto>> SoftDelete(string id)
         {
             var deli = await _service.InactivateAsync(new DeliveryId(id));
 
@@ -90,7 +98,7 @@ namespace DDDSample1.Controllers
         
         // DELETE: api/Deliveries/5
         [HttpDelete("{id}/hard")]
-        public async Task<ActionResult<DeliveryDto>> HardDelete(Guid id)
+        public async Task<ActionResult<DeliveryDto>> HardDelete(string id)
         {
             try
             {

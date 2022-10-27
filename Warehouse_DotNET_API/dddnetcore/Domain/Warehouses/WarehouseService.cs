@@ -20,7 +20,7 @@ namespace DDDSample1.Domain.Warehouses
         {
             var list = await this._repo.GetAllAsync();
 
-            List<WarehouseDto> listDto = list.ConvertAll<WarehouseDto>(war => new WarehouseDto { Id = war.Id.AsGuid(), WarehouseNr = war.WarehouseNr, Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude });
+            List<WarehouseDto> listDto = list.ConvertAll<WarehouseDto>(war => new WarehouseDto { Id = war.Id.AsString(), Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude });
 
             return listDto;
         }
@@ -32,18 +32,18 @@ namespace DDDSample1.Domain.Warehouses
             if (war == null)
                 return null;
 
-           return new WarehouseDto { Id = war.Id.AsGuid(), WarehouseNr = war.WarehouseNr, Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
+           return new WarehouseDto { Id = war.Id.AsString(), Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
         }
 
         public async Task<WarehouseDto> AddAsync(WarehouseDto dto)
         {
-            var war = new Warehouse(dto.WarehouseNr, dto.Designation, dto.Address, dto.Latitude, dto.Longitude);
+            var war = new Warehouse(dto.Id, dto.Designation, dto.Address, dto.Latitude, dto.Longitude);
 
             await this._repo.AddAsync(war);
 
             await this._unitOfWork.CommitAsync();
 
-            return new WarehouseDto { Id = war.Id.AsGuid(), WarehouseNr = war.WarehouseNr, Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
+            return new WarehouseDto { Id = war.Id.AsString(), Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
         }
 
         public async Task<WarehouseDto> UpdateAsync(WarehouseDto dto)
@@ -55,7 +55,7 @@ namespace DDDSample1.Domain.Warehouses
 
             await this._unitOfWork.CommitAsync();
 
-            return new WarehouseDto { Id = war.Id.AsGuid(), WarehouseNr = war.WarehouseNr, Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
+            return new WarehouseDto { Id = war.Id.AsString(),  Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
         }
 
     }

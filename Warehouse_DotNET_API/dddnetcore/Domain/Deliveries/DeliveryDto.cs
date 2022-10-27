@@ -6,15 +6,15 @@ namespace DDDSample1.Domain.Deliveries
     public class DeliveryDto
     {
         
-        public Guid Id { get;  set; }
-        public DateOnly deliveryDate {get;  set;}
+        public string Id { get;  set; }
+        public DateTime deliveryDate {get;  set;}
         public string weight { get;  set; }
-        public WarehouseId warehouseID { get;  set; }
-        public TimeOnly timeToPlace  { get;  set; }
-        public TimeOnly timeToPickup { get;  set; }
-    public DeliveryDto(Guid Id, DateOnly date, string mass, WarehouseId warehouseId, TimeOnly toPlace, TimeOnly toPickup)
+        public string warehouseID { get;  set; }
+        public DateTime timeToPlace  { get;  set; }
+        public DateTime timeToPickup { get;  set; }
+    public DeliveryDto(string code, DateTime date, string mass, string warehouseId, DateTime toPlace, DateTime toPickup)
     {
-        this.Id = Id;
+        this.Id = code;
         this.deliveryDate = date;
         this.weight = mass;
         this.warehouseID = warehouseId;

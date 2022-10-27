@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Warehouses;
+using Newtonsoft.Json.Linq;
 
 
 
@@ -13,17 +14,18 @@ namespace DDDSample1.Domain.Deliveries
         private readonly IDeliveryRepository _repo;
         private readonly IWarehouseRepository _repoWar;
 
-        public DeliveryService(IUnitOfWork unitOfWork, IDeliveryRepository repo)
+        public DeliveryService(IUnitOfWork unitOfWork, IDeliveryRepository repo, IWarehouseRepository repoWarehouses)
         {
             this._unitOfWork = unitOfWork;
             this._repo = repo;
+            this._repoWar = repoWarehouses;
         }
 
         public async Task<List<DeliveryDto>> GetAllAsync()
         {
             var list = await this._repo.GetAllAsync();
 
-            List<DeliveryDto> listDto = list.ConvertAll<DeliveryDto>(deli => new DeliveryDto(deli.Id.AsGuid(),deli.deliveryDate, deli.weight,deli.warehouseID, deli.timeToPlace, deli.timeToPickup));
+            List<DeliveryDto> listDto = list.ConvertAll<DeliveryDto>(deli => new DeliveryDto(deli.Id.AsString(), deli.deliveryDate, deli.weight,deli.warehouseID, deli.timeToPlace, deli.timeToPickup));
 
             return listDto;
         }
@@ -35,29 +37,31 @@ namespace DDDSample1.Domain.Deliveries
             if (deli == null)
                 return null;
 
-           return new DeliveryDto (deli.Id.AsGuid(), deli.deliveryDate,deli.weight, deli.warehouseID, deli.timeToPlace, deli.timeToPickup );
+           return new DeliveryDto (deli.Id.AsString(), deli.deliveryDate,deli.weight, deli.warehouseID, deli.timeToPlace, deli.timeToPickup );
         }
 
         public async Task<DeliveryDto> AddAsync(CreatingDeliveryDto dto)
         {
-            //await checkWarehouseIdAsync(dto.warehouseID);
-            var deli = new Delivery(dto.deliveryDate, dto.weight, dto.warehouseID, dto.timeToPlace, dto.timeToPickup);
+
+            //await checkWarehouseIdAsync(dto.warehouseID);//does not work...
+            var deli = new Delivery(dto.Id, dto.deliveryDate, dto.weight, dto.warehouseID, dto.timeToPlace, dto.timeToPickup);
 
             await this._repo.AddAsync(deli);
 
             await this._unitOfWork.CommitAsync();
 
-            return new DeliveryDto (deli.Id.AsGuid(),deli.deliveryDate, deli.weight, deli.warehouseID, deli.timeToPlace, deli.timeToPickup);
+            return new DeliveryDto (deli.Id.AsString(), deli.deliveryDate, deli.weight, deli.warehouseID, deli.timeToPlace, deli.timeToPickup);
         }
 
         public async Task<DeliveryDto> UpdateAsync(DeliveryDto dto)
         {
-            //await checkWarehouseIdAsync(dto.warehouseID);
+            //await checkWarehouseIdAsync(dto.warehouseID); //does not work...
             var deli = await this._repo.GetByIdAsync(new DeliveryId(dto.Id));
 
             if (deli == null)
                 return null;
 
+           
             deli.ChangeDeliveryDate(dto.deliveryDate);
             deli.ChangeWeight(dto.weight);
             deli.ChangeWarehouseId(dto.warehouseID);
@@ -66,7 +70,7 @@ namespace DDDSample1.Domain.Deliveries
 
             await this._unitOfWork.CommitAsync();
 
-            return new DeliveryDto(deli.Id.AsGuid(), deli.deliveryDate,deli.weight,  deli.warehouseID, deli.timeToPlace, deli.timeToPickup);
+            return new DeliveryDto(deli.Id.AsString(), deli.deliveryDate,deli.weight,  deli.warehouseID, deli.timeToPlace, deli.timeToPickup);
         }
 
         public async Task<DeliveryDto> InactivateAsync(DeliveryId id)
@@ -80,7 +84,7 @@ namespace DDDSample1.Domain.Deliveries
 
             await this._unitOfWork.CommitAsync();
 
-            return new DeliveryDto(deli.Id.AsGuid(), deli.deliveryDate,deli.weight, deli.warehouseID, deli.timeToPlace,  deli.timeToPickup );
+            return new DeliveryDto(deli.Id.AsString(), deli.deliveryDate,deli.weight, deli.warehouseID, deli.timeToPlace,  deli.timeToPickup );
         }
 
         public async Task<DeliveryDto> DeleteAsync(DeliveryId id)
@@ -93,15 +97,19 @@ namespace DDDSample1.Domain.Deliveries
             this._repo.Remove(deli);
             await this._unitOfWork.CommitAsync();
 
-            return new DeliveryDto(deli.Id.AsGuid(), deli.deliveryDate, deli.weight,deli.warehouseID,  deli.timeToPlace, deli.timeToPickup);
+            return new DeliveryDto(deli.Id.AsString(), deli.deliveryDate, deli.weight,deli.warehouseID,  deli.timeToPlace, deli.timeToPickup);
         }
         
-       /* private async Task checkWarehouseIdAsync(WarehouseId warehouseId)
+
+        //this does not work...
+        /*
+        private async Task checkWarehouseIdAsync(WarehouseId warehouseId)
         {
+            
            var war = await _repoWar.GetByIdAsync(warehouseId);
            if (war == null)
                 throw new BusinessRuleValidationException("Invalid Warehouse Id.");
-        }*/
+        }*/ 
         
     }
 }

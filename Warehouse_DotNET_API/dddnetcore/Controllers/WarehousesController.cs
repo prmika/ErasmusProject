@@ -27,7 +27,7 @@ namespace DDDSample1.Controllers
 
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<WarehouseDto>> GetGetById(Guid id)
+        public async Task<ActionResult<WarehouseDto>> GetGetById(string id)
         {
             var war = await _service.GetByIdAsync(new WarehouseId(id));
 
@@ -52,7 +52,7 @@ namespace DDDSample1.Controllers
         
         // PUT: api/Warehouses/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<WarehouseDto>> Update(Guid id, WarehouseDto dto)
+        public async Task<ActionResult<WarehouseDto>> Update(string id, WarehouseDto dto)
         {
             if (id != dto.Id)
             {

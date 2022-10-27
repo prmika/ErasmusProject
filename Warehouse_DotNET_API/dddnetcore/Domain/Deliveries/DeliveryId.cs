@@ -7,30 +7,19 @@ namespace DDDSample1.Domain.Deliveries
     public class DeliveryId : EntityId
     {
         [JsonConstructor]
-        public DeliveryId(Guid value) : base(value)
+        
+        public DeliveryId(String value):base(value)
         {
-        }
-        public DeliveryId(string value) : base(value)
-        {
-        }
 
-        override
-        protected Object createFromString(String text)
-        {
-            return new Guid(text);
         }
 
         override
-        public String AsString()
-        {
-            Guid obj = (Guid)base.ObjValue;
-            return obj.ToString();
+        protected  Object createFromString(String text){
+            return text;
         }
-
-
-        public Guid AsGuid()
-        {
-            return (Guid)base.ObjValue;
+        override
+        public String AsString(){
+            return (String) base.Value;
         }
     }
 }
