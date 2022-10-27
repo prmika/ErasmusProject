@@ -7,9 +7,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using DDDSample1.Infrastructure;
 using DDDSample1.Infrastructure.Warehouses;
+using DDDSample1.Infrastructure.Deliveries;
 using DDDSample1.Infrastructure.Shared;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Warehouses;
+using DDDSample1.Domain.Deliveries;
 
 namespace DDDSample1
 {
@@ -66,6 +68,9 @@ namespace DDDSample1
 
             services.AddTransient<IWarehouseRepository,WarehouseRepository>();
             services.AddTransient<WarehouseService>();
+            
+            services.AddTransient<IDeliveryRepository,DeliveryRepository>();
+            services.AddTransient<DeliveryService>();
 
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using DDDSample1.Domain.Shared;
-
+using DDDSample1.Domain.Warehouses;
+    
 namespace DDDSample1.Domain.Deliveries
 {
     public class Delivery : Entity<DeliveryId>, IAggregateRoot
@@ -8,8 +9,9 @@ namespace DDDSample1.Domain.Deliveries
 
     
         public DateOnly deliveryDate {get; private set;}
+
         public string weight { get; private set; }
-        public string warehouseID { get; private set; }
+        public WarehouseId warehouseID { get; private set; }
         public TimeOnly timeToPlace  { get; private set; }
         public TimeOnly timeToPickup { get; private set; }
 
@@ -25,7 +27,7 @@ namespace DDDSample1.Domain.Deliveries
         public void ChangeWeight(string mass) {
             this.weight = mass;
         }
-        public void ChangeWarehouseId(string warehouseId) {
+        public void ChangeWarehouseId(WarehouseId warehouseId) {
             this.warehouseID = warehouseId;
         }
         public void ChangeTimeToPlace(TimeOnly toPlace) {
@@ -35,7 +37,7 @@ namespace DDDSample1.Domain.Deliveries
             this.timeToPickup = toPickup;
         }
 
-        public Delivery(DateOnly date, string mass, string warehouseId, TimeOnly toPlace, TimeOnly toPickup )
+        public Delivery(DateOnly date, string mass, WarehouseId warehouseId, TimeOnly toPlace, TimeOnly toPickup )
         {
             this.Id = new DeliveryId(Guid.NewGuid());
             this.deliveryDate = date;

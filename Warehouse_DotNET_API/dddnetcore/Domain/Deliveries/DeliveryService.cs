@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
 using DDDSample1.Domain.Shared;
+using DDDSample1.Domain.Warehouses;
+
 
 
 namespace DDDSample1.Domain.Deliveries
@@ -9,6 +11,7 @@ namespace DDDSample1.Domain.Deliveries
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDeliveryRepository _repo;
+        private readonly IWarehouseRepository _repoWar;
 
         public DeliveryService(IUnitOfWork unitOfWork, IDeliveryRepository repo)
         {
@@ -37,6 +40,7 @@ namespace DDDSample1.Domain.Deliveries
 
         public async Task<DeliveryDto> AddAsync(CreatingDeliveryDto dto)
         {
+            //await checkWarehouseIdAsync(dto.warehouseID);
             var deli = new Delivery(dto.deliveryDate, dto.weight, dto.warehouseID, dto.timeToPlace, dto.timeToPickup);
 
             await this._repo.AddAsync(deli);
@@ -48,6 +52,7 @@ namespace DDDSample1.Domain.Deliveries
 
         public async Task<DeliveryDto> UpdateAsync(DeliveryDto dto)
         {
+            //await checkWarehouseIdAsync(dto.warehouseID);
             var deli = await this._repo.GetByIdAsync(new DeliveryId(dto.Id));
 
             if (deli == null)
@@ -90,13 +95,13 @@ namespace DDDSample1.Domain.Deliveries
 
             return new DeliveryDto(deli.Id.AsGuid(), deli.deliveryDate, deli.weight,deli.warehouseID,  deli.timeToPlace, deli.timeToPickup);
         }
-        /*
-        private async Task checkCategoryIdAsync(WarehouseId warehouseId)
+        
+       /* private async Task checkWarehouseIdAsync(WarehouseId warehouseId)
         {
-           var war = await _repoCat.GetByIdAsync(warehouseId);
+           var war = await _repoWar.GetByIdAsync(warehouseId);
            if (war == null)
                 throw new BusinessRuleValidationException("Invalid Warehouse Id.");
-        }
-        */
+        }*/
+        
     }
 }

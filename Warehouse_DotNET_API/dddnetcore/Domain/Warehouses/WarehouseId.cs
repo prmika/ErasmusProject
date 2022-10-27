@@ -1,5 +1,6 @@
 ﻿using System;
 using DDDSample1.Domain.Shared;
+using DDDSample1.Domain.Warehouses;
 using Newtonsoft.Json;
 
 namespace DDDSample1.Domain.Warehouses

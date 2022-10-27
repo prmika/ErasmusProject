@@ -1,4 +1,5 @@
 ﻿using System;
+using DDDSample1.Domain.Warehouses;
 
 namespace DDDSample1.Domain.Deliveries
 {
@@ -8,10 +9,10 @@ namespace DDDSample1.Domain.Deliveries
         public Guid Id { get;  set; }
         public DateOnly deliveryDate {get;  set;}
         public string weight { get;  set; }
-        public string warehouseID { get;  set; }
+        public WarehouseId warehouseID { get;  set; }
         public TimeOnly timeToPlace  { get;  set; }
         public TimeOnly timeToPickup { get;  set; }
-    public DeliveryDto(Guid Id, DateOnly date, string mass, string warehouseId, TimeOnly toPlace, TimeOnly toPickup)
+    public DeliveryDto(Guid Id, DateOnly date, string mass, WarehouseId warehouseId, TimeOnly toPlace, TimeOnly toPickup)
     {
         this.Id = Id;
         this.deliveryDate = date;
