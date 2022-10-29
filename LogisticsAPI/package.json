@@ -1,5 +1,6 @@
 {
   "name": "bulletproof-nodejs",
+  "type": "module",
   "version": "1.0.0",
   "description": "Bulletproof node.js",
   "main": "src/app.ts",
