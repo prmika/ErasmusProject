@@ -43,7 +43,7 @@ namespace DDDSample1.Domain.Deliveries
         public async Task<DeliveryDto> AddAsync(CreatingDeliveryDto dto)
         {
 
-            //await checkWarehouseIdAsync(dto.warehouseID);//does not work...
+           // await checkWarehouseIdAsync(dto.warehouseID);
             var deli = new Delivery(dto.Id, dto.deliveryDate, dto.weight, dto.warehouseID, dto.timeToPlace, dto.timeToPickup);
 
             await this._repo.AddAsync(deli);
@@ -73,43 +73,22 @@ namespace DDDSample1.Domain.Deliveries
             return new DeliveryDto(deli.Id.AsString(), deli.deliveryDate,deli.weight,  deli.warehouseID, deli.timeToPlace, deli.timeToPickup);
         }
 
-        public async Task<DeliveryDto> InactivateAsync(DeliveryId id)
-        {
-            var deli = await this._repo.GetByIdAsync(id);
-
-            if (deli == null)
-                return null;
-
-
-
-            await this._unitOfWork.CommitAsync();
-
-            return new DeliveryDto(deli.Id.AsString(), deli.deliveryDate,deli.weight, deli.warehouseID, deli.timeToPlace,  deli.timeToPickup );
-        }
-
-        public async Task<DeliveryDto> DeleteAsync(DeliveryId id)
-        {
-            var deli = await this._repo.GetByIdAsync(id);
-
-            if (deli == null)
-                return null;
-
-            this._repo.Remove(deli);
-            await this._unitOfWork.CommitAsync();
-
-            return new DeliveryDto(deli.Id.AsString(), deli.deliveryDate, deli.weight,deli.warehouseID,  deli.timeToPlace, deli.timeToPickup);
-        }
         
 
         //this does not work...
-        /*
-        private async Task checkWarehouseIdAsync(WarehouseId warehouseId)
+        
+        /*private async Task checkWarehouseIdAsync(string warId)
         {
             
-           var war = await _repoWar.GetByIdAsync(warehouseId);
-           if (war == null)
+        var list = await this._repoWar.GetAllAsync();
+            
+        var result = list.FindAll(element => element.Id.ToString().Contains(warId));
+
+           if ( result == null)
                 throw new BusinessRuleValidationException("Invalid Warehouse Id.");
-        }*/ 
+        } */
+
+        
         
     }
 }

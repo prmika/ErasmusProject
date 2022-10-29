@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Deliveries;
+using DDDSample1.Domain.Warehouses;
 
 namespace DDDSample1.Controllers
 {
@@ -12,6 +13,7 @@ namespace DDDSample1.Controllers
     public class DeliveriesController : ControllerBase
     {
         private readonly DeliveryService _service;
+        
 
         public DeliveriesController(DeliveryService service)
         {
@@ -82,39 +84,8 @@ namespace DDDSample1.Controllers
             }
         }
 
-        // Inactivate: api/Deliveries/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<DeliveryDto>> SoftDelete(string id)
-        {
-            var deli = await _service.InactivateAsync(new DeliveryId(id));
-
-            if (deli == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(deli);
-        }
         
-        // DELETE: api/Deliveries/5
-        [HttpDelete("{id}/hard")]
-        public async Task<ActionResult<DeliveryDto>> HardDelete(string id)
-        {
-            try
-            {
-                var deli = await _service.DeleteAsync(new DeliveryId(id));
-
-                if (deli == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(deli);
-            }
-            catch(BusinessRuleValidationException ex)
-            {
-               return BadRequest(new {Message = ex.Message});
-            }
-        }
+        
+       
     }
 }
