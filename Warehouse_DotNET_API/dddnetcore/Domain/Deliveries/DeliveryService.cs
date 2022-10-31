@@ -11,84 +11,65 @@ namespace DDDSample1.Domain.Deliveries
     public class DeliveryService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IDeliveryRepository _repo;
-        private readonly IWarehouseRepository _repoWar;
+        private readonly IWarehouseRepository _warrepo;
+        private readonly IDeliveryRepository _delrepo;
 
-        public DeliveryService(IUnitOfWork unitOfWork, IDeliveryRepository repo, IWarehouseRepository repoWarehouses)
+        public DeliveryService(IUnitOfWork unitOfWork, IWarehouseRepository warrepo,IDeliveryRepository delrepo)
         {
             this._unitOfWork = unitOfWork;
-            this._repo = repo;
-            this._repoWar = repoWarehouses;
+            this._warrepo = warrepo;
+            this._delrepo = delrepo;
         }
 
         public async Task<List<DeliveryDto>> GetAllAsync()
         {
-            var list = await this._repo.GetAllAsync();
+            var list = await this._delrepo.GetAllAsync();
 
-            List<DeliveryDto> listDto = list.ConvertAll<DeliveryDto>(deli => new DeliveryDto(deli.Id.AsString(), deli.deliveryDate, deli.weight,deli.warehouseID, deli.timeToPlace, deli.timeToPickup));
+            List<DeliveryDto> listDto = list.ConvertAll<DeliveryDto>(del => new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate, timeToPickup = del.timeToPickup, timeToPlace = del.timeToPlace, warehouseID = del.warehouseID, weight = del.weight  });
 
             return listDto;
         }
 
-        public async Task<DeliveryDto> GetByIdAsync(DeliveryId id)
+        public async Task<DeliveryDto> GetByIdAsync(DeliveryId Id)
         {
-            var deli = await this._repo.GetByIdAsync(id);
+            var del = await this._delrepo.GetByIdAsync(Id);
 
-            if (deli == null)
+            if (del == null)
                 return null;
 
-           return new DeliveryDto (deli.Id.AsString(), deli.deliveryDate,deli.weight, deli.warehouseID, deli.timeToPlace, deli.timeToPickup );
+            return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate, timeToPickup = del.timeToPickup, timeToPlace = del.timeToPlace, warehouseID = del.warehouseID, weight = del.weight };
         }
 
-        public async Task<DeliveryDto> AddAsync(CreatingDeliveryDto dto)
+        public async Task<DeliveryDto> AddAsync(DeliveryDto dto)
         {
+            var del = new Delivery(dto.Id, dto.deliveryDate, dto.weight, dto.warehouseID, new System.DateTime(dto.deliveryDate.Year, dto.deliveryDate.Month, dto.deliveryDate.Day, dto.timeToPickup.Hour, dto.timeToPickup.Minute, 0), new System.DateTime(dto.deliveryDate.Year, dto.deliveryDate.Month, dto.deliveryDate.Day, dto.timeToPlace.Hour, dto.timeToPlace.Minute, 0));
+            var war = await this._warrepo.GetByIdAsync(new WarehouseId(del.warehouseID));
 
-           // await checkWarehouseIdAsync(dto.warehouseID);
-            var deli = new Delivery(dto.Id, dto.deliveryDate, dto.weight, dto.warehouseID, dto.timeToPlace, dto.timeToPickup);
+            if (war != null)
+            {
+                await this._delrepo.AddAsync(del);
+                await this._unitOfWork.CommitAsync();
 
-            await this._repo.AddAsync(deli);
-
-            await this._unitOfWork.CommitAsync();
-
-            return new DeliveryDto (deli.Id.AsString(), deli.deliveryDate, deli.weight, deli.warehouseID, deli.timeToPlace, deli.timeToPickup);
+                return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate, timeToPickup = del.timeToPickup, timeToPlace = del.timeToPlace, warehouseID = del.warehouseID, weight = del.weight };
+            }
+            else return null;
+            
         }
 
         public async Task<DeliveryDto> UpdateAsync(DeliveryDto dto)
         {
-            //await checkWarehouseIdAsync(dto.warehouseID); //does not work...
-            var deli = await this._repo.GetByIdAsync(new DeliveryId(dto.Id));
+            var del = await this._delrepo.GetByIdAsync(new DeliveryId(dto.Id));
 
-            if (deli == null)
-                return null;
-
-           
-            deli.ChangeDeliveryDate(dto.deliveryDate);
-            deli.ChangeWeight(dto.weight);
-            deli.ChangeWarehouseId(dto.warehouseID);
-            deli.ChangeTimeToPlace(dto.timeToPlace);
-            deli.ChangeTimeToPickup(dto.timeToPickup);
-
-            await this._unitOfWork.CommitAsync();
-
-            return new DeliveryDto(deli.Id.AsString(), deli.deliveryDate,deli.weight,  deli.warehouseID, deli.timeToPlace, deli.timeToPickup);
+            if (del != null)
+            {
+                var war = await this._warrepo.GetByIdAsync(new WarehouseId(del.warehouseID));
+                if (war == null)
+                {
+                    await this._unitOfWork.CommitAsync();
+                    return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = new System.DateTime(del.deliveryDate.Year, del.deliveryDate.Month, del.deliveryDate.Day, del.timeToPickup.Hour, del.timeToPickup.Minute, 0), timeToPlace = new System.DateTime(del.deliveryDate.Year, del.deliveryDate.Month, del.deliveryDate.Day, del.timeToPlace.Hour, del.timeToPlace.Minute, 0), warehouseID = del.warehouseID, weight = del.weight };
+                }
+            }
+            return null;
         }
-
-        
-
-        //this does not work...
-        
-        /*private async Task checkWarehouseIdAsync(string warId)
-        {
-            
-        var list = await this._repoWar.GetAllAsync();
-            
-        var result = list.FindAll(element => element.Id.ToString().Contains(warId));
-
-           if ( result == null)
-                throw new BusinessRuleValidationException("Invalid Warehouse Id.");
-        } */
-
-        
-        
     }
 }

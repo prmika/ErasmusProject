@@ -14,11 +14,13 @@ namespace DDDSample1.Controllers
     {
         private readonly DeliveryService _service;
         
+        
 
         public DeliveriesController(DeliveryService service)
         {
             _service = service;
         }
+       
 
         // GET: api/Deliveries
         [HttpGet]
@@ -43,17 +45,18 @@ namespace DDDSample1.Controllers
 
         // POST: api/Deliveries
         [HttpPost]
-        public async Task<ActionResult<DeliveryDto>> Create(CreatingDeliveryDto dto)
+        public async Task<ActionResult<DeliveryDto>> Create(DeliveryDto dto)
         {
-            try
-            {
+
             var deli = await _service.AddAsync(dto);
 
-            return CreatedAtAction(nameof(GetGetById), new { id = deli.Id }, deli);
-            }
-             catch(BusinessRuleValidationException ex)
+            if (deli != null)
             {
-                return BadRequest(new {Message = ex.Message});
+                return CreatedAtAction(nameof(GetGetById), new { Id = deli.Id }, deli);
+            }
+            else
+            {
+                return BadRequest("WarehouseId is not valid! Make sure the Warehouse exists.");
             }
         }
 
