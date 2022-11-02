@@ -49,6 +49,10 @@ export default {
     truck: {
       name: "TruckController",
       path: "../controllers/truckController"
+    },
+    packaging: {
+      name: "PackagingController",
+      path: "../controllers/packagingController"
     }
   },
 
@@ -56,6 +60,10 @@ export default {
     truck: {
       name: "TruckRepo",
       path: "../repos/truckRepo"
+    },
+    packaging: {
+      name: "PackagingRepo",
+      path: "../repos/packagingRepo"
     },
     role: {
       name: "RoleRepo",
@@ -75,6 +83,10 @@ export default {
     truck: {
       name: "TruckService",
       path: "../services/truckService"
+    },
+    packaging: {
+      name: "PackagingService",
+      path: "../services/packagingService"
     }
   },
 };
