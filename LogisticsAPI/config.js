@@ -53,6 +53,10 @@ export default {
     packaging: {
       name: "PackagingController",
       path: "../controllers/packagingController"
+    },
+    deliverypath: {
+      name: "DeliveryPathController",
+      path: "../controllers/deliverypathController"
     }
   },
 
@@ -64,6 +68,10 @@ export default {
     packaging: {
       name: "PackagingRepo",
       path: "../repos/packagingRepo"
+    },
+    deliverypath: {
+      name: "DeliveryPathRepo",
+      path: "../repos/deliverypathRepo"
     },
     role: {
       name: "RoleRepo",
@@ -87,6 +95,11 @@ export default {
     packaging: {
       name: "PackagingService",
       path: "../services/packagingService"
+    },
+    deliverypath: {
+      name: "DeliveryPathService",
+      path: "../services/deliverypathService"
     }
+
   },
 };

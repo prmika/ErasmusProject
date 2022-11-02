@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Hn8n6L7fiD96SR+sX1i3JWN7NSGmMsuU/2aG4GFzmvPJR0tDavnitBFTU11pjHA/qdmFmtpJmpvjbLrylN9hSw==",
+  "dgSpecHash": "kIUbC2d5zePhnHo7QlRtdoVmxZSDWABNi9fvUP/ItmDRVH4OviuCSZdJQXrhM7OUS0SX9gBVvLbOnFMWjdcFpg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\offic\\Documents\\School\\ISEP\\Lab5\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+  "projectFilePath": "C:\\Users\\offic\\Downloads\\Warehouse_DotNET_API\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\offic\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\6.0.0\\microsoft.aspnetcore.jsonpatch.6.0.0.nupkg.sha512",
     "C:\\Users\\offic\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\6.0.0\\microsoft.aspnetcore.mvc.newtonsoftjson.6.0.0.nupkg.sha512",

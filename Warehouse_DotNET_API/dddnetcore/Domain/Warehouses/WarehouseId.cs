@@ -1,5 +1,6 @@
 ﻿using System;
 using DDDSample1.Domain.Shared;
+using DDDSample1.Domain.Warehouses;
 using Newtonsoft.Json;
 
 namespace DDDSample1.Domain.Warehouses
@@ -7,30 +8,19 @@ namespace DDDSample1.Domain.Warehouses
     public class WarehouseId : EntityId
     {
         [JsonConstructor]
-        public WarehouseId(Guid value) : base(value)
+        
+        public WarehouseId(String value):base(value)
         {
-        }
-        public WarehouseId(String value) : base(value)
-        {
-        }
 
-        override
-        protected Object createFromString(String text)
-        {
-            return new Guid(text);
         }
 
         override
-        public String AsString()
-        {
-            Guid obj = (Guid)base.ObjValue;
-            return obj.ToString();
+        protected  Object createFromString(String text){
+            return text;
         }
-
-
-        public Guid AsGuid()
-        {
-            return (Guid)base.ObjValue;
+        override
+        public String AsString(){
+            return (String) base.Value;
         }
     }
 }
