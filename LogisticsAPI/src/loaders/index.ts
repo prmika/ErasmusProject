@@ -32,6 +32,12 @@ export default async ({ expressApp }) => {
     name: 'deliverypathSchema',
     schema: '../persistence/schemas/deliverypathSchema',
   };
+  
+  const packagingSchema = {
+    // compare with the approach followed in repos and services
+    name: 'packagingSchema',
+    schema: '../persistence/schemas/packagingSchema',
+  };
 
   const roleController = {
     name: config.controllers.role.name,
@@ -46,6 +52,11 @@ export default async ({ expressApp }) => {
   const deliveryPathController = {
     name: config.controllers.deliverypath.name,
     path: config.controllers.deliverypath.path
+  };
+  
+  const packagingController = {
+    name: config.controllers.packaging.name,
+    path: config.controllers.packaging.path
   }
 
   const roleRepo = {
@@ -66,6 +77,11 @@ export default async ({ expressApp }) => {
   const deliveryPathRepo = {
     name: config.repos.deliverypath.name,
     path: config.repos.deliverypath.path
+  };
+  
+  const packagingRepo = {
+    name: config.repos.packaging.name,
+    path: config.repos.packaging.path
   }
 
   const roleService = {
@@ -81,6 +97,11 @@ export default async ({ expressApp }) => {
   const deliveryPathService = {
     name: config.services.deliverypath.name,
     path: config.services.deliverypath.path
+  };
+  
+  const packagingService = {
+    name: config.services.packaging.name,
+    path: config.services.packaging.path
   }
 
   await dependencyInjectorLoader({
@@ -89,23 +110,27 @@ export default async ({ expressApp }) => {
       userSchema,
       roleSchema,
       truckSchema,
-      deliveryPathSchema
+      deliveryPathSchema,
+      packagingSchema
     ],
     controllers: [
       roleController,
       truckController,
-      deliveryPathController
+      deliveryPathController,
+      packagingController
     ],
     repos: [
       roleRepo,
       userRepo,
       truckRepo,
-      deliveryPathRepo
+      deliveryPathRepo,
+      packagingRepo
     ],
     services: [
       roleService,
       truckService,
-      deliveryPathService
+      deliveryPathService,
+      packagingService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

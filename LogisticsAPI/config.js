@@ -50,6 +50,10 @@ export default {
       name: "TruckController",
       path: "../controllers/truckController"
     },
+    packaging: {
+      name: "PackagingController",
+      path: "../controllers/packagingController"
+    },
     deliverypath: {
       name: "DeliveryPathController",
       path: "../controllers/deliverypathController"
@@ -61,6 +65,14 @@ export default {
       name: "TruckRepo",
       path: "../repos/truckRepo"
     },
+    packaging: {
+      name: "PackagingRepo",
+      path: "../repos/packagingRepo"
+    },
+    deliverypath: {
+      name: "DeliveryPathRepo",
+      path: "../repos/deliverypathRepo"
+    },
     role: {
       name: "RoleRepo",
       path: "../repos/roleRepo"
@@ -68,10 +80,6 @@ export default {
     user: {
       name: "UserRepo",
       path: "../repos/userRepo"
-    },
-    deliverypath: {
-      name: "DeliveryPathRepo",
-      path: "../repos/deliverypathRepo"
     }
   },
 
@@ -83,6 +91,10 @@ export default {
     truck: {
       name: "TruckService",
       path: "../services/truckService"
+    },
+    packaging: {
+      name: "PackagingService",
+      path: "../services/packagingService"
     },
     deliverypath: {
       name: "DeliveryPathService",
