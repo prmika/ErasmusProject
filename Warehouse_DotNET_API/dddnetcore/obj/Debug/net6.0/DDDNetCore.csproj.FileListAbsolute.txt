@@ -122,3 +122,4 @@ C:\Users\offic\Downloads\Warehouse_DotNET_API\Warehouse_DotNET_API\dddnetcore\ob
 C:\Users\offic\Downloads\Warehouse_DotNET_API\Warehouse_DotNET_API\dddnetcore\obj\Debug\net6.0\DDDNetCore.pdb
 C:\Users\offic\Downloads\Warehouse_DotNET_API\Warehouse_DotNET_API\dddnetcore\obj\Debug\net6.0\DDDNetCore.genruntimeconfig.cache
 C:\Users\offic\Downloads\Warehouse_DotNET_API\Warehouse_DotNET_API\dddnetcore\obj\Debug\net6.0\ref\DDDNetCore.dll
+C:\Users\maipp\Documents\isep\Lab5Project\Warehouse_DotNET_API\dddnetcore\bin\Debug\net6.0\MySqlConnector.dll
