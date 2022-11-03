@@ -61,20 +61,25 @@ namespace DDDSample1.Domain.Deliveries
 
         public async Task<DeliveryDto> UpdateAsync(DeliveryDto dto)
         {
-            await checkWarehouseIdAsync(new WarehouseId(dto.warehouseID));
+            
 
             var del = await this._delrepo.GetByIdAsync(new DeliveryId(dto.Id));
+            
 
             if (del == null)
                 return null;
-
+            
+            await checkWarehouseIdAsync(new WarehouseId(dto.warehouseID));
             await this._unitOfWork.CommitAsync();
             del.ChangeDeliveryDate(dto.deliveryDate);
             del.ChangeWeight(dto.weight);
             del.ChangeWarehouseId(dto.warehouseID);
             del.ChangeTimeToPlace(dto.timeToPlace);
             del.ChangeTimeToPickup(dto.timeToPickup);
-            return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = new System.DateTime(del.deliveryDate.Year, del.deliveryDate.Month, del.deliveryDate.Day, del.timeToPickup.Hour, del.timeToPickup.Minute, 0), timeToPlace = new System.DateTime(del.deliveryDate.Year, del.deliveryDate.Month, del.deliveryDate.Day, del.timeToPlace.Hour, del.timeToPlace.Minute, 0), warehouseID = del.warehouseID, weight = del.weight };
+            
+
+            
+            return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = new System.DateTime(del.timeToPickup.Year, del.timeToPickup.Month, del.timeToPickup.Day, del.timeToPickup.Hour, del.timeToPickup.Minute, 0), timeToPlace = new System.DateTime(del.timeToPlace.Year, del.timeToPlace.Month, del.timeToPlace.Day, del.timeToPlace.Hour, del.timeToPlace.Minute, 0), warehouseID = del.warehouseID, weight = del.weight };
                 
             
             
