@@ -19,7 +19,11 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         product: Joi.string().required(),
-        weight: Joi.number().required()
+        width: Joi.number().required(),
+        height: Joi.number().required(),
+        depth: Joi.number().required(),
+        weight: Joi.number().required(),
+        timeToLoad: Joi.number().required()
       })
     }),
     (req, res, next) => ctrl.createPackaging(req, res, next));
@@ -31,7 +35,11 @@ export default (app: Router) => {
       body: Joi.object({
         id: Joi.string().required(),
         product: Joi.string().required(),
-        weight: Joi.number().required()
+        width: Joi.number().required(),
+        height: Joi.number().required(),
+        depth: Joi.number().required(),
+        weight: Joi.number().required(),
+        timeToLoad: Joi.number()
       }),
     }),
     (req, res, next) => ctrl.updatePackaging(req, res, next));

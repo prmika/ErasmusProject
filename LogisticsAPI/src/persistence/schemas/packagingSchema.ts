@@ -14,9 +14,33 @@ const Packaging = new mongoose.Schema(
             unique: true
         },
 
+        width: {
+            type: Number,
+            required: [true, 'Please enter the width of package'],
+            index: true,
+        },
+
+        height: {
+            type: Number,
+            required: [true, 'Please enter the height of package'],
+            index: true,
+        },
+
+        depth: {
+            type: Number,
+            required: [true, 'Please enter the depth of package'],
+            index: true,
+        },
+
         weight: {
             type: Number,
-            required: [true, 'Please enter the weight'],
+            required: [true, 'Please enter the weight of package'],
+            index: true,
+        },
+
+        timeToLoad: {
+            type: Number,
+            required: [true, 'Please enter the time needed to Load/Unload the package'],
             index: true,
         },
 
