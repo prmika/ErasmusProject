@@ -28,6 +28,7 @@ const getTokenFromHeader = req => {
 const isAuth = (0, express_jwt_1.default)({
     secret: config_1.default.jwtSecret,
     userProperty: 'token',
+    algorithms: ['HS256'],
     getToken: getTokenFromHeader, // How to extract the JWT from the request
 });
 exports.default = isAuth;

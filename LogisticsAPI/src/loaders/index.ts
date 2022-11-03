@@ -27,6 +27,12 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/truckSchema',
   };
 
+  const deliveryPathSchema = {
+    // compare with the approach followed in repos and services
+    name: 'deliverypathSchema',
+    schema: '../persistence/schemas/deliverypathSchema',
+  };
+  
   const packagingSchema = {
     // compare with the approach followed in repos and services
     name: 'packagingSchema',
@@ -43,6 +49,11 @@ export default async ({ expressApp }) => {
     path: config.controllers.truck.path
   }
 
+  const deliveryPathController = {
+    name: config.controllers.deliverypath.name,
+    path: config.controllers.deliverypath.path
+  };
+  
   const packagingController = {
     name: config.controllers.packaging.name,
     path: config.controllers.packaging.path
@@ -63,6 +74,11 @@ export default async ({ expressApp }) => {
     path: config.repos.truck.path
   }
 
+  const deliveryPathRepo = {
+    name: config.repos.deliverypath.name,
+    path: config.repos.deliverypath.path
+  };
+  
   const packagingRepo = {
     name: config.repos.packaging.name,
     path: config.repos.packaging.path
@@ -78,6 +94,11 @@ export default async ({ expressApp }) => {
     path: config.services.truck.path
   }
 
+  const deliveryPathService = {
+    name: config.services.deliverypath.name,
+    path: config.services.deliverypath.path
+  };
+  
   const packagingService = {
     name: config.services.packaging.name,
     path: config.services.packaging.path
@@ -89,22 +110,26 @@ export default async ({ expressApp }) => {
       userSchema,
       roleSchema,
       truckSchema,
+      deliveryPathSchema,
       packagingSchema
     ],
     controllers: [
       roleController,
       truckController,
+      deliveryPathController,
       packagingController
     ],
     repos: [
       roleRepo,
       userRepo,
       truckRepo,
+      deliveryPathRepo,
       packagingRepo
     ],
     services: [
       roleService,
       truckService,
+      deliveryPathService,
       packagingService
     ]
   });

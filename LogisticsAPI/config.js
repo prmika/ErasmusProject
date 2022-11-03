@@ -100,6 +100,5 @@ export default {
       name: "DeliveryPathService",
       path: "../services/deliverypathService"
     }
-
   },
 };

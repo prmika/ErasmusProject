@@ -7,7 +7,7 @@ import { randomBytes } from 'crypto';
 
 //import MailerService from './mailer.ts.bak';
 
-import IUserService from './IServices/IUserService';
+import IUserService from '../services/IServices/IUserService';
 import { UserMap } from "../mappers/UserMap";
 import { IUserDTO } from '../dto/IUserDTO';
 
