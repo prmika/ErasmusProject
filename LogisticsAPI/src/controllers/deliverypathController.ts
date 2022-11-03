@@ -69,8 +69,8 @@ export default class DeliveryPathController implements IDeliveryPathController {
                 return res.status(404).send();
             }
 
-            const truckDTO = deliverypath.getValue();
-            return res.status(201).json(truckDTO);
+            const deliveryPathDTO = deliverypathOrError.getValue();
+            return res.status(201).json(deliveryPathDTO);
         }
         catch (e) {
             return next(e);

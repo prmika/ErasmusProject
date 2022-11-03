@@ -61,10 +61,6 @@ export default {
       name: "TruckRepo",
       path: "../repos/truckRepo"
     },
-    deliverypath: {
-      name: "DeliveryPathRepo",
-      path: "../repos/deliverypathRepo"
-    },
     role: {
       name: "RoleRepo",
       path: "../repos/roleRepo"
@@ -72,6 +68,10 @@ export default {
     user: {
       name: "UserRepo",
       path: "../repos/userRepo"
+    },
+    deliverypath: {
+      name: "DeliveryPathRepo",
+      path: "../repos/deliverypathRepo"
     }
   },
 
@@ -88,6 +88,5 @@ export default {
       name: "DeliveryPathService",
       path: "../services/deliverypathService"
     }
-
   },
 };

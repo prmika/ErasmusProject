@@ -7,11 +7,15 @@ const express_1 = require("express");
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
 const userRoute_2 = __importDefault(require("./routes/userRoute"));
 const roleRoute_1 = __importDefault(require("./routes/roleRoute"));
+const truckRoute_1 = __importDefault(require("./routes/truckRoute"));
+const deliverypathRoute_1 = __importDefault(require("./routes/deliverypathRoute"));
 exports.default = () => {
     const app = (0, express_1.Router)();
     (0, userRoute_1.default)(app);
     (0, userRoute_2.default)(app);
     (0, roleRoute_1.default)(app);
+    (0, truckRoute_1.default)(app);
+    (0, deliverypathRoute_1.default)(app);
     return app;
 };
 //# sourceMappingURL=index.js.map

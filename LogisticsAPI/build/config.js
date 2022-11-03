@@ -19,7 +19,8 @@ exports.default = {
     /**
      * That long string from mlab
      */
-    databaseURL: process.env.MONGODB_URI || "mongodb://localhost:27017/test",
+    databaseURL: process.env.MONGODB_URI || "mongodb+srv://dbAdmin:Lab5project2022@lab5project.9vyeml3.mongodb.net/electricgo",
+    //databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000/electricgo",
     /**
      * Your secret sauce
      */
@@ -40,9 +41,21 @@ exports.default = {
         role: {
             name: "RoleController",
             path: "../controllers/roleController"
+        },
+        truck: {
+            name: "TruckController",
+            path: "../controllers/truckController"
+        },
+        deliverypath: {
+            name: "DeliveryPathController",
+            path: "../controllers/deliverypathController"
         }
     },
     repos: {
+        truck: {
+            name: "TruckRepo",
+            path: "../repos/truckRepo"
+        },
         role: {
             name: "RoleRepo",
             path: "../repos/roleRepo"
@@ -50,12 +63,24 @@ exports.default = {
         user: {
             name: "UserRepo",
             path: "../repos/userRepo"
+        },
+        deliverypath: {
+            name: "DeliveryPathRepo",
+            path: "../repos/deliverypathRepo"
         }
     },
     services: {
         role: {
             name: "RoleService",
             path: "../services/roleService"
+        },
+        truck: {
+            name: "TruckService",
+            path: "../services/truckService"
+        },
+        deliverypath: {
+            name: "DeliveryPathService",
+            path: "../services/deliverypathService"
         }
     },
 };
