@@ -5529,24 +5529,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\maipp\\.nuget\\packages\\": {}
+    "C:\\Users\\Patryk\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+      "projectUniqueName": "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
       "projectName": "DDDNetCore",
-      "projectPath": "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
-      "packagesPath": "C:\\Users\\maipp\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\obj\\",
+      "projectPath": "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+      "packagesPath": "C:\\Users\\Patryk\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\maipp\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Patryk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

@@ -53,6 +53,11 @@ namespace DDDSample1.Domain.Warehouses
             if (war == null)
                 return null;
 
+            war.ChangeDesignation(dto.Designation);
+            war.ChangeAddress(dto.Address);
+            war.ChangeLat(dto.Latitude);
+            war.ChangeLong(dto.Longitude);
+
             await this._unitOfWork.CommitAsync();
 
             return new WarehouseDto { Id = war.Id.AsString(),  Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
