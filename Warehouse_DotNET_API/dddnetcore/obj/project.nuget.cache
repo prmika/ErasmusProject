@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CTHD8CHPxCb5c10tr35ivUPhH5WMB5b2omBT/9KIGDm7eGDnCDl38QdFG52gFOwLi4mff9P9HIdbrG6EXijrEg==",
+  "dgSpecHash": "nAohiiHpvQLeRhRHg8Cg8TQqJFhiwqSutYBRE7wwqtiDEZnjzVN9D8dlkiOK68fS7yBrgObczYJX7lDu+NAb5Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
   "expectedPackageFiles": [
@@ -24,6 +24,7 @@
     "C:\\Users\\maipp\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\maipp\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\maipp\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
+    "C:\\Users\\maipp\\.nuget\\packages\\mysqlconnector\\2.1.13\\mysqlconnector.2.1.13.nupkg.sha512",
     "C:\\Users\\maipp\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Users\\maipp\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\maipp\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",

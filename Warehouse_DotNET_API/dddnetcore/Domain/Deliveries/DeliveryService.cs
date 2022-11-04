@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Warehouses;
 using Newtonsoft.Json.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+
 
 
 
@@ -42,34 +46,51 @@ namespace DDDSample1.Domain.Deliveries
 
         public async Task<DeliveryDto> AddAsync(DeliveryDto dto)
         {
+            await checkWarehouseIdAsync(new WarehouseId(dto.warehouseID));
+
             var del = new Delivery(dto.Id, dto.deliveryDate, dto.weight, dto.warehouseID, new System.DateTime(dto.deliveryDate.Year, dto.deliveryDate.Month, dto.deliveryDate.Day, dto.timeToPickup.Hour, dto.timeToPickup.Minute, 0), new System.DateTime(dto.deliveryDate.Year, dto.deliveryDate.Month, dto.deliveryDate.Day, dto.timeToPlace.Hour, dto.timeToPlace.Minute, 0));
-            var war = await this._warrepo.GetByIdAsync(new WarehouseId(del.warehouseID));
-
-            if (war != null)
-            {
-                await this._delrepo.AddAsync(del);
-                await this._unitOfWork.CommitAsync();
-
-                return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate, timeToPickup = del.timeToPickup, timeToPlace = del.timeToPlace, warehouseID = del.warehouseID, weight = del.weight };
-            }
-            else return null;
+            
+            await this._delrepo.AddAsync(del);
+            await this._unitOfWork.CommitAsync();
+            
+            return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate, timeToPickup = del.timeToPickup, timeToPlace = del.timeToPlace, warehouseID = del.warehouseID, weight = del.weight };
+            
+            
             
         }
 
         public async Task<DeliveryDto> UpdateAsync(DeliveryDto dto)
         {
-            var del = await this._delrepo.GetByIdAsync(new DeliveryId(dto.Id));
+            
 
-            if (del != null)
-            {
-                var war = await this._warrepo.GetByIdAsync(new WarehouseId(del.warehouseID));
-                if (war == null)
-                {
-                    await this._unitOfWork.CommitAsync();
-                    return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = new System.DateTime(del.deliveryDate.Year, del.deliveryDate.Month, del.deliveryDate.Day, del.timeToPickup.Hour, del.timeToPickup.Minute, 0), timeToPlace = new System.DateTime(del.deliveryDate.Year, del.deliveryDate.Month, del.deliveryDate.Day, del.timeToPlace.Hour, del.timeToPlace.Minute, 0), warehouseID = del.warehouseID, weight = del.weight };
-                }
-            }
-            return null;
+            var del = await this._delrepo.GetByIdAsync(new DeliveryId(dto.Id));
+            
+
+            if (del == null)
+                return null;
+            
+            await checkWarehouseIdAsync(new WarehouseId(dto.warehouseID));
+            await this._unitOfWork.CommitAsync();
+            del.ChangeDeliveryDate(dto.deliveryDate);
+            del.ChangeWeight(dto.weight);
+            del.ChangeWarehouseId(dto.warehouseID);
+            del.ChangeTimeToPlace(dto.timeToPlace);
+            del.ChangeTimeToPickup(dto.timeToPickup);
+            
+
+            
+            return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = new System.DateTime(del.timeToPickup.Year, del.timeToPickup.Month, del.timeToPickup.Day, del.timeToPickup.Hour, del.timeToPickup.Minute, 0), timeToPlace = new System.DateTime(del.timeToPlace.Year, del.timeToPlace.Month, del.timeToPlace.Day, del.timeToPlace.Hour, del.timeToPlace.Minute, 0), warehouseID = del.warehouseID, weight = del.weight };
+                
+            
+            
+        }
+        private async Task checkWarehouseIdAsync(WarehouseId warId)
+        {
+            
+        var list = await this._warrepo.GetByIdAsync(warId);
+            
+           if ( list == null)
+                throw new BusinessRuleValidationException("Invalid Warehouse Id.");
         }
     }
 }

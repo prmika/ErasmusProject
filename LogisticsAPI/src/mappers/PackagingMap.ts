@@ -14,7 +14,11 @@ export class PackagingMap extends Mapper<Packaging> {
     return {
       id: packaging.id.toString(),
       product: packaging.product,
-      weight: packaging.weight
+      width: packaging.width,
+      height: packaging.height,
+      depth: packaging.depth,
+      weight: packaging.weight,
+      timeToLoad: packaging.timeToLoad
     } as IPackagingDTO;
   }
 
@@ -33,7 +37,11 @@ export class PackagingMap extends Mapper<Packaging> {
     return {
       domainId: packaging.id.toString(),
       product: packaging.product,
-      weight: packaging.weight
+      width: packaging.width,
+      height: packaging.height,
+      depth: packaging.depth,
+      weight: packaging.weight,
+      timeToLoad: packaging.timeToLoad
     }
   }
 }
