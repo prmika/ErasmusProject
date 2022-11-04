@@ -19,8 +19,8 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Response time is less than 500ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Response content is empty\", function () {\r",
@@ -205,6 +205,65 @@
 						"body": {
 							"mode": "raw",
 							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:5001/api/Warehouses/{{Id}}",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "5001",
+							"path": [
+								"api",
+								"Warehouses",
+								"{{Id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put a Warehouse - Info is updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"The updated Warehouse is the requested one\", function () {\r",
+									"    requestId = pm.globals.get(\"Id\");\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id).equals(requestId);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"The longitude information was updated\", function () {\r",
+									"    pm.expect(jsonData.longitude).eq(12.3456);\r",
+									"});\r",
+									"   "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": \"{{Id}}\",\r\n    \"longitude\":\"12.3456\"  \r\n     }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -609,9 +668,6 @@
 									"pm.test(\"The weight information was updated\", function () {\r",
 									"    pm.expect(jsonData.weight).eq(999);\r",
 									"});\r",
-									"pm.test(\"The warehouse information was updated\", function () {\r",
-									"    pm.expect(jsonData.warehouseId).equals(\"W02\");\r",
-									"});\r",
 									"   "
 								],
 								"type": "text/javascript"
@@ -623,7 +679,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Id\": \"{{Id}}\",\r\n    \"weight\":\"999\",   \r\n    \"warehouseId\": \"W02\"\r\n   }",
+							"raw": "{\r\n    \"Id\": \"{{Id}}\",\r\n    \"weight\":\"999\",\r\n   \"warehouseId\":\"W02\"\r\n   }",
 							"options": {
 								"raw": {
 									"language": "json"
