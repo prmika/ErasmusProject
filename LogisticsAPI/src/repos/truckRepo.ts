@@ -26,8 +26,8 @@ export default class TruckRepo implements ITruckRepo {
     
     const idX = truck.id instanceof TruckId ? (<TruckId>truck.id).toValue() : truck.id;
 
-    const query = { domainId: idX}; 
-    const truckDocument = await this.truckSchema.findOne( query as FilterQuery<ITruckPersistence & Document>);
+    const query = { domainId: idX.toString()}; 
+    const truckDocument = await this.truckSchema.findOne( query);
 
     return !!truckDocument === true;
   }
@@ -62,7 +62,7 @@ export default class TruckRepo implements ITruckRepo {
   public async findByDomainId (truckId: TruckId | string): Promise<Truck> {
     const query = { domainId: truckId};
     const truckRecord = await this.truckSchema.findOne( query as FilterQuery<ITruckPersistence & Document> );
-
+    console.log(truckRecord)
     if( truckRecord != null) {
       return TruckMap.toDomain(truckRecord);
     }
