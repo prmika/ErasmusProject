@@ -70,13 +70,14 @@ namespace DDDSample1.Domain.Deliveries
                 return null;
             
             await checkWarehouseIdAsync(new WarehouseId(dto.warehouseID));
-            await this._unitOfWork.CommitAsync();
+
             del.ChangeDeliveryDate(dto.deliveryDate);
             del.ChangeWeight(dto.weight);
             del.ChangeWarehouseId(dto.warehouseID);
             del.ChangeTimeToPlace(dto.timeToPlace);
             del.ChangeTimeToPickup(dto.timeToPickup);
             
+            await this._unitOfWork.CommitAsync();
 
             
             return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = new System.DateTime(del.timeToPickup.Year, del.timeToPickup.Month, del.timeToPickup.Day, del.timeToPickup.Hour, del.timeToPickup.Minute, 0), timeToPlace = new System.DateTime(del.timeToPlace.Year, del.timeToPlace.Month, del.timeToPlace.Day, del.timeToPlace.Hour, del.timeToPlace.Minute, 0), warehouseID = del.warehouseID, weight = del.weight };
