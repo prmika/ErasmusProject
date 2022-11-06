@@ -54,8 +54,8 @@ describe('packaging service', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO).getValue() as Packaging);//When the packagingService needs the method findByDomainId, it will return this Packaging
 
 		const srvc = new PackagingService(packagingRepoInstance as IPackagingRepo);
@@ -100,16 +100,16 @@ describe('packaging service', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO).getValue() as Packaging, Packaging.create({
 			"id": "P01",
 			"product": "test_product",
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO).getValue() as Packaging] as Packaging[]);//When the packagingService needs the method findAll, it will return a list with Packages
 
 		const srvc = new PackagingService(packagingRepoInstance as IPackagingRepo);
@@ -160,8 +160,8 @@ describe('packaging service', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO).getValue() as Packaging);
 
 		let tempSpy2 = sandbox.stub(packagingRepoInstance, "save").returns(Packaging.create({//When the packagingService needs the method save, it will return this created Packaging
@@ -170,8 +170,8 @@ describe('packaging service', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO).getValue() as Packaging);
 
 		const srvc = new PackagingService(packagingRepoInstance as IPackagingRepo);
@@ -210,6 +210,62 @@ describe('packaging service', function () {
 
 		assert.notEqual(result, null);//The findByDomainId and save method will have returned a package which means the updatePackaging will also return a package. Therfore it can't be null
 	});
+
+	it('packagingService + packagingRepo integration test for getAllPackages using packagingRepoistory stubs', async function () {
+		// Arrange	
+		let packagingSchemaInstance = Container.get("packagingSchema");//We mock packagingRepo
+		let tempSpy = sandbox.stub(packagingSchemaInstance, "find").returns(new Promise<Packaging[]>((resolve, reject) => {//We mock find method of PackagingSchema
+			resolve([Packaging.create({
+				"id": "P01",
+				"product": "test_product",
+				"width": 2,
+				"height": 1.5,
+				"depth": 2.3,
+				"weight": 20.4
+            	//"timeToLoad": 0.5
+			} as IPackagingDTO).getValue() as Packaging, Packaging.create({
+				"id": "P02",
+				"product": "test_product_2",
+				"width": 1.5,
+				"height": 3,
+				"depth": 4,
+				"weight": 25.1
+            	//"timeToLoad": 0.5
+			} as IPackagingDTO).getValue() as Packaging])
+		}));
+
+		let packagingRepoInstance = Container.get("PackagingRepo");//We mock packagingRepo
+
+		const srv = new PackagingService(packagingRepoInstance as IPackagingRepo);//Make new packagingService
+
+		// Act
+		let result = await srv.getAllPackages();
+
+		// Assert
+		tempSpy.callsFake(() => {
+			sandbox.assert.calledOnce();
+			sandbox.assert.calledWith(sandbox.match([{//Will return true if those attributes and their values are indeed the one that were called
+				"id": "P01",
+				"product": "test_product",
+				"width": 2,
+				"height": 1.5,
+				"depth": 2.3,
+				"weight": 20.4
+            	//"timeToLoad": 0.5
+			}, {
+				"id": "P02",
+				"product": "test_product_2",
+				"width": 1.5,
+				"height": 3,
+				"depth": 4,
+				"weight": 25.1
+            	//"timeToLoad": 0.5
+			}]));
+			sandbox.done();
+		});
+		assert.notEqual(result, null);
+	});
+	
 });
 
 

@@ -87,7 +87,7 @@ export class Packaging extends AggregateRoot<PackagingProps> {
     /*if ((!!product === false || product.length === 0) && (!!width === false || width === 0) && (!!height === false || height === 0) && (!!depth === false || depth === 0) && (!!weight === false || weight === 0) && (!!timeToLoad === false || timeToLoad === 0)) {
       return Result.fail<Packaging>('Must provide all the package properties!')
     }*/
-    if ((width >= 9) && (height > 10) && (depth > 20)) {
+    if ((width > 8) && (height > 10) && (depth > 20)) {
       return Result.fail<Packaging>('Package is too big!')
     }
     else {

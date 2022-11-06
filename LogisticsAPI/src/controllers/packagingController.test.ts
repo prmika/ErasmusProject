@@ -412,6 +412,96 @@ describe('packaging controller', function () {
             //"timeToLoad": req.body.timeToLoad
 		}));
 	});
+
+	it('packagingController + packagingService integration test for updatePackaging using packagingRepoistory stubs', async function () {
+		// Arrange	
+		let body = { //Declare body for the request, which will be used to create a package
+			"product": "test_product",
+			"width": 2,
+			"height": 1.5,
+			"depth": 2.3,
+			"weight": 20.4
+            //"timeToLoad": 0.5
+		};
+		let req: Partial<Request> = {};
+		req.body = body;
+
+		let res: Partial<Response> = {
+			json: sandbox.spy()
+		};
+		let next: Partial<NextFunction> = () => { };
+
+		sandbox.stub(Packaging, "create").returns(Result.ok({ //Create method will return Packaging with these attributes and values
+			"id": "123",
+			"product": req.body.product,
+			"width": req.body.width,
+			"height": req.body.height,
+			"depth": req.body.depth,
+			"weight": req.body.weight
+            //"timeToLoad": req.body.timeToLoad
+		}));
+		let packagingRepoInstance = Container.get("PackagingRepo");//We mock packagingRepo
+		let tempSpy = sandbox.stub(packagingRepoInstance, "findByDomainId").returns(new Promise<Packaging>((resolve, reject) => {
+			resolve(Packaging.create({ //We resolve the data when creating the package and get + check the value
+				"id": "123",
+				"product": req.body.product,
+				"width": req.body.width,
+				"height": req.body.height,
+				"depth": req.body.depth,
+				"weight": req.body.weight
+				//"timeToLoad": req.body.timeToLoad
+			}).getValue())
+		}));
+		let tempSpy2 = sandbox.stub(packagingRepoInstance, "save").returns(new Promise<Packaging>((resolve, reject) => {
+			resolve(Packaging.create({ //We resolve the data when creating the package and get + check the value
+				"id": "123",
+				"product": req.body.product,
+				"width": req.body.width,
+				"height": req.body.height,
+				"depth": req.body.depth,
+				"weight": req.body.weight
+				//"timeToLoad": req.body.timeToLoad
+			}).getValue())
+		}));
+
+		let packagingServiceInstance = Container.get("PackagingService");//We mock packagingService
+
+		const ctrl = new PackagingController(packagingServiceInstance as IPackagingService);
+
+		// Act
+		await ctrl.updatePackaging(<Request>req, <Response>res, <NextFunction>next);
+
+		//Check findByDomainId stub
+		tempSpy.callsFake(() => {
+			sandbox.assert.calledOnce(res.json);
+			sandbox.assert.calledWith(res.json, sandbox.match({//Will return true if those attributes and their values are indeed the one that were called
+				"id": "123",
+				"product": req.body.product,
+				"width": req.body.width,
+				"height": req.body.height,
+				"depth": req.body.depth,
+				"weight": req.body.weight
+				//"timeToLoad": req.body.timeToLoad
+			}));
+			sandbox.done();
+		});
+
+		//Check save stub
+		tempSpy2.callsFake(() => {
+			sandbox.assert.calledOnce(res.json);
+			sandbox.assert.calledWith(res.json, sandbox.match({//Will return true if those attributes and their values are indeed the one that were called
+				"id": "123",
+				"product": req.body.product,
+				"width": req.body.width,
+				"height": req.body.height,
+				"depth": req.body.depth,
+				"weight": req.body.weight
+				//"timeToLoad": req.body.timeToLoad
+			}));
+			sandbox.done();
+		});
+	});
+
 });
 
 
