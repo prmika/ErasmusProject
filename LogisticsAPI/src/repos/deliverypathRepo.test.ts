@@ -97,8 +97,8 @@ describe('delivery path repository', function () {
 
 
         let deliverypathSchemaInstance = Container.get("deliverypathSchema");//We mock deliverypathSchema
-        let tempSpy = sandbox.stub(deliverypathSchemaInstance, "findOne").returns(null); //We want the system to return null which means the truck doesn't exist yet.
-        let tempSpy2 = sandbox.stub(deliverypathSchemaInstance, "create").returns(convertedDeliveryPath); //The method will return a truck that was created with the data we sent.
+        let tempSpy = sandbox.stub(deliverypathSchemaInstance, "findOne").returns(null); //We want the system to return null which means the delivery path doesn't exist yet.
+        let tempSpy2 = sandbox.stub(deliverypathSchemaInstance, "create").returns(convertedDeliveryPath); //The method will return a delivery path that was created with the data we sent.
         const repo = new DeliveryPathRepo(deliverypathSchemaInstance as Model<IDeliveryPathPersistence & Document>);
 
         // Act
@@ -129,7 +129,7 @@ describe('delivery path repository', function () {
             sandbox.done();
         });
 
-        assert.ok(result);//A delivery path will be returned (not null because the truck will be saved successfully)
+        assert.ok(result);//A delivery path will be returned (not null because the delivery path will be saved successfully)
     });
 
     it('deliverypathRepo findByDomainId unit test using deliverypathSchema stub', async function () {
