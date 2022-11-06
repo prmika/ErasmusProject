@@ -79,15 +79,6 @@ describe('truck service', function () {
 
 	it('truckService getAllTrucks unit test using truckRepo stub', async function () {
 		// Arrange
-		let body = {
-			"id": "T01",
-			"tare": 29.70,
-			"load_capacity": 33.75,
-			"max_battery_charge": 43.7,
-			"autonomy": 32.74,
-			"fast_charging_time": 54.8
-		};
-
 		let truckRepoInstance = Container.get("TruckRepo");//We mock truckRepo
 		let tempSpy = sandbox.stub(truckRepoInstance, "findAll").returns([Truck.create({
 			"id": "T01", "tare": 29.70,
@@ -190,6 +181,54 @@ describe('truck service', function () {
 
 		assert.notEqual(result, null);//The findByDomainId and save method will have returned a truck which means the updateTruck will also return a truck. Therfore it can't be null
 	});
+
+	it('truckService + truckRepo integration test for getAllTrucks using truckRepoistory stubs', async function () {
+		// Arrange	
+		let truckSchemaInstance = Container.get("truckSchema");//We mock truckRepo
+		let tempSpy = sandbox.stub(truckSchemaInstance, "find").returns(new Promise<Truck[]>((resolve, reject) => {//We mock find method of TruckSchema
+			resolve([Truck.create({
+				"id": "T01", "tare": 29.70,
+				"load_capacity": 33.75,
+				"max_battery_charge": 43.7,
+				"autonomy": 32.74,
+				"fast_charging_time": 54.8
+			} as ITruckDTO).getValue() as Truck, Truck.create({
+				"id": "W02", "tare": 34,
+				"load_capacity": 20.75,
+				"max_battery_charge": 65,
+				"autonomy": 54,
+				"fast_charging_time": 45
+			} as ITruckDTO).getValue() as Truck])
+		}));
+
+		let truckRepoInstance = Container.get("TruckRepo");//We mock truckRepo
+
+		const srv = new TruckService(truckRepoInstance as ITruckRepo);//Make new truckservice
+
+		// Act
+		let result = await srv.getAllTrucks();
+
+		// Assert
+		tempSpy.callsFake(() => {
+			sandbox.assert.calledOnce();
+			sandbox.assert.calledWith(sandbox.match([{//Will return true if those attributes and their values are indeed the one that were called
+				"id": "T01", "tare": 29.70,
+				"load_capacity": 33.75,
+				"max_battery_charge": 43.7,
+				"autonomy": 32.74,
+				"fast_charging_time": 54.8
+			}, {
+				"id": "W02", "tare": 34,
+				"load_capacity": 20.75,
+				"max_battery_charge": 65,
+				"autonomy": 54,
+				"fast_charging_time": 45
+			}]));
+			sandbox.done();
+		});
+		assert.notEqual(result, null);
+	});
+	
 });
 
 

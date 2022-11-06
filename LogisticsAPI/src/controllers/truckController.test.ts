@@ -321,7 +321,7 @@ describe('truck controller', function () {
 		assert.ok(convertedTruck.equals(convertedTruck2))
 	});
 
-	it('truckController + truckService integration test using truckRepoistory and Truck stubs', async function () {
+	it('truckController + truckService integration test for createTruck using truckRepoistory and Truck stubs', async function () {
 		// Arrange	
 		let body = { //Declare body for the request, which will be used to create a truck
 			"tare": 29.70,
@@ -375,6 +375,87 @@ describe('truck controller', function () {
 			"fast_charging_time": req.body.fast_charging_time
 		}));
 	});
+
+	it('truckController + truckService integration test for updateTruck using truckRepoistory stubs', async function () {
+		// Arrange	
+		let body = { //Declare body for the request, which will be used to create a truck
+			"tare": 29.70,
+			"load_capacity": 33.75,
+			"max_battery_charge": 43.7,
+			"autonomy": 32.74,
+			"fast_charging_time": 54.8
+		};
+		let req: Partial<Request> = {};
+		req.body = body;
+
+		let res: Partial<Response> = {
+			json: sandbox.spy()
+		};
+		let next: Partial<NextFunction> = () => { };
+
+		sandbox.stub(Truck, "create").returns(Result.ok({ //Create method will return Truck with these attributes and values
+			"id": "123", "tare": req.body.tare,
+			"load_capacity": req.body.load_capacity,
+			"max_battery_charge": req.body.max_battery_charge,
+			"autonomy": req.body.autonomy,
+			"fast_charging_time": req.body.fast_charging_time
+		}));
+		let truckRepoInstance = Container.get("TruckRepo");//We mock truckRepo
+		let tempSpy = sandbox.stub(truckRepoInstance, "findByDomainId").returns(new Promise<Truck>((resolve, reject) => {
+			resolve(Truck.create({ //We resolve the data when creating the truck and get + check the value
+				"id": "123", "tare": req.body.tare,
+				"load_capacity": req.body.load_capacity,
+				"max_battery_charge": req.body.max_battery_charge,
+				"autonomy": req.body.autonomy,
+				"fast_charging_time": req.body.fast_charging_time
+			}).getValue())
+		}));
+		let tempSpy2 = sandbox.stub(truckRepoInstance, "save").returns(new Promise<Truck>((resolve, reject) => {
+			resolve(Truck.create({ //We resolve the data when creating the truck and get + check the value
+				"id": "123", "tare": req.body.tare,
+				"load_capacity": req.body.load_capacity,
+				"max_battery_charge": req.body.max_battery_charge,
+				"autonomy": req.body.autonomy,
+				"fast_charging_time": req.body.fast_charging_time
+			}).getValue())
+		}));
+
+		let truckServiceInstance = Container.get("TruckService");//We mock truckService
+
+		const ctrl = new TruckController(truckServiceInstance as ITruckService);
+
+		// Act
+		await ctrl.updateTruck(<Request>req, <Response>res, <NextFunction>next);
+
+		//Check findByDomainId stub
+		tempSpy.callsFake(() => {
+			sandbox.assert.calledOnce(res.json);
+			sandbox.assert.calledWith(res.json, sandbox.match({//Will return true if those attributes and their values are indeed the one that were called
+				"id": "123",
+				"tare": req.body.tare,
+				"load_capacity": req.body.load_capacity,
+				"max_battery_charge": req.body.max_battery_charge,
+				"autonomy": req.body.autonomy,
+				"fast_charging_time": req.body.fast_charging_time
+			}));
+			sandbox.done();
+		});
+
+		//Check save stub
+		tempSpy2.callsFake(() => {
+			sandbox.assert.calledOnce(res.json);
+			sandbox.assert.calledWith(res.json, sandbox.match({//Will return true if those attributes and their values are indeed the one that were called
+				"id": "123",
+				"tare": req.body.tare,
+				"load_capacity": req.body.load_capacity,
+				"max_battery_charge": req.body.max_battery_charge,
+				"autonomy": req.body.autonomy,
+				"fast_charging_time": req.body.fast_charging_time
+			}));
+			sandbox.done();
+		});
+	});
+
 });
 
 
