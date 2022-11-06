@@ -80,7 +80,7 @@ export default class PackagingService implements IPackagingService {
           packaging.height = packagingDTO.height;
           packaging.depth = packagingDTO.depth;
           packaging.weight = packagingDTO.weight;
-          packaging.timeToLoad = packagingDTO.timeToLoad;
+          //packaging.timeToLoad = packagingDTO.timeToLoad;
           await this.packagingRepo.save(packaging);
 
           const packagingDTOResult = PackagingMap.toDTO(packaging) as IPackagingDTO;

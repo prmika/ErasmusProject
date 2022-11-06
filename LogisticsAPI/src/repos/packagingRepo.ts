@@ -50,7 +50,7 @@ export default class PackagingRepo implements IPackagingRepo {
         packagingDocument.height = packaging.height;
         packagingDocument.depth = packaging.depth;
         packagingDocument.weight = packaging.weight;
-        packagingDocument.timeToLoad = packaging.timeToLoad;
+        //packagingDocument.timeToLoad = packaging.timeToLoad;
         await packagingDocument.save();
 
         return packaging;
