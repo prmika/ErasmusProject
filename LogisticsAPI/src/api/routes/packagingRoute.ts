@@ -23,7 +23,7 @@ export default (app: Router) => {
         height: Joi.number().required(),
         depth: Joi.number().required(),
         weight: Joi.number().required(),
-        timeToLoad: Joi.number().required()
+        timeToLoad: Joi.number()
       })
     }),
     (req, res, next) => ctrl.createPackaging(req, res, next));

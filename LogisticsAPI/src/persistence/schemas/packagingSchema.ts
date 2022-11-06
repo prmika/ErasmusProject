@@ -40,7 +40,7 @@ const Packaging = new mongoose.Schema(
 
         timeToLoad: {
             type: Number,
-            required: [true, 'Please enter the time needed to Load/Unload the package'],
+            //required: [true, 'Please enter the time needed to Load/Unload the package'],
             index: true,
         },
 

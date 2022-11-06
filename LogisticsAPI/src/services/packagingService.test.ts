@@ -43,8 +43,8 @@ describe('packaging service', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		};
 
 		let packagingRepoInstance = Container.get("PackagingRepo");//We mock packagingRepo
@@ -72,8 +72,8 @@ describe('packaging service', function () {
 			    "width": body.width,
 			    "height": body.height,
 			    "depth": body.depth,
-			    "weight": body.weight,
-                "timeToLoad": body.timeToLoad
+			    "weight": body.weight
+                //"timeToLoad": body.timeToLoad
 			}));
 			sandbox.done();
 		});
@@ -89,8 +89,8 @@ describe('packaging service', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		};
 
 		let packagingRepoInstance = Container.get("PackagingRepo");//We mock packagingRepo
@@ -126,16 +126,16 @@ describe('packaging service', function () {
 			    "width": 2,
 			    "height": 1.5,
 			    "depth": 2.3,
-			    "weight": 20.4,
-                "timeToLoad": 0.5
+			    "weight": 20.4
+                //"timeToLoad": 0.5
 			}, {
 				"id": "P01",
 			    "product": "test_product",
 			    "width": 2,
 			    "height": 1.5,
 			    "depth": 2.3,
-			    "weight": 20.4,
-                "timeToLoad": 0.5
+			    "weight": 20.4
+                //"timeToLoad": 0.5
 			}]));
 			sandbox.done();
 		});
@@ -149,8 +149,8 @@ describe('packaging service', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		};
 
 		let packagingRepoInstance = Container.get("PackagingRepo");//We mock packagingRepo
@@ -177,7 +177,7 @@ describe('packaging service', function () {
 		const srvc = new PackagingService(packagingRepoInstance as IPackagingRepo);
 
 		// Act
-		let result = await srvc.updatePackaging("P01",body as IPackagingDTO);
+		let result = await srvc.updatePackaging("P01", body as IPackagingDTO);
 
 		// Assert
 		tempSpy.callsFake(() => {
@@ -188,8 +188,8 @@ describe('packaging service', function () {
 			    "width": body.width,
 			    "height": body.height,
 			    "depth": body.depth,
-			    "weight": body.weight,
-                "timeToLoad": body.timeToLoad
+			    "weight": body.weight
+                //"timeToLoad": body.timeToLoad
 			}));
 			sandbox.done();
 		});
@@ -202,8 +202,8 @@ describe('packaging service', function () {
 			    "width": body.width,
 			    "height": body.height,
 			    "depth": body.depth,
-			    "weight": body.weight,
-                "timeToLoad": body.timeToLoad
+			    "weight": body.weight
+                //"timeToLoad": body.timeToLoad
 			}));
 			sandbox.done();
 		});

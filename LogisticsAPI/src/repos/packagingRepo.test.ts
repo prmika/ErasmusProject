@@ -74,8 +74,8 @@ describe('packaging repository', function () {
 			    "width": 2,
 			    "height": 1.5,
 			    "depth": 2.3,
-			    "weight": 20.4,
-                "timeToLoad": 0.5
+			    "weight": 20.4
+                //"timeToLoad": 0.5
 			}));
 			sandbox.done();
 		});
@@ -113,8 +113,8 @@ describe('packaging repository', function () {
 			    "width": 2,
 			    "height": 1.5,
 			    "depth": 2.3,
-			    "weight": 20.4,
-                "timeToLoad": 0.5
+			    "weight": 20.4
+                //"timeToLoad": 0.5
 			}));
 			sandbox.done();
 		});
@@ -125,8 +125,8 @@ describe('packaging repository', function () {
 			    "width": 2,
 			    "height": 1.5,
 			    "depth": 2.3,
-			    "weight": 20.4,
-                "timeToLoad": 0.5
+			    "weight": 20.4
+                //"timeToLoad": 0.5
 			}));
 			sandbox.done();
 		});
@@ -159,8 +159,8 @@ describe('packaging repository', function () {
 			    "width": 2,
 			    "height": 1.5,
 			    "depth": 2.3,
-			    "weight": 20.4,
-                "timeToLoad": 0.5
+			    "weight": 20.4
+                //"timeToLoad": 0.5
 			}));
 			sandbox.done();
 		});

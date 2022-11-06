@@ -5,6 +5,6 @@ export interface IPackagingDTO {
     height: Number;
     depth: Number;
     weight: Number;
-    timeToLoad: Number;
+    //timeToLoad: Number;
   }
   
