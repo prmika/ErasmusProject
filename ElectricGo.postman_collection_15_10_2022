@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "eed2819a-a813-4247-881e-9e68aa3ad8c5",
+		"_postman_id": "775fdfb0-82f9-48ab-a159-1e02c46518b9",
 		"name": "ElectricGo",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23616676"
 	},
 	"item": [
 		{
@@ -10,17 +11,58 @@
 			"item": [
 				{
 					"name": "GetAllTrucks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/trucks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"trucks"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "GetTruckById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/trucks/f4c96eaa-4613-4b15-b138-2459f0849945",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"trucks",
+								"f4c96eaa-4613-4b15-b138-2459f0849945"
+							]
+						}
 					},
 					"response": []
 				},
@@ -80,6 +122,146 @@
 								"v1",
 								"trucks",
 								"f4c96eaa-4613-4b15-b138-2459f0849945"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPackages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/packages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddPackaging",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\": \"Carrots\",\r\n    \"width\": 1.7,\r\n    \"height\": 1.3,\r\n    \"depth\": 2.1,\r\n    \"weight\": 15.6\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/packages",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPackaging",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/packages/68182f24-dd89-4a86-af10-ba52e4943013",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"packages",
+								"68182f24-dd89-4a86-af10-ba52e4943013"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePackaging",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"68182f24-dd89-4a86-af10-ba52e4943013\",\r\n    \"product\": \"Banana\",\r\n    \"width\": 4,\r\n    \"height\": 5,\r\n    \"depth\": 1,\r\n    \"weight\": 3125\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/packages/68182f24-dd89-4a86-af10-ba52e4943013",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"packages",
+								"68182f24-dd89-4a86-af10-ba52e4943013"
 							]
 						}
 					},

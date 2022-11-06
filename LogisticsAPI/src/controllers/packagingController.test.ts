@@ -40,7 +40,7 @@ describe('packaging controller', function () {
 			"height": 1.5,
 			"depth": 2.3,
 			"weight": 20.4,
-            "timeToLoad": 0.5
+            //"timeToLoad": 0.5
 		};
 		let req: Partial<Request> = {};
 		req.body = body;
@@ -56,8 +56,8 @@ describe('packaging controller', function () {
 			"width": req.body.width,
 			"height": req.body.height,
 			"depth": req.body.depth,
-			"weight": req.body.weight,
-            "timeToLoad": req.body.timeToLoad
+			"weight": req.body.weight
+            //"timeToLoad": req.body.timeToLoad
 		}));
 
 		const ctrl = new PackagingController(packagingServiceInstance as IPackagingService);
@@ -73,8 +73,8 @@ describe('packaging controller', function () {
 			"width": req.body.width,
 			"height": req.body.height,
 			"depth": req.body.depth,
-			"weight": req.body.weight,
-            "timeToLoad": req.body.timeToLoad
+			"weight": req.body.weight
+            //"timeToLoad": req.body.timeToLoad
 		}));
 	});
 	
@@ -95,8 +95,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		}));
 
 		const ctrl = new PackagingController(packagingServiceInstance as IPackagingService);
@@ -112,8 +112,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		}));
 	});
 
@@ -132,8 +132,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		},
 		{
 			"id": "P02",
@@ -141,8 +141,8 @@ describe('packaging controller', function () {
 			"width": 1.5,
 			"height": 3,
 			"depth": 4,
-			"weight": 25.1,
-            "timeToLoad": 0.5
+			"weight": 25.1
+            //"timeToLoad": 0.5
 		}]));
 
 		const ctrl = new PackagingController(packagingServiceInstance as IPackagingService);
@@ -158,8 +158,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		},
 		{
 			"id": "P02",
@@ -167,8 +167,8 @@ describe('packaging controller', function () {
 			"width": 1.5,
 			"height": 3,
 			"depth": 4,
-			"weight": 25.1,
-            "timeToLoad": 0.5
+			"weight": 25.1
+            //"timeToLoad": 0.5
 		}]));
 	});
 
@@ -180,8 +180,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		};
 		let req: Partial<Request> = {};
 		req.body = body; //Requests needs a body
@@ -198,8 +198,8 @@ describe('packaging controller', function () {
 			"width": req.body.width,
 			"height": req.body.height,
 			"depth": req.body.depth,
-			"weight": req.body.weight,
-            "timeToLoad": req.body.timeToLoad
+			"weight": req.body.weight
+            //"timeToLoad": req.body.timeToLoad
 		}));
 
 		const ctrl = new PackagingController(packagingServiceInstance as IPackagingService);
@@ -214,8 +214,8 @@ describe('packaging controller', function () {
 			    "width": req.body.width,
 			    "height": req.body.height,
 			    "depth": req.body.depth,
-			    "weight": req.body.weight,
-                "timeToLoad": req.body.timeToLoad
+			    "weight": req.body.weight
+                //"timeToLoad": req.body.timeToLoad
 			}));
 			sandbox.done();
 		});
@@ -229,8 +229,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO);
 
 		let convertedPackaging: Packaging = packaging.getValue() as Packaging;
@@ -241,7 +241,7 @@ describe('packaging controller', function () {
 		assert.equal(convertedPackaging.height,1.5);  
 		assert.equal(convertedPackaging.depth,2.3);  
 		assert.equal(convertedPackaging.weight,20.4);
-        assert.equal(convertedPackaging.timeToLoad,0.5);
+        //assert.equal(convertedPackaging.timeToLoad,0.5);
 	});
 
 	it('Create and update packaging', function () {
@@ -251,8 +251,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO);
 
 		let convertedPackaging: Packaging = packaging.getValue() as Packaging;
@@ -263,7 +263,7 @@ describe('packaging controller', function () {
 		assert.equal(convertedPackaging.height,1.5);  
 		assert.equal(convertedPackaging.depth,2.3);  
 		assert.equal(convertedPackaging.weight,20.4);
-        assert.equal(convertedPackaging.timeToLoad,0.5);  
+        //assert.equal(convertedPackaging.timeToLoad,0.5);  
 		
 		//Changes values
 		convertedPackaging.product = "test_product_99";
@@ -271,7 +271,7 @@ describe('packaging controller', function () {
 		convertedPackaging.height = 2.5;
 		convertedPackaging.depth = 2.9;
 		convertedPackaging.weight = 10.1;
-        convertedPackaging.timeToLoad = 1.1;
+        //convertedPackaging.timeToLoad = 1.1;
 
 		//Values are replaced
 		//Check if all parameters are correct and equal to the ones assigned (not the older values anymore)
@@ -280,14 +280,14 @@ describe('packaging controller', function () {
 		assert.notEqual(convertedPackaging.height,1.5);  
 		assert.notEqual(convertedPackaging.depth,2.3);  
 		assert.notEqual(convertedPackaging.weight,20.4);
-		assert.notEqual(convertedPackaging.timeToLoad,0.5);  
+		//assert.notEqual(convertedPackaging.timeToLoad,0.5);  
 
 		assert.equal(convertedPackaging.product,"test_product_99");  
 		assert.equal(convertedPackaging.width,4);  
 		assert.equal(convertedPackaging.height,2.5);  
 		assert.equal(convertedPackaging.depth,2.9);  
 		assert.equal(convertedPackaging.weight,10.1);
-        assert.equal(convertedPackaging.timeToLoad,1.1); 
+        //assert.equal(convertedPackaging.timeToLoad,1.1); 
 
 	});
 
@@ -298,8 +298,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO);
 
 		
@@ -313,7 +313,7 @@ describe('packaging controller', function () {
 		assert.equal(packagingDto.height,1.5);  
 		assert.equal(packagingDto.depth,2.3);  
 		assert.equal(packagingDto.weight,20.4);
-		assert.equal(packagingDto.timeToLoad,0.5);  
+		//assert.equal(packagingDto.timeToLoad,0.5);  
 
 		//Check if toDomain maps correctly and values are still the same
 		let packagingDomain = PackagingMap.toDomain(convertedPackaging);
@@ -322,7 +322,7 @@ describe('packaging controller', function () {
 		assert.equal(packagingDomain.height,1.5);  
 		assert.equal(packagingDomain.depth,2.3);  
 		assert.equal(packagingDomain.weight,20.4);
-		assert.equal(packagingDomain.timeToLoad,0.5); 
+		//assert.equal(packagingDomain.timeToLoad,0.5); 
 
 		//Check if toPersistence maps correctly and values are still the same
 		let packagingPersistence = PackagingMap.toPersistence(convertedPackaging);
@@ -331,7 +331,7 @@ describe('packaging controller', function () {
 		assert.equal(packagingPersistence.height,1.5);  
 		assert.equal(packagingPersistence.depth,2.3);  
 		assert.equal(packagingPersistence.weight,20.4);
-		assert.equal(packagingPersistence.timeToLoad,0.5); 
+		//assert.equal(packagingPersistence.timeToLoad,0.5); 
 	});
 
 	it('Check if 2 packages are equal to each other', function () {
@@ -341,8 +341,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		} as IPackagingDTO);
 
 		let convertedPackaging: Packaging = packaging.getValue() as Packaging;
@@ -359,8 +359,8 @@ describe('packaging controller', function () {
 			"width": 2,
 			"height": 1.5,
 			"depth": 2.3,
-			"weight": 20.4,
-            "timeToLoad": 0.5
+			"weight": 20.4
+            //"timeToLoad": 0.5
 		};
 		let req: Partial<Request> = {};
 		req.body = body;
@@ -376,8 +376,8 @@ describe('packaging controller', function () {
 			"width": req.body.width,
 			"height": req.body.height,
 			"depth": req.body.depth,
-			"weight": req.body.weight,
-            "timeToLoad": req.body.timeToLoad
+			"weight": req.body.weight
+            //timeToLoad": req.body.timeToLoad
 		}));
 
 		let packagingRepoInstance = Container.get("PackagingRepo");//We mock packagingRepo
@@ -388,8 +388,8 @@ describe('packaging controller', function () {
 				"width": req.body.width,
 				"height": req.body.height,
 				"depth": req.body.depth,
-				"weight": req.body.weight,
-            	"timeToLoad": req.body.timeToLoad
+				"weight": req.body.weight
+            	//"timeToLoad": req.body.timeToLoad
 			}).getValue())
 		}));
 
@@ -408,8 +408,8 @@ describe('packaging controller', function () {
 			"width": req.body.width,
 			"height": req.body.height,
 			"depth": req.body.depth,
-			"weight": req.body.weight,
-            "timeToLoad": req.body.timeToLoad
+			"weight": req.body.weight
+            //"timeToLoad": req.body.timeToLoad
 		}));
 	});
 });

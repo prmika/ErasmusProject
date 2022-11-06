@@ -154,8 +154,6 @@ describe('truck repository', function () {
 			}));
 			sandbox.done();
 		});
-
-		assert.ok(result);//Result is a truck that has the sane id as the one given to the method
 	});
 
 	it('truckRepo findByDomainId unit test when result is null (using truckSchema stub)', async function () {

@@ -65,12 +65,12 @@ export class Packaging extends AggregateRoot<PackagingProps> {
   }
 
   get timeToLoad (): Number {
-    return this.props.timeToLoad;
+    return 0.5 + (0.02 * this.weight.valueOf());
   }
 
-  set timeToLoad ( value: Number) {
+  /*set timeToLoad ( value: Number) {
     this.props.timeToLoad = 0.5 + (0.02 * this.weight.valueOf());
-  }
+  }*/
 
   private constructor (props: PackagingProps, id?: UniqueEntityID) {
     super(props, id);
@@ -82,7 +82,7 @@ export class Packaging extends AggregateRoot<PackagingProps> {
     const height = packagingDTO.height;
     const depth = packagingDTO.depth;
     const weight = packagingDTO.weight;
-    const timeToLoad = packagingDTO.timeToLoad;
+    //const timeToLoad = packagingDTO.timeToLoad;
 
     /*if ((!!product === false || product.length === 0) && (!!width === false || width === 0) && (!!height === false || height === 0) && (!!depth === false || depth === 0) && (!!weight === false || weight === 0) && (!!timeToLoad === false || timeToLoad === 0)) {
       return Result.fail<Packaging>('Must provide all the package properties!')
@@ -91,7 +91,7 @@ export class Packaging extends AggregateRoot<PackagingProps> {
       return Result.fail<Packaging>('Package is too big!')
     }
     else {
-      const packaging = new Packaging({ product: product, width: width, height: height, depth: depth, weight: weight, timeToLoad: timeToLoad }, id);
+      const packaging = new Packaging({ product: product, width: width, height: height, depth: depth, weight: weight, timeToLoad: 0.5 }, id);
       return Result.ok<Packaging>(packaging)
     }
   }
