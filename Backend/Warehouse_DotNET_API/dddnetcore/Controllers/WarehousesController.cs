@@ -4,11 +4,13 @@ using System;
 using System.Threading.Tasks;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Warehouses;
+using System.Web.Http.Cors;
 
 namespace DDDSample1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class WarehousesController : ControllerBase
     {
         private readonly WarehouseService _service;

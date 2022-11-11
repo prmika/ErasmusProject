@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Deliveries;
 using DDDSample1.Domain.Warehouses;
+using System.Web.Http.Cors;
 
 namespace DDDSample1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class DeliveriesController : ControllerBase
     {
         private readonly DeliveryService _service;
