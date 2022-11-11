@@ -35,12 +35,4 @@ export class TruckService {
     const url = 'http://localhost:3000/api/v1/trucks'
     return this.http.post<Truck>(url, truck, this.httpOptions);
   }
-  //  // URL to web api
-
-  //   /** DELETE: delete the truck from the server */
-  //   deleteTruck(id: number): Observable<Truck> {
-  //     const url = `${this.truckesUrl}/${id}`;
-
-  //     return this.http.delete<Truck>(url, this.httpOptions);
-  //   }
 }

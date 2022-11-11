@@ -1,6 +1,6 @@
+<div style="text-align: center;"><button class="button is-info" routerLink="/truck/create" style="margin: 15px"><i class="fa fa-plus"
+  aria-hidden="true"></i>Create new Truck</button></div>
 <div *ngIf="trucksSuccessfullyLoaded">
-  <div style="text-align: center;"><button class="button is-info" routerLink="/truck/create" style="margin: 15px"><i class="fa fa-plus"
-        aria-hidden="true"></i>Create new Truck</button></div>
   <div class="card" *ngFor="let truck of trucks">
     <div class="card-content">
       <div class="media">
@@ -28,8 +28,7 @@
 </div>
 <div *ngIf="!trucksSuccessfullyLoaded">
   <div class="notification is-danger">
-    There was an error while trying to load the trucks data. Please try again later or try to go back to the general
-    page with all the trucks.<br>
+    There was an error while trying to load the trucks data. Please try again later.<br>
     The page will be reloaded every 5 seconds.
   </div>
 </div>

@@ -13,6 +13,8 @@ import { TruckComponent } from './components/truck/truck.component';
 import { TruckDetailComponent } from './components/truck-detail/truck-detail.component';
 import { WarehousesComponent } from './components/warehouses/warehouses.component';
 import { TruckAddComponent } from './components/truckadd/truckadd.component';
+import { WarehouseDetailComponent } from './components/warehouse-detail/warehouse-detail.component';
+import { WarehouseAddComponent } from './components/warehouseadd/warehouseadd.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { TruckAddComponent } from './components/truckadd/truckadd.component';
     TruckComponent,
     TruckDetailComponent,
     WarehousesComponent,
-    TruckAddComponent
+    TruckAddComponent,
+    WarehouseDetailComponent,
+    WarehouseAddComponent
   ],
   imports: [
     BrowserModule,

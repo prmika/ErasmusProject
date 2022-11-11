@@ -16,14 +16,14 @@ export class TruckComponent implements OnInit {
   }
 
   trucks: Truck[] = [];
-  trucksSuccessfullyLoaded = false;
+  trucksSuccessfullyLoaded = true;
   getTrucks(): void {
     this.truckService.getTrucks().subscribe({
       next: (v) => {
-        this.trucksSuccessfullyLoaded = true;
         this.trucks = v
       },
       error: (e) => {
+        this.trucksSuccessfullyLoaded = false;
         console.error("Internal Server Error, the GET request for trucks couldn't be processed. Try again later.");
         setTimeout(() => window.location.reload(), 5000)
       },

@@ -1,0 +1,80 @@
+<div *ngIf="warehouse">
+    <div class="notification is-success" [hidden]="successnotificationHidden">
+        The warehouse with id {{warehouse.id}} was updated successfully, you'll be redirected soon.
+    </div>
+    <div class="notification is-danger" [hidden]="errornotificationHidden">
+        The warehouse with id {{warehouse.id}} couldn't be updated. Please try again later.
+    </div>
+    <div class="card">
+        <div class="card-content">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-48x48">
+                        <img src="https://d3ciwvs59ifrt8.cloudfront.net/d8da335c-eac5-4d57-8adc-3391f18a5c9a/3b4086d5-15d0-4b84-92cf-4aa436a5f3be_l.jpeg" alt="Warehouse photo">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="title is-4">Warehouse</p>
+                    <p class="subtitle is-6">Id: {{warehouse.id}}</p>
+                </div>
+            </div>
+            <div class="content field">
+                <p><i class="fa fa-building"></i><b> Designation</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Designation" style="width: 400px;" [(ngModel)]="warehouse.designation"
+                     required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <p><i class="fa fa-location-arrow"></i><b> Address</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Address" style="width: 400px;"
+                        [(ngModel)]="warehouse.address" required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <p><i class="fa fa-thumb-tack"></i><b> Latitude</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="number" placeholder="Latitude" style="width: 400px;"
+                        [(ngModel)]="warehouse.latitude" required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <p><i class="fa fa-map-marker"></i><b> Longitude</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="number" placeholder="Longitude" style="width: 400px;"
+                        [(ngModel)]="warehouse.longitude" required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <div class="field is-grouped is-grouped">
+                    <p class="control">
+                        <a class="button is-primary" (click)="updateWarehouse()">
+                            Save Changes
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button is-light" routerLink="/warehouses">
+                            Back
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!warehouse">
+    <div class="notification is-danger">
+        There was an error while trying to load the warehouses data. Please try again later or try to go back to the general
+        page with all the warehouses.<br>
+        The page will be reloaded every 5 seconds.<br>
+        <a class="button is-dark" routerLink="/warehouses" style="margin: 10px;">
+            Back
+        </a>
+    </div>
+
+</div>

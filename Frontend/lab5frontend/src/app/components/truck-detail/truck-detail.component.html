@@ -1,10 +1,10 @@
 <div *ngIf="truck">
     <div class="notification is-success" [hidden]="successnotificationHidden">
         The truck with id {{truck.id}} was updated successfully, you'll be redirected soon.
-      </div>
-      <div class="notification is-danger" [hidden]="errornotificationHidden">
+    </div>
+    <div class="notification is-danger" [hidden]="errornotificationHidden">
         The truck with id {{truck.id}} couldn't be updated. Please try again later.
-      </div>
+    </div>
     <div class="card">
         <div class="card-content">
             <div class="media">
@@ -21,35 +21,40 @@
             <div class="content field" style="">
                 <p><i class="fa fa-balance-scale"></i><b> Tare (kg)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="tare" style="width: 150px;" [(ngModel)]="truck.tare" min="1" required>
+                    <input class="input" type="number" placeholder="tare" style="width: 150px;" [(ngModel)]="truck.tare"
+                        min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
                     </span>
                 </p>
                 <p><i class="fa fa-road"></i><b> Autonomy (km)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="autonomy" style="width: 150px;" [(ngModel)]="truck.autonomy" min="1" required>
+                    <input class="input" type="number" placeholder="autonomy" style="width: 150px;"
+                        [(ngModel)]="truck.autonomy" min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
                     </span>
                 </p>
                 <p><i class="fa fa-arrows-alt"></i><b> Load Capacity (kg)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="tare" style="width: 150px;" [(ngModel)]="truck.load_capacity" min="1" required>
+                    <input class="input" type="number" placeholder="tare" style="width: 150px;"
+                        [(ngModel)]="truck.load_capacity" min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
                     </span>
                 </p>
                 <p><i class="fa fa-clock-o"></i><b> Fast Charging Time (min)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="tare" style="width: 150px;" [(ngModel)]="truck.fast_charging_time" min="1" required>
+                    <input class="input" type="number" placeholder="tare" style="width: 150px;"
+                        [(ngModel)]="truck.fast_charging_time" min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
                     </span>
                 </p>
                 <p><i class="fa fa-battery-full"></i><b> Max Battery Charge (kWh)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="tare" style="width: 150px;" [(ngModel)]="truck.max_battery_charge" min="1" required>
+                    <input class="input" type="number" placeholder="tare" style="width: 150px;"
+                        [(ngModel)]="truck.max_battery_charge" min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
                     </span>
@@ -72,11 +77,12 @@
 </div>
 <div *ngIf="!truck">
     <div class="notification is-danger">
-        There was an error while trying to load the truck data. Please try again later.<br>
+        There was an error while trying to load the trucks data. Please try again later or try to go back to the general
+        page with all the trucks.<br>
         The page will be reloaded every 5 seconds.<br>
         <a class="button is-dark" routerLink="/trucks" style="margin: 10px;">
             Back
         </a>
     </div>
-      
+
 </div>

@@ -1,56 +1,52 @@
 import { Component, OnInit } from '@angular/core';
+import { Warehouse } from 'src/app/interfaces/warehouse';
 import { ActivatedRoute } from '@angular/router';
-import { HeroService } from 'src/app/hero.service';
-import { Truck } from 'src/app/interfaces/truck';
-import { TruckService } from 'src/app/services/truck.service';
-import { Location } from '@angular/common';
-import { Router } from 'express';
-
+import { WarehouseService } from 'src/app/services/warehouse.service';
 
 @Component({
-  selector: 'app-truck-detail',
-  templateUrl: './truck-detail.component.html',
-  styleUrls: ['./truck-detail.component.css']
+  selector: 'app-warehouse-detail',
+  templateUrl: './warehouse-detail.component.html',
+  styleUrls: ['./warehouse-detail.component.css']
 })
-export class TruckDetailComponent implements OnInit {
+export class WarehouseDetailComponent implements OnInit {
 
-  truck: Truck | undefined;
+  warehouse: Warehouse | undefined;
   successnotificationHidden = true;
   errornotificationHidden = true;
 
   constructor(
     private route: ActivatedRoute,
-    private truckService: TruckService,
-    private location: Location
+    private warehouseService: WarehouseService
   ) { }
 
   ngOnInit(): void {
-    this.getTruck();
+    this.getWarehouse();
   }
 
-  getTruck(): void {
+  getWarehouse(): void {
     const id = String(this.route.snapshot.paramMap.get('id'));
-    this.truckService.getTruck(id)
+    console.log(id)
+    this.warehouseService.getWarehouse(id)
       .subscribe({
         next: (v) => {
-          this.truck = v
+          this.warehouse = v
         },
         error: (e) => {
-          console.error("Internal Server Error, the GET request for trucks couldn't be processed. Try again later.");
+          console.error("Internal Server Error, the GET request for warehouse couldn't be processed. Try again later.");
           setTimeout(() => window.location.reload(), 5000)
         },
-      });
+      }); 
   }
 
-  updateTruck(): void {
-    if (this.truck) {
-      this.truckService.updateTruck(this.truck.id, this.truck).subscribe({
+  updateWarehouse(): void {
+    if (this.warehouse) {
+      this.warehouseService.updateWarehouse(this.warehouse.id, this.warehouse).subscribe({
         next: (v) => {
           this.successnotificationHidden = false;
           console.log(v);
           setTimeout(() => {
             this.successnotificationHidden = true;
-            window.location.href = 'trucks';
+            window.location.href = 'warehouses';
           }, 4000)
         },
         error: (e) => {
@@ -63,4 +59,5 @@ export class TruckDetailComponent implements OnInit {
       })
     }
   }
+
 }
