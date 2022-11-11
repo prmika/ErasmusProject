@@ -1,0 +1,15 @@
+.box{
+    margin: 10px;
+}
+
+.create-title{
+    font-weight: bold;
+    color: darkred;
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.button{
+    margin: 10px;
+}

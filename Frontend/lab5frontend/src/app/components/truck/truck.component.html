@@ -1,0 +1,35 @@
+<div *ngIf="trucksSuccessfullyLoaded">
+  <div style="text-align: center;"><button class="button is-info" routerLink="/truck/create" style="margin: 15px"><i class="fa fa-plus"
+        aria-hidden="true"></i>Create new Truck</button></div>
+  <div class="card" *ngFor="let truck of trucks">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="https://uncrate.com/p/2021/04/freightliner-ecascadia-1.jpg" alt="Truck photo">
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4">Electric Truck</p>
+          <p class="subtitle is-6">{{truck.id}}</p>
+        </div>
+      </div>
+      <div class="content">
+        <p><i class="fa fa-balance-scale"></i><b> Tare</b> - {{truck.tare}} kg</p>
+        <p><i class="fa fa-road"></i><b> Autonomy</b> - {{truck.autonomy}} km</p>
+        <p><i class="fa fa-arrows-alt"></i><b> Load Capacity</b> - {{truck.load_capacity}} kg</p>
+        <p><i class="fa fa-clock-o"></i><b> Fast Charging Time</b> - {{truck.fast_charging_time}} min</p>
+        <p><i class="fa fa-battery-full"></i><b> Max Battery Charge</b> - {{truck.max_battery_charge}} kWh</p>
+        <p><button class="button is-warning" routerLink="/truck/{{truck.id}}"><i class="fa fa-pencil-square-o"
+              aria-hidden="true"></i>Update</button></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!trucksSuccessfullyLoaded">
+  <div class="notification is-danger">
+    There was an error while trying to load the trucks data. Please try again later or try to go back to the general
+    page with all the trucks.<br>
+    The page will be reloaded every 5 seconds.
+  </div>
+</div>
