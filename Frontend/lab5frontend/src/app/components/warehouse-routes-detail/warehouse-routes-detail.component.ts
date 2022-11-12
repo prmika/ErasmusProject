@@ -36,7 +36,6 @@ export class WarehouseRoutesDetailComponent implements OnInit {
         else {
           this.min2WarehouseSuccessfullyLoaded = true;
         }
-        console.log(this.warehouseIds);
       },
       error: (e) => {
         console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be added at the moment. Try again later.");
