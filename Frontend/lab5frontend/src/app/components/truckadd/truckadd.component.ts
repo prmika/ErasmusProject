@@ -40,7 +40,7 @@ export class TruckAddComponent implements OnInit {
       this.truckService.addTruck(body as Truck).subscribe({
         next: (v) => {
           this.truckWasSuccessfullyAddedHidden = false;
-          setTimeout(() => {window.location.href = 'trucks';; this.truckWasSuccessfullyAddedHidden = true;}, 5000)      
+          setTimeout(() => {window.location.href = 'trucks'; this.truckWasSuccessfullyAddedHidden = true;}, 5000)      
         },
         error: (e) => {
           this.truckWasNotAddedErrorHidden = false;

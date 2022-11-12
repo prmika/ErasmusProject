@@ -21,6 +21,15 @@ export class WarehousesComponent implements OnInit {
     this.warehouseService.getWarehouses().subscribe({
       next: (v) => {
         this.warehouses = v
+        this.warehouses.sort((w1, w2) => {
+          if(w1.id > w2.id) {
+            return 1;
+          } else if(w1.id < w2.id) {
+            return -1;
+          } else {
+            return 0;
+          }
+        })
       },
       error: (e) => {
         console.error("Internal Server Error, the GET request for warehouses couldn't be processed. Try again later.");

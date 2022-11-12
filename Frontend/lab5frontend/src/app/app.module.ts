@@ -15,6 +15,9 @@ import { WarehousesComponent } from './components/warehouses/warehouses.componen
 import { TruckAddComponent } from './components/truckadd/truckadd.component';
 import { WarehouseDetailComponent } from './components/warehouse-detail/warehouse-detail.component';
 import { WarehouseAddComponent } from './components/warehouseadd/warehouseadd.component';
+import { WarehouseRoutesComponent } from './components/warehouse-routes/warehouse-routes.component';
+import { WarehouseRoutesaddComponent } from './components/warehouse-routesadd/warehouse-routesadd.component';
+import { WarehouseRoutesDetailComponent } from './components/warehouse-routes-detail/warehouse-routes-detail.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { WarehouseAddComponent } from './components/warehouseadd/warehouseadd.co
     WarehousesComponent,
     TruckAddComponent,
     WarehouseDetailComponent,
-    WarehouseAddComponent
+    WarehouseAddComponent,
+    WarehouseRoutesComponent,
+    WarehouseRoutesaddComponent,
+    WarehouseRoutesDetailComponent
   ],
   imports: [
     BrowserModule,

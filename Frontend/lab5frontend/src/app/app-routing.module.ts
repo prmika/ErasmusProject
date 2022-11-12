@@ -4,6 +4,9 @@ import { TruckDetailComponent } from './components/truck-detail/truck-detail.com
 import { TruckComponent } from './components/truck/truck.component';
 import { TruckAddComponent } from './components/truckadd/truckadd.component';
 import { WarehouseDetailComponent } from './components/warehouse-detail/warehouse-detail.component';
+import { WarehouseRoutesDetailComponent } from './components/warehouse-routes-detail/warehouse-routes-detail.component';
+import { WarehouseRoutesComponent } from './components/warehouse-routes/warehouse-routes.component';
+import { WarehouseRoutesaddComponent } from './components/warehouse-routesadd/warehouse-routesadd.component';
 import { WarehouseAddComponent } from './components/warehouseadd/warehouseadd.component';
 import { WarehousesComponent } from './components/warehouses/warehouses.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -18,6 +21,9 @@ const routes: Routes = [
   { path: 'warehouses', component: WarehousesComponent },
   { path: 'warehouse/create', component: WarehouseAddComponent},
   { path: 'warehouse/:id', component: WarehouseDetailComponent },
+  { path: 'warehouse-routes', component: WarehouseRoutesComponent },
+  { path: 'warehouse-route/create', component: WarehouseRoutesaddComponent },
+  { path: 'warehouse-route/:id', component: WarehouseRoutesDetailComponent },
   { path: '**', redirectTo: '/trucks', pathMatch: 'full' }]
 
 @NgModule({

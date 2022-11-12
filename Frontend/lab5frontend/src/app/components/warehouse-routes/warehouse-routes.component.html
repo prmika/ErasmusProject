@@ -1,0 +1,36 @@
+<div style="text-align: center;"><button class="button is-info" routerLink="/warehouse-route/create" style="margin: 15px"><i class="fa fa-plus"
+    aria-hidden="true"></i>Create new Warehouse Route</button></div>
+  <div *ngIf="warehouseRoutesSuccessfullyLoaded && warehouseRoutes.length > 0">
+      <div class="card" *ngFor="let warehouseRoute of warehouseRoutes">
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="https://fundingsage.com/wp-content/uploads/2015/06/RoadMap.jpg" alt="Warehouse Route photo">
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4">Warehouses Route</p>
+              <p class="subtitle is-6">{{warehouseRoute.id}}</p>
+            </div>
+          </div>
+          <div class="content">
+            <p><i class="fa fa-home"></i><b> Departure Warehouse</b> - {{warehouseRoute.departure_warehouseId}}</p>
+            <p><i class="fa fa-home"></i><b> Destination Warehouse</b> - {{warehouseRoute.destination_warehouseId}}</p>
+            <p><i class="fa fa-battery-full"></i><b> Used Battery</b> - {{warehouseRoute.used_battery}} km</p>
+            <p><i class="fa fa-road"></i><b> Distance</b> - {{warehouseRoute.distance}} km</p>          
+            <p><i class="fa fa-clock-o"></i><b> Time</b> - {{warehouseRoute.time}} min</p>
+            <p><i class="fa fa-clock-o"></i><b> Extra Time (when charging required)</b> - {{warehouseRoute.extra_time_when_charging_required}} min</p>
+            <p><button class="button is-warning" routerLink="/warehouse-route/{{warehouseRoute.id}}"><i class="fa fa-pencil-square-o"
+                  aria-hidden="true"></i>Update</button></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!warehouseRoutesSuccessfullyLoaded">
+      <div class="notification is-danger">
+        There was an error while trying to load the warehouse data. Please try again later.<br>
+        The page will be reloaded every 5 seconds.
+      </div>
+    </div>
+  
