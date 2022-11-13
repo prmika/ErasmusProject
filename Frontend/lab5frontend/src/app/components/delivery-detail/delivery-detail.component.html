@@ -1,0 +1,104 @@
+<div *ngIf="delivery && min1WarehouseSuccessfullyLoaded">
+    <div class="notification is-success" [hidden]="successnotificationHidden">
+        The delivery with id {{delivery.id}} was updated successfully, you'll be redirected soon.
+    </div>
+    <div class="notification is-danger" [hidden]="errornotificationHidden">
+        The delivery with id {{delivery.id}} couldn't be updated because of an internal Server Error. Please try again later.
+    </div>
+    <div class="card">
+        <div class="card-content">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-48x48">
+                        <img src="https://fundingsage.com/wp-content/uploads/2015/06/RoadMap.jpg" alt="Warehouse Route photo">
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="title is-4">Delivery</p>
+                    <p class="subtitle is-6">Id: {{delivery.id}}</p>
+                </div>
+            </div>
+            <div class="content field">
+                <p><i class="fa fa-building"></i><b> WarehouseId</b></p>
+                <p class="control has-icons-left">
+                    <span class="select">
+                        <select [(ngModel)]="delivery.warehouseID">
+                            <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
+                        </select>
+                    </span>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-home"></i>
+                    </span>
+                </p>
+                <p><i class="fa fa-balance-scale"></i><b> Weight (kg)</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="number" placeholder="Weight" style="width: 400px;" [(ngModel)]="delivery.weight"
+                     min="0" required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <p><i class="fa fa-calendar"></i><b> Delivery Date</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="date" placeholder="Delivery Date" style="width: 400px;" [(ngModel)]="deliveryDateFormatted"
+                     required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <p><i class="fa fa-clock-o"></i><b> Time To Place (min)</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="number" placeholder="Time to place" style="width: 400px;" [(ngModel)]="delivery.timeToPlace"
+                     min="1" required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <p><i class="fa fa-clock-o"></i><b> Time To Pickup (min)</b></p>
+                <p class="control has-icons-left">
+                    <input class="input" type="number" placeholder="Time to pickup" style="width: 400px;" [(ngModel)]="delivery.timeToPickup"
+                     min="1" required>
+                    <span class="icon is-small is-left">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </span>
+                </p>
+                <div class="field is-grouped is-grouped">
+                    <p class="control">
+                        <a class="button is-primary" (click)="updateDelivery()">
+                            Save Changes
+                        </a>
+                    </p>
+                    <p class="control">
+                        <a class="button is-light" routerLink="/deliveries">
+                            Back
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+        The delivery couldn't be updated. Make sure to fill in all the necessary data to create a delivery.
+    </div>
+</div>
+<div *ngIf="!delivery">
+    <div class="notification is-danger">
+        There was an error while trying to load the delivery data. Please try again later or try to go back to the general
+        page with all the deliveries.<br>
+        The page will be reloaded every 5 seconds.<br>
+        <a class="button is-dark" routerLink="/deliveries" style="margin: 10px;">
+            Back
+        </a>
+    </div>
+</div>
+<div *ngIf="!min1WarehouseSuccessfullyLoaded">
+    <div class="notification is-danger">
+        At the moment, the delivery can't be updated because we are not able to retrieve at least 1 warehouse. Please wait and try again later!
+    </div>
+    <div style="text-align: center;">
+        <button class="button is-dark" style="text-align: center;" routerLink="/warehouse-routes">
+            Return
+        </button>
+    </div>
+    
+</div>

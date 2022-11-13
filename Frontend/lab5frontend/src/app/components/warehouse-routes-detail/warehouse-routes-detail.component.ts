@@ -38,7 +38,7 @@ export class WarehouseRoutesDetailComponent implements OnInit {
         }
       },
       error: (e) => {
-        console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be added at the moment. Try again later.");
+        console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be updated at the moment. Try again later.");
         this.min2WarehouseSuccessfullyLoaded = false;
       },
     })

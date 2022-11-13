@@ -1,0 +1,35 @@
+<div style="text-align: center;"><button class="button is-info" routerLink="/delivery/create" style="margin: 15px"><i class="fa fa-plus"
+    aria-hidden="true"></i>Create new Delivery</button></div>
+  <div *ngIf="deliveriesSuccessfullyLoaded && deliveries.length > 0">
+      <div class="card" *ngFor="let delivery of deliveries">
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="https://discountboxprinting.com/wp-content/uploads/2021/01/Custom-Shipping-Boxes-with-Logo.jpg" alt="Delivery photo">
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4">Delivery</p>
+              <p class="subtitle is-6">{{delivery.id}}</p>
+            </div>
+          </div>
+          <div class="content">
+            <p><i class="fa fa-home"></i><b> WarehouseId</b> - {{delivery.warehouseID}}</p>
+            <p><i class="fa fa-balance-scale"></i><b> Weight</b> - {{delivery.weight}} kg</p>
+            <p><i class="fa fa-calendar"></i><b> Delivery Date</b> - {{delivery.deliveryDate.split("T")[0]}}</p>
+            <p><i class="fa fa-clock-o"></i><b> Time To Place</b> - {{delivery.timeToPlace}} min</p>
+            <p><i class="fa fa-clock-o"></i><b> Time To Pickup</b> - {{delivery.timeToPickup}} min</p>
+            <p><button class="button is-warning" routerLink="/delivery/{{delivery.id}}"><i class="fa fa-pencil-square-o"
+                  aria-hidden="true"></i>Update</button></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!deliveriesSuccessfullyLoaded">
+      <div class="notification is-danger">
+        There was an error while trying to load the deliveries data. Please try again later.<br>
+        The page will be reloaded every 5 seconds.
+      </div>
+    </div>
+  

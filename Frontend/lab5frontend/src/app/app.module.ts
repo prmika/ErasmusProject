@@ -18,6 +18,9 @@ import { WarehouseAddComponent } from './components/warehouseadd/warehouseadd.co
 import { WarehouseRoutesComponent } from './components/warehouse-routes/warehouse-routes.component';
 import { WarehouseRoutesaddComponent } from './components/warehouse-routesadd/warehouse-routesadd.component';
 import { WarehouseRoutesDetailComponent } from './components/warehouse-routes-detail/warehouse-routes-detail.component';
+import { DeliveriesComponent } from './components/deliveries/deliveries.component';
+import { DeliveryDetailComponent } from './components/delivery-detail/delivery-detail.component';
+import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,10 @@ import { WarehouseRoutesDetailComponent } from './components/warehouse-routes-de
     WarehouseAddComponent,
     WarehouseRoutesComponent,
     WarehouseRoutesaddComponent,
-    WarehouseRoutesDetailComponent
+    WarehouseRoutesDetailComponent,
+    DeliveriesComponent,
+    DeliveryDetailComponent,
+    DeliveryaddComponent
   ],
   imports: [
     BrowserModule,

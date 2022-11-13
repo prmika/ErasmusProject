@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DeliveriesComponent } from './components/deliveries/deliveries.component';
+import { DeliveryDetailComponent } from './components/delivery-detail/delivery-detail.component';
+import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.component';
 import { TruckDetailComponent } from './components/truck-detail/truck-detail.component';
 import { TruckComponent } from './components/truck/truck.component';
 import { TruckAddComponent } from './components/truckadd/truckadd.component';
@@ -15,6 +18,9 @@ import { HeroesComponent } from './heroes/heroes.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/trucks', pathMatch: 'full' },
+  { path: 'deliveries', component: DeliveriesComponent },
+  { path: 'delivery/create', component: DeliveryaddComponent },
+  { path: 'delivery/:id', component: DeliveryDetailComponent },
   { path: 'trucks', component: TruckComponent },
   { path: 'truck/create', component: TruckAddComponent},
   { path: 'truck/:id', component: TruckDetailComponent },
