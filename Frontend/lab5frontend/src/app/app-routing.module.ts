@@ -12,9 +12,6 @@ import { WarehouseRoutesComponent } from './components/warehouse-routes/warehous
 import { WarehouseRoutesaddComponent } from './components/warehouse-routesadd/warehouse-routesadd.component';
 import { WarehouseAddComponent } from './components/warehouseadd/warehouseadd.component';
 import { WarehousesComponent } from './components/warehouses/warehouses.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { HeroDetailComponent } from './hero-detail/hero-detail.component';
-import { HeroesComponent } from './heroes/heroes.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/trucks', pathMatch: 'full' },
