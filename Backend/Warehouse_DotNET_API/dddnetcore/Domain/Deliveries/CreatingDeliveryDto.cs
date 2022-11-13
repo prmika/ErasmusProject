@@ -8,12 +8,12 @@ namespace DDDSample1.Domain.Deliveries
         public DateTime deliveryDate {get; set;}
         public string weight { get; set; }
         public string warehouseID { get; set; }
-        public DateTime timeToPlace  { get; set; }
-        public DateTime timeToPickup { get; set; }
+        public int timeToPlace  { get; set; }
+        public int timeToPickup { get; set; }
 
 
 
-        public CreatingDeliveryDto( string code, DateTime date, string mass, string warehouseId, DateTime toPlace, DateTime toPickup)
+        public CreatingDeliveryDto( string code, DateTime date, string mass, string warehouseId, int toPlace, int toPickup)
         {
             this.Id = code;
             this.deliveryDate = date;

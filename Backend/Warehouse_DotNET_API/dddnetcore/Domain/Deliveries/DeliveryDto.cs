@@ -9,8 +9,8 @@ namespace DDDSample1.Domain.Deliveries
         public DateTime deliveryDate {get;  set;}
         public double weight { get;  set; }
         public string warehouseID { get;  set; }
-        public DateTime timeToPickup { get; set; }
-        public DateTime timeToPlace  { get;  set; }
+        public int timeToPickup { get; set; }
+        public int timeToPlace  { get;  set; }
         
 
     }

@@ -11,8 +11,8 @@ namespace DDDSample1.Domain.Deliveries
         public DateTime deliveryDate {get; private set;}
         public double weight { get; private set; }
         public string warehouseID { get; private set; }
-        public DateTime timeToPickup { get; private set; }
-        public DateTime timeToPlace { get; private set; }
+        public int timeToPickup { get; private set; }
+        public int timeToPlace { get; private set; }
 
 
          public void ChangeDeliveryDate(DateTime date)
@@ -25,10 +25,10 @@ namespace DDDSample1.Domain.Deliveries
         public void ChangeWarehouseId(string warehouseId) {
             this.warehouseID = warehouseId;
         }
-        public void ChangeTimeToPlace(DateTime toPlace) {
+        public void ChangeTimeToPlace(int toPlace) {
             this.timeToPlace = toPlace;
         }
-        public void ChangeTimeToPickup(DateTime toPickup) {
+        public void ChangeTimeToPickup(int toPickup) {
             this.timeToPickup = toPickup;
         }
 
@@ -37,7 +37,7 @@ namespace DDDSample1.Domain.Deliveries
             
         }
 
-        public Delivery(string code, DateTime date, double mass, string warehouseId, DateTime toPickup, DateTime toPlace)
+        public Delivery(string code, DateTime date, double mass, string warehouseId, int toPickup, int toPlace)
         {
             this.Id = new DeliveryId(code);
             this.deliveryDate = date;

@@ -48,7 +48,7 @@ namespace DDDSample1.Domain.Deliveries
         {
             await checkWarehouseIdAsync(new WarehouseId(dto.warehouseID));
 
-            var del = new Delivery(dto.Id, dto.deliveryDate, dto.weight, dto.warehouseID, new System.DateTime(dto.deliveryDate.Year, dto.deliveryDate.Month, dto.deliveryDate.Day, dto.timeToPickup.Hour, dto.timeToPickup.Minute, 0), new System.DateTime(dto.deliveryDate.Year, dto.deliveryDate.Month, dto.deliveryDate.Day, dto.timeToPlace.Hour, dto.timeToPlace.Minute, 0));
+            var del = new Delivery(dto.Id, dto.deliveryDate, dto.weight, dto.warehouseID, dto.timeToPickup, dto.timeToPlace);
             
             await this._delrepo.AddAsync(del);
             await this._unitOfWork.CommitAsync();
@@ -80,7 +80,7 @@ namespace DDDSample1.Domain.Deliveries
             await this._unitOfWork.CommitAsync();
 
             
-            return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = new System.DateTime(del.timeToPickup.Year, del.timeToPickup.Month, del.timeToPickup.Day, del.timeToPickup.Hour, del.timeToPickup.Minute, 0), timeToPlace = new System.DateTime(del.timeToPlace.Year, del.timeToPlace.Month, del.timeToPlace.Day, del.timeToPlace.Hour, del.timeToPlace.Minute, 0), warehouseID = del.warehouseID, weight = del.weight };
+            return new DeliveryDto { Id = del.Id.AsString(), deliveryDate = del.deliveryDate,  timeToPickup = del.timeToPickup, timeToPlace = del.timeToPlace, warehouseID = del.warehouseID, weight = del.weight };
                 
             
             
