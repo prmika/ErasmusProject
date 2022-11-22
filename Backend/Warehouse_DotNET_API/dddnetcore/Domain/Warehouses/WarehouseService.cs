@@ -1,66 +1,45 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using DDDNetCore.Infrastructure;
 using DDDSample1.Domain.Shared;
+using DDDSample1.Domain.Warehouses;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
-
-namespace DDDSample1.Domain.Warehouses
+namespace DDDNetCore.Domain.Warehouses
 {
-    public class WarehouseService
+    public class WarehouseService: IWarehouseService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IWarehouseRepository _repo;
+        private IUnitOfWork _unitOfWork;
 
-        public WarehouseService(IUnitOfWork unitOfWork, IWarehouseRepository repo)
+        public WarehouseService(IUnitOfWork unitOfWork)
         {
-            this._unitOfWork = unitOfWork;
-            this._repo = repo;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<WarehouseDto>> GetAllAsync()
+        public List<Warehouse> GetAllWarehouses()
         {
-            var list = await this._repo.GetAllAsync();
-
-            List<WarehouseDto> listDto = list.ConvertAll<WarehouseDto>(war => new WarehouseDto { Id = war.Id.AsString(), Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude });
-
-            return listDto;
+            return _unitOfWork.WarehouseRepository.GetAll().ToList();
         }
 
-        public async Task<WarehouseDto> GetByIdAsync(WarehouseId Id)
+        public Warehouse GetOneWarehouse(string id)
         {
-            var war = await this._repo.GetByIdAsync(Id);
-
-            if (war == null)
-                return null;
-
-           return new WarehouseDto { Id = war.Id.AsString(), Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
+            return _unitOfWork.WarehouseRepository.GetById(id);
         }
 
-        public async Task<WarehouseDto> AddAsync(WarehouseDto dto)
+        public Warehouse AddWarehouse(WarehouseDto warehouse)
         {
-            var war = new Warehouse(dto.Id, dto.Designation, dto.Address, dto.Latitude, dto.Longitude);
-
-            await this._repo.AddAsync(war);
-
-            await this._unitOfWork.CommitAsync();
-
-            return new WarehouseDto { Id = war.Id.AsString(), Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
+            Warehouse warehouseToCreate = new Warehouse(warehouse.Id, warehouse.Designation, warehouse.Address, warehouse.Latitude, warehouse.Longitude);
+            _unitOfWork.WarehouseRepository.Create(warehouseToCreate);
+            _unitOfWork.Commit();
+            return warehouseToCreate;
         }
 
-        public async Task<WarehouseDto> UpdateAsync(WarehouseDto dto)
+        public Warehouse UpdateWarehouse(WarehouseDto warehouse)
         {
-            var war = await this._repo.GetByIdAsync(new WarehouseId(dto.Id));
-
-            if (war == null)
-                return null;
-
-            war.ChangeDesignation(dto.Designation);
-            war.ChangeAddress(dto.Address);
-            war.ChangeLat(dto.Latitude);
-            war.ChangeLong(dto.Longitude);
-
-            await this._unitOfWork.CommitAsync();
-
-            return new WarehouseDto { Id = war.Id.AsString(),  Designation = war.Designation, Address = war.Address, Latitude = war.Latitude, Longitude = war.Longitude };
+            Warehouse warehouseToUpdate = new Warehouse(warehouse.Id, warehouse.Designation, warehouse.Address, warehouse.Latitude, warehouse.Longitude);
+            _unitOfWork.WarehouseRepository.Update(warehouseToUpdate);
+            _unitOfWork.Commit();
+            return warehouseToUpdate;
         }
 
     }

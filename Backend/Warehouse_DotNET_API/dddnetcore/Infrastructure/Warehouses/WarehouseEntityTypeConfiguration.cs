@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DDDSample1.Domain.Warehouses;
+using System.Diagnostics;
+using DDDNetCore.Domain.Warehouses;
 
 namespace DDDSample1.Infrastructure.Warehouses
 {
@@ -8,10 +9,28 @@ namespace DDDSample1.Infrastructure.Warehouses
     {
         public void Configure(EntityTypeBuilder<Warehouse> builder)
         {
-            // cf. https://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx
+            builder.ToTable("tblWarehouses","Warehouses")
+                .HasKey(x => x.Id);
 
-            //builder.ToTable("Warehouses", SchemaNames.DDDSample1);
-            builder.HasKey(b => b.Id);
+            builder.Property(x => x.Address)
+                .IsRequired()
+                .HasColumnType("nvarchar")
+                .HasMaxLength(50);
+
+            builder.Property(x => x.Designation)
+                .IsRequired()
+                .HasColumnType("nvarchar")
+                .HasMaxLength(50);
+
+            builder.Property(x => x.Latitude)
+                .IsRequired()
+                .HasColumnType("float");
+
+            builder.Property(x => x.Longitude)
+                .IsRequired()
+                .HasColumnType("float");
+
+
             //builder.Property<bool>("_active").HasColumnName("Active");
         }
     }

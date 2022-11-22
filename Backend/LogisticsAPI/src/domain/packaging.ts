@@ -12,7 +12,7 @@ interface PackagingProps {
     height: Number;
     depth: Number;
     weight: Number;
-    timeToLoad: Number;
+    //timeToLoad: Number;
 }
 
 export class Packaging extends AggregateRoot<PackagingProps> {
@@ -64,9 +64,9 @@ export class Packaging extends AggregateRoot<PackagingProps> {
     this.props.weight = value;
   }
 
-  get timeToLoad (): Number {
+  /* get timeToLoad (): Number {
     return 0.5 + (0.02 * this.weight.valueOf());
-  }
+  } */
 
   /*set timeToLoad ( value: Number) {
     this.props.timeToLoad = 0.5 + (0.02 * this.weight.valueOf());
@@ -91,7 +91,7 @@ export class Packaging extends AggregateRoot<PackagingProps> {
       return Result.fail<Packaging>('Package is too big!')
     }
     else {
-      const packaging = new Packaging({ product: product, width: width, height: height, depth: depth, weight: weight, timeToLoad: 0.5 }, id);
+      const packaging = new Packaging({ product: product, width: width, height: height, depth: depth, weight: weight }, id);
       return Result.ok<Packaging>(packaging)
     }
   }
