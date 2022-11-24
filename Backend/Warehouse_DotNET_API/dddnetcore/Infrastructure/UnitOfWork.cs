@@ -1,20 +1,38 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using DDDNetCore.Infrastructure;
+using DDDSample1.Domain.Deliveries;
 using DDDSample1.Domain.Shared;
+using DDDSample1.Domain.Warehouses;
 
 namespace DDDSample1.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DDDSample1DbContext _context;
+        private BackendContext _backendContext;
+        private IWarehouseRepository _warehouseRepository;
+        private IDeliveryRepository _deliveryRepository;
 
-        public UnitOfWork(DDDSample1DbContext context)
+        public UnitOfWork(BackendContext backendContext, IWarehouseRepository warehouseRepository, IDeliveryRepository deliveryRepository)
         {
-            this._context = context;
+            _backendContext = backendContext;
+            _warehouseRepository = warehouseRepository;
+            _deliveryRepository = deliveryRepository;
         }
 
-        public async Task<int> CommitAsync()
+        public IWarehouseRepository WarehouseRepository
         {
-            return await this._context.SaveChangesAsync();
+            get { return _warehouseRepository; }
+        }
+
+        public IDeliveryRepository DeliveryRepository
+        {
+            get { return _deliveryRepository; }
+        }
+
+        public int Commit()
+        {
+            return _backendContext.SaveChanges();
         }
     }
 }
