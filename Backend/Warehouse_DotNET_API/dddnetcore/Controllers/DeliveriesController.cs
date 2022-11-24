@@ -30,6 +30,8 @@ namespace DDDSample1.Controllers
             this._context = context;
             this.deliveryService = deliveryService;
         }
+
+        // GET: api/Deliveries
         [HttpGet]
         public ActionResult ReadAll()
         {
@@ -42,11 +44,12 @@ namespace DDDSample1.Controllers
             return Ok(result);
         }
 
+        // GET: api/Deliveries/{id}
         [HttpGet("{id}")]
         public ActionResult ReadOne(string id)
         {
             var result = deliveryService.GetOneDelivery(id);
-
+            
             if (result == null)
             {
                 return NotFound($"No delivery with id {id} could be found");
@@ -54,16 +57,26 @@ namespace DDDSample1.Controllers
             return Ok(result);
         }
 
+        // POST: api/Deliveries/
         [HttpPost]
         public ActionResult<DeliveryDto> Post([FromBody] DeliveryDto delivery)
         {
+            try
+            {
             deliveryService.AddDelivery(delivery);
+            }
+            catch (BusinessRuleValidationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
             return Ok(delivery);
         }
 
+        // PUT: api/Deliveries/{id}
         [HttpPut("{id}")]
         public ActionResult<DeliveryDto> Put(string id, [FromBody] DeliveryDto delivery)
         {
+            //checks if id matches with existing id
             if ( id != delivery.Id)
             {
                 return BadRequest("Id of url doesn't match with the id of the delivery data that was sent to be updated.");
