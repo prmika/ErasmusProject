@@ -14,7 +14,24 @@ namespace DDDNetCore.Domain.Deliveries
         public int TimeToPickup { get; set; }
         public int TimeToPlace { get; set; }
 
+        
+        private Delivery()
+        {
 
+        }
+
+        public Delivery(string id, DateTime date, double mass, string warehouseId, int toPickup, int toPlace)
+        {
+            this.Id = id;
+            this.DeliveryDate = date;
+            this.Weight = mass;
+            this.WarehouseID = warehouseId;
+            this.TimeToPlace = toPlace;
+           this.TimeToPickup = toPickup;
+
+        }
+
+        
         //public void ChangeDeliveryDate(DateTime date)
         //{
         //    this.deliveryDate = date;
@@ -32,21 +49,6 @@ namespace DDDNetCore.Domain.Deliveries
         //    this.timeToPickup = toPickup;
         //}
 
-        //private Delivery()
-        //{
-
-        //}
-
-        //public Delivery(string code, DateTime date, double mass, string warehouseId, int toPickup, int toPlace)
-        //{
-        //    this.Id = new DeliveryId(code);
-        //    this.deliveryDate = date;
-        //    this.weight = mass;
-        //    this.warehouseID = warehouseId;
-        //    this.timeToPlace = toPlace;
-        //    this.timeToPickup = toPickup;
-
-        //}
 
     }
 }

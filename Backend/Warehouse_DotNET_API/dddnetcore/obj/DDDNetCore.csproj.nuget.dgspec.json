@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\offic\\Documents\\School\\ISEP\\Lab5\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {}
+    "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\offic\\Documents\\School\\ISEP\\Lab5\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {
+    "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\offic\\Documents\\School\\ISEP\\Lab5\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+        "projectUniqueName": "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
         "projectName": "DDDNetCore",
-        "projectPath": "C:\\Users\\offic\\Documents\\School\\ISEP\\Lab5\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
-        "packagesPath": "C:\\Users\\offic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\offic\\Documents\\School\\ISEP\\Lab5\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\obj\\",
+        "projectPath": "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+        "packagesPath": "C:\\Users\\maipp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\maipp\\Documents\\isep\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\offic\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\maipp\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -102,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
