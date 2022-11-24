@@ -1,9 +1,10 @@
 export interface IPackagingPersistence {
     domainId: string;
-    product: string;
-    width: Number;
-    height: Number;
-    depth: Number;
-    weight: Number;
+    truckToPlace: string;
+    deliveryId: string;
+    placementX: Number;
+    placementY: Number;
+    placementZ: Number;
     timeToLoad: Number;
+    timeToUnload: Number;
   }

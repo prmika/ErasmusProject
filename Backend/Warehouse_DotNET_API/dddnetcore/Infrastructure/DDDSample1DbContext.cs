@@ -1,23 +1,27 @@
-﻿using DDDNetCore.Domain.Deliveries;
-using DDDNetCore.Domain.Warehouses;
-using DDDSample1.Domain.Deliveries;
-using DDDSample1.Infrastructure.Deliveries;
-using DDDSample1.Infrastructure.Warehouses;
 using Microsoft.EntityFrameworkCore;
+using DDDSample1.Domain.Warehouses;
+using DDDSample1.Domain.Deliveries;
+using DDDSample1.Infrastructure.Warehouses;
+using DDDSample1.Infrastructure.Deliveries;
 
-namespace DDDNetCore.Infrastructure
+
+namespace DDDSample1.Infrastructure
 {
-    public class BackendContext: DbContext
+    public class DDDSample1DbContext : DbContext
     {
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
-        public BackendContext(DbContextOptions<BackendContext> dbContextOptions): base(dbContextOptions) { }
+
+
+        public DDDSample1DbContext(DbContextOptions options) : base(options)
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new WarehouseEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new DeliveryEntityTypeConfiguration());
         }
-
     }
 }

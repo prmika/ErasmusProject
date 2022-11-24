@@ -12,8 +12,6 @@ using DDDSample1.Infrastructure.Shared;
 using DDDSample1.Domain.Shared;
 using DDDSample1.Domain.Warehouses;
 using DDDSample1.Domain.Deliveries;
-using DDDNetCore.Infrastructure;
-using DDDNetCore.Infrastructure.Extensions;
 
 namespace DDDSample1
 {
@@ -29,13 +27,13 @@ namespace DDDSample1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BackendContext>(options => options.UseSqlServer("name=ConnectionStrings:Prega"));
+            services.AddDbContext<DDDSample1DbContext>(opt =>
+                opt.UseInMemoryDatabase("DDDSample1DB")
+                .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
-            //ConfigureMyServices(services);
+            ConfigureMyServices(services);
+            
 
-            services.RegisterServices();
-            services.RegisterRepositories();
-            services.RegisterUnitOfWorks();
             services.AddControllers().AddNewtonsoftJson();
             
       
@@ -73,6 +71,12 @@ namespace DDDSample1
         public void ConfigureMyServices(IServiceCollection services)
         {
             services.AddTransient<IUnitOfWork,UnitOfWork>();
+
+            services.AddTransient<IWarehouseRepository,WarehouseRepository>();
+            services.AddTransient<WarehouseService>();
+            
+            services.AddTransient<IDeliveryRepository,DeliveryRepository>();
+            services.AddTransient<DeliveryService>();
 
         }
     }

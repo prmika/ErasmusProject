@@ -1,15 +1,9 @@
-﻿using DDDNetCore.Domain.Deliveries;
-using DDDNetCore.Domain.Warehouses;
+﻿
 using DDDSample1.Domain.Shared;
-using System.Collections.Generic;
 
 namespace DDDSample1.Domain.Deliveries
 {
-    public interface IDeliveryRepository
+    public interface IDeliveryRepository : IRepository<Delivery, DeliveryId>
     {
-        public IEnumerable<Delivery> GetAll();
-        public Delivery GetById(string id);
-        public Delivery Create(Delivery delivery);
-        public void Update(Delivery delivery);
     }
 }

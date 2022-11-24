@@ -18,12 +18,13 @@ export default (app: Router) => {
   route.post('',
     celebrate({
       body: Joi.object({
-        product: Joi.string().required(),
-        width: Joi.number().required(),
-        height: Joi.number().required(),
-        depth: Joi.number().required(),
-        weight: Joi.number().required(),
-        timeToLoad: Joi.number()
+        truckToPlace: Joi.string().required(),
+        deliveryId: Joi.string().required(),
+        placementX: Joi.number().required(),
+        placementY: Joi.number().required(),
+        placementZ: Joi.number().required(),
+        timeToLoad: Joi.number().required(),
+        timeToUnload: Joi.number().required()
       })
     }),
     (req, res, next) => ctrl.createPackaging(req, res, next));
@@ -34,12 +35,13 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         id: Joi.string().required(),
-        product: Joi.string().required(),
-        width: Joi.number().required(),
-        height: Joi.number().required(),
-        depth: Joi.number().required(),
-        weight: Joi.number().required(),
-        timeToLoad: Joi.number()
+        truckToPlace: Joi.string().required(),
+        deliveryId: Joi.string().required(),
+        placementX: Joi.number().required(),
+        placementY: Joi.number().required(),
+        placementZ: Joi.number().required(),
+        timeToLoad: Joi.number().required(),
+        timeToUnload: Joi.number().required()
       }),
     }),
     (req, res, next) => ctrl.updatePackaging(req, res, next));

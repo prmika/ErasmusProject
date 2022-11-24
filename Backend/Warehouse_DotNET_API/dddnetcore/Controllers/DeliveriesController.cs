@@ -94,72 +94,71 @@ namespace DDDSample1.Controllers
         }
        
 
-        //// GET: api/Deliveries
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetAll()
-        //{
-        //    return await _service.GetAllAsync();
-        //}
+        // GET: api/Deliveries
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DeliveryDto>>> GetAll()
+        {
+            return await _service.GetAllAsync();
+        }
 
-        //// GET: api/Deliveries/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<DeliveryDto>> GetGetById(string id)
-        //{
-        //    var deli = await _service.GetByIdAsync(new DeliveryId(id));
+        // GET: api/Deliveries/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DeliveryDto>> GetGetById(string id)
+        {
+            var deli = await _service.GetByIdAsync(new DeliveryId(id));
 
-        //    if (deli == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (deli == null)
+            {
+                return NotFound();
+            }
 
-        //    return deli;
-        //}
+            return deli;
+        }
 
-        //// POST: api/Deliveries
-        //[HttpPost]
-        //public async Task<ActionResult<DeliveryDto>> Create(DeliveryDto dto)
-        //{
+        // POST: api/Deliveries
+        [HttpPost]
+        public async Task<ActionResult<DeliveryDto>> Create(DeliveryDto dto)
+        {
 
-        //    //var deli = await _service.AddAsync(dto);
-        //    var deli = "";
+            var deli = await _service.AddAsync(dto);
 
-        //    if (deli != null)
-        //    {
-        //        //return CreatedAtAction(nameof(GetGetById), new { Id = deli.Id }, deli);
-        //        return BadRequest();
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("WarehouseId is not valid! Make sure the Warehouse exists.");
-        //    }
-        //}
+
+            if (deli != null)
+            {
+                return CreatedAtAction(nameof(GetGetById), new { Id = deli.Id }, deli);
+            }
+            else
+            {
+                return BadRequest("WarehouseId is not valid! Make sure the Warehouse exists.");
+            }
+        }
 
         
-        //// PUT: api/Deliveries/5
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult<DeliveryDto>> Update(string id, DeliveryDto dto)
-        //{
+        // PUT: api/Deliveries/5
+        [HttpPut("{id}")]
+        public async Task<ActionResult<DeliveryDto>> Update(string id, DeliveryDto dto)
+        {
             
-        //    if (id!= dto.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+            if (id!= dto.Id)
+            {
+                return BadRequest();
+            }
 
-        //    try
-        //    {
-        //        var deli = await _service.UpdateAsync(dto);
+            try
+            {
+                var deli = await _service.UpdateAsync(dto);
                 
-        //        if (deli == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(deli);
-        //    }
-        //    catch(BusinessRuleValidationException ex)
-        //    {
-        //        return BadRequest(new {Message = ex.Message});
-        //    }
-        //}
+                if (deli == null)
+                {
+                    return NotFound();
+                }
+                return Ok(deli);
+            }
+            catch(BusinessRuleValidationException ex)
+            {
+                return BadRequest(new {Message = ex.Message});
+            }
+        }
 
         
         

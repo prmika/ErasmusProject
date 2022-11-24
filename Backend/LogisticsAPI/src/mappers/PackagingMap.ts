@@ -13,12 +13,13 @@ export class PackagingMap extends Mapper<Packaging> {
   public static toDTO( packaging: Packaging): IPackagingDTO {
     return {
       id: packaging.id.toString(),
-      product: packaging.product,
-      width: packaging.width,
-      height: packaging.height,
-      depth: packaging.depth,
-      weight: packaging.weight,
-      timeToLoad: packaging.timeToLoad
+      truckToPlace: packaging.truckToPlace,
+      deliveryId: packaging.deliveryId,
+      placementX: packaging.placementX,
+      placementY: packaging.placementY,
+      placementZ: packaging.placementZ,
+      timeToLoad: packaging.timeToLoad,
+      timeToUnload: packaging.timeToUnload
     } as IPackagingDTO;
   }
 
@@ -36,12 +37,13 @@ export class PackagingMap extends Mapper<Packaging> {
   public static toPersistence (packaging: Packaging): any {
     return {
       domainId: packaging.id.toString(),
-      product: packaging.product,
-      width: packaging.width,
-      height: packaging.height,
-      depth: packaging.depth,
-      weight: packaging.weight,
-      timeToLoad: packaging.timeToLoad
+      truckToPlace: packaging.truckToPlace,
+      deliveryId: packaging.deliveryId,
+      placementX: packaging.placementX,
+      placementY: packaging.placementY,
+      placementZ: packaging.placementZ,
+      timeToLoad: packaging.timeToLoad,
+      timeToUnload: packaging.timeToUnload
     }
   }
 }
