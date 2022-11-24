@@ -75,12 +75,13 @@ export default class PackagingService implements IPackagingService {
           return Result.fail<IPackagingDTO>("Package not found");
         }
         else {
-          packaging.product = packagingDTO.product;
-          packaging.width = packagingDTO.width;
-          packaging.height = packagingDTO.height;
-          packaging.depth = packagingDTO.depth;
-          packaging.weight = packagingDTO.weight;
-          //packaging.timeToLoad = packagingDTO.timeToLoad;
+          packaging.truckToPlace = packagingDTO.truckToPlace;
+          packaging.deliveryId = packagingDTO.deliveryId;
+          packaging.placementX = packagingDTO.placementX;
+          packaging.placementY = packagingDTO.placementY;
+          packaging.placementZ = packagingDTO.placementZ;
+          packaging.timeToLoad = packagingDTO.timeToLoad;
+          packaging.timeToUnload = packagingDTO.timeToUnload;
           await this.packagingRepo.save(packaging);
 
           const packagingDTOResult = PackagingMap.toDTO(packaging) as IPackagingDTO;
