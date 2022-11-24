@@ -7,6 +7,7 @@ import { PackagingId } from "./packagingId";
 import { IPackagingDTO } from "../dto/IPackagingDTO";
 
 interface PackagingProps {
+<<<<<<< HEAD
     truckToPlace: string;
     deliveryId: string;
     placementX: Number;
@@ -14,6 +15,14 @@ interface PackagingProps {
     placementZ: Number;
     timeToLoad: Number;
     timeToUnload: Number;
+=======
+    product: string;
+    width: Number;
+    height: Number;
+    depth: Number;
+    weight: Number;
+    //timeToLoad: Number;
+>>>>>>> c648350b359081460788b6505b8296826b33d151
 }
 
 export class Packaging extends AggregateRoot<PackagingProps> {
@@ -65,9 +74,15 @@ export class Packaging extends AggregateRoot<PackagingProps> {
     this.props.placementZ = value;
   }
 
+<<<<<<< HEAD
   get timeToLoad (): Number {
     return this.props.timeToLoad;
   }
+=======
+  /* get timeToLoad (): Number {
+    return 0.5 + (0.02 * this.weight.valueOf());
+  } */
+>>>>>>> c648350b359081460788b6505b8296826b33d151
 
   set timeToLoad ( value: Number) {
     this.props.timeToLoad = value;
@@ -101,7 +116,11 @@ export class Packaging extends AggregateRoot<PackagingProps> {
       return Result.fail<Packaging>('Must provide all the package properties!')
     }
     else {
+<<<<<<< HEAD
       const packaging = new Packaging({ truckToPlace: truckToPlace, deliveryId: deliveryId, placementX: placementX, placementY: placementY, placementZ: placementZ, timeToLoad: timeToLoad, timeToUnload: timeToUnload }, id);
+=======
+      const packaging = new Packaging({ product: product, width: width, height: height, depth: depth, weight: weight }, id);
+>>>>>>> c648350b359081460788b6505b8296826b33d151
       return Result.ok<Packaging>(packaging)
     }
   }
