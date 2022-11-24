@@ -15,12 +15,12 @@ namespace DDDSample1.Infrastructure.Warehouses
             builder.Property(x => x.Address)
                 .IsRequired()
                 .HasColumnType("nvarchar")
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             builder.Property(x => x.Designation)
                 .IsRequired()
                 .HasColumnType("nvarchar")
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             builder.Property(x => x.Latitude)
                 .IsRequired()

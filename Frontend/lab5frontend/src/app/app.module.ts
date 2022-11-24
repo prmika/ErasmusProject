@@ -16,9 +16,11 @@ import { WarehouseRoutesDetailComponent } from './components/warehouse-routes-de
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { DeliveryDetailComponent } from './components/delivery-detail/delivery-detail.component';
 import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.component';
+import { PackagesComponent } from './components/packages/packages.component';
+import { PlanningComponent } from './components/planning/planning.component';
 
 @NgModule({
-  declarations: [
+  declarations: [ //Declares all the Components so that we can use them.
     AppComponent,
     TruckComponent,
     TruckDetailComponent,
@@ -31,9 +33,11 @@ import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.compo
     WarehouseRoutesDetailComponent,
     DeliveriesComponent,
     DeliveryDetailComponent,
-    DeliveryaddComponent
+    DeliveryaddComponent,
+    PackagesComponent,
+    PlanningComponent
   ],
-  imports: [
+  imports: [ //Imports certain modules that we need to have the application working correctly.
     BrowserModule,
     AppRoutingModule,
     FormsModule,
