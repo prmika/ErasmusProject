@@ -7,12 +7,13 @@ import { PackagingId } from "./packagingId";
 import { IPackagingDTO } from "../dto/IPackagingDTO";
 
 interface PackagingProps {
-    product: string;
-    width: Number;
-    height: Number;
-    depth: Number;
-    weight: Number;
-    //timeToLoad: Number;
+    truckToPlace: string;
+    deliveryId: string;
+    placementX: Number;
+    placementY: Number;
+    placementZ: Number;
+    timeToLoad: Number;
+    timeToUnload: Number;
 }
 
 export class Packaging extends AggregateRoot<PackagingProps> {
@@ -24,74 +25,83 @@ export class Packaging extends AggregateRoot<PackagingProps> {
     return new PackagingId(this.packagingId.toValue());
   }
 
-  get product (): string {
-    return this.props.product;
+  get truckToPlace (): string {
+    return this.props.truckToPlace;
   }
 
-  set product ( value: string) {
-    this.props.product = value;
+  set truckToPlace ( value: string) {
+    this.props.truckToPlace = value;
   }
 
-  get width (): Number {
-    return this.props.width;
+  get deliveryId (): string {
+    return this.props.deliveryId;
   }
 
-  set width ( value: Number) {
-    this.props.width = value;
+  set deliveryId ( value: string) {
+    this.props.deliveryId = value;
   }
 
-  get height (): Number {
-    return this.props.height;
+  get placementX (): Number {
+    return this.props.placementX;
   }
 
-  set height ( value: Number) {
-    this.props.height = value;
+  set placementX ( value: Number) {
+    this.props.placementX = value;
   }
 
-  get depth (): Number {
-    return this.props.depth;
+  get placementY (): Number {
+    return this.props.placementY;
   }
 
-  set depth ( value: Number) {
-    this.props.depth = value;
+  set placementY ( value: Number) {
+    this.props.placementY = value;
   }
 
-  get weight (): Number {
-    return this.props.weight;
+  get placementZ (): Number {
+    return this.props.placementZ;
   }
 
-  set weight ( value: Number) {
-    this.props.weight = value;
+  set placementZ ( value: Number) {
+    this.props.placementZ = value;
   }
 
-  /* get timeToLoad (): Number {
-    return 0.5 + (0.02 * this.weight.valueOf());
-  } */
+  get timeToLoad (): Number {
+    return this.props.timeToLoad;
+  }
 
-  /*set timeToLoad ( value: Number) {
-    this.props.timeToLoad = 0.5 + (0.02 * this.weight.valueOf());
-  }*/
+  set timeToLoad ( value: Number) {
+    this.props.timeToLoad = value;
+  }
+
+  get timeToUnload (): Number {
+    return this.props.timeToUnload;
+  }
+
+  set timeToUnload ( value: Number) {
+    this.props.timeToUnload = value;
+  }
 
   private constructor (props: PackagingProps, id?: UniqueEntityID) {
     super(props, id);
   }
 
   public static create (packagingDTO: IPackagingDTO, id?: UniqueEntityID): Result<Packaging> {
-    const product = packagingDTO.product;
-    const width = packagingDTO.width;
-    const height = packagingDTO.height;
-    const depth = packagingDTO.depth;
-    const weight = packagingDTO.weight;
-    //const timeToLoad = packagingDTO.timeToLoad;
+    const truckToPlace = packagingDTO.truckToPlace;
+    const deliveryId = packagingDTO.deliveryId;
+    const placementX = packagingDTO.placementX;
+    const placementY = packagingDTO.placementY;
+    const placementZ = packagingDTO.placementZ;
+    const timeToLoad = packagingDTO.timeToLoad;
+    const timeToUnload = packagingDTO.timeToUnload;
 
     /*if ((!!product === false || product.length === 0) && (!!width === false || width === 0) && (!!height === false || height === 0) && (!!depth === false || depth === 0) && (!!weight === false || weight === 0) && (!!timeToLoad === false || timeToLoad === 0)) {
       return Result.fail<Packaging>('Must provide all the package properties!')
     }*/
-    if ((width > 8) && (height > 10) && (depth > 20)) {
-      return Result.fail<Packaging>('Package is too big!')
+    if ((!!truckToPlace === false || truckToPlace.length === 0) && (!!deliveryId === false || deliveryId.length === 0) && (!!placementX === false || placementX < 0 || placementX >= 10) && (!!placementY === false || placementY < 0 || placementY >= 20) && (!!placementZ === false || placementZ < 0 || placementZ >= 8) && (!!timeToLoad === false || timeToLoad === 0) && (!!timeToUnload === false || timeToUnload === 0)) {
+      return Result.fail<Packaging>('Must provide all the package properties!')
     }
     else {
-      const packaging = new Packaging({ product: product, width: width, height: height, depth: depth, weight: weight }, id);
+      const packaging = new Packaging({ truckToPlace: truckToPlace, deliveryId: deliveryId, placementX: placementX, placementY: placementY, placementZ: placementZ, timeToLoad: timeToLoad, timeToUnload: timeToUnload }, id);
       return Result.ok<Packaging>(packaging)
     }
   }

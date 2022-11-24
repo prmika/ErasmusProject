@@ -1,10 +1,11 @@
 export interface IPackagingDTO {
     id: string;
-    product: string;
-    width: Number;
-    height: Number;
-    depth: Number;
-    weight: Number;
-    //timeToLoad: Number;
+    truckToPlace: string;
+    deliveryId: string;
+    placementX: Number;
+    placementY: Number;
+    placementZ: Number;
+    timeToLoad: Number;
+    timeToUnload: Number;
   }
   

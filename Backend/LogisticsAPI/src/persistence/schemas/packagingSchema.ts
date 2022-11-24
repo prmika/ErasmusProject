@@ -8,39 +8,45 @@ const Packaging = new mongoose.Schema(
             unique: true
         },
 
-        product: {
+        truckToPlace: {
             type: String,
-            required: [true, 'Enter the name of the product'],
+            required: [true, 'Choose a truck to place delivery'],
             unique: true
         },
 
-        width: {
+        deliveryId: {
+            type: String,
+            required: [true, 'Choose a delivery'],
+            unique: true
+        },
+
+        placementX: {
             type: Number,
-            required: [true, 'Please enter the width of package'],
+            required: [true, 'Please enter the X coordinate'],
             index: true,
         },
 
-        height: {
+        placementY: {
             type: Number,
-            required: [true, 'Please enter the height of package'],
+            required: [true, 'Please enter the Y coordinate'],
             index: true,
         },
 
-        depth: {
+        placementZ: {
             type: Number,
-            required: [true, 'Please enter the depth of package'],
-            index: true,
-        },
-
-        weight: {
-            type: Number,
-            required: [true, 'Please enter the weight of package'],
+            required: [true, 'Please enter the Z coordinate'],
             index: true,
         },
 
         timeToLoad: {
             type: Number,
-            //required: [true, 'Please enter the time needed to Load/Unload the package'],
+            required: [true, 'Please enter the time needed to Load the delivery'],
+            index: true,
+        },
+
+        timeToUnload: {
+            type: Number,
+            required: [true, 'Please enter the time needed to Unload the delivery'],
             index: true,
         },
 

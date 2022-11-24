@@ -45,12 +45,13 @@ export default class PackagingRepo implements IPackagingRepo {
 
         return PackagingMap.toDomain(packagingCreated);
       } else {
-        packagingDocument.product = packaging.product;
-        packagingDocument.width = packaging.width;
-        packagingDocument.height = packaging.height;
-        packagingDocument.depth = packaging.depth;
-        packagingDocument.weight = packaging.weight;
-        //packagingDocument.timeToLoad = packaging.timeToLoad;
+        packagingDocument.truckToPlace = packaging.truckToPlace;
+        packagingDocument.deliveryId = packaging.deliveryId;
+        packagingDocument.placementX = packaging.placementX;
+        packagingDocument.placementY = packaging.placementY;
+        packagingDocument.placementZ = packaging.placementZ;
+        packagingDocument.timeToLoad = packaging.timeToLoad;
+        packagingDocument.timeToUnload = packaging.timeToUnload;
         await packagingDocument.save();
 
         return packaging;
