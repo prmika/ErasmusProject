@@ -9,6 +9,6 @@ namespace DDDSample1.Domain.Shared
         public int Commit();
 
         public IWarehouseRepository WarehouseRepository { get; }
-        public IDeliveryRepository DeliveryRepository { get; }
+        //public IDeliveryRepository DeliveryRepository { get; }
     }
 }
