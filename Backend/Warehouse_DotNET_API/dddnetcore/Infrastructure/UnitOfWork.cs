@@ -11,13 +11,13 @@ namespace DDDSample1.Infrastructure
     {
         private BackendContext _backendContext;
         private IWarehouseRepository _warehouseRepository;
-        //private IDeliveryRepository _deliveryRepository;
+        private IDeliveryRepository _deliveryRepository;
 
-        public UnitOfWork(BackendContext backendContext, IWarehouseRepository warehouseRepository/*, IDeliveryRepository deliveryRepository*/)
+        public UnitOfWork(BackendContext backendContext, IWarehouseRepository warehouseRepository, IDeliveryRepository deliveryRepository)
         {
             _backendContext = backendContext;
             _warehouseRepository = warehouseRepository;
-            //_deliveryRepository = deliveryRepository;
+            _deliveryRepository = deliveryRepository;
         }
 
         public IWarehouseRepository WarehouseRepository
@@ -25,10 +25,10 @@ namespace DDDSample1.Infrastructure
             get { return _warehouseRepository; }
         }
 
-        //public IDeliveryRepository DeliveryRepository
-        //{
-        //    get { return _deliveryRepository; }
-        //}
+        public IDeliveryRepository DeliveryRepository
+        {
+            get { return _deliveryRepository; }
+        }
 
         public int Commit()
         {
