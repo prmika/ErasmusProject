@@ -26,25 +26,7 @@ namespace DDDNetCore.Domain.Warehouses
             this.Longitude = longt;
         }
 
-        //public void ChangeDesignation(string des)
-        //{
-        //    this.Designation = des;
-        //}
-
-        //public void ChangeAddress(string adr)
-        //{
-        //    this.Address = adr;
-        //}
-
-        //public void ChangeLat(double lat)
-        //{
-        //    this.Latitude = lat;
-        //}
-
-        //public void ChangeLong(double longt)
-        //{
-        //    this.Longitude = longt;
-        //}
+        
 
     }
 }
