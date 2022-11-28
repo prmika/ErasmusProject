@@ -10,13 +10,13 @@ const Packaging = new mongoose.Schema(
 
         truckToPlace: {
             type: String,
-            required: [true, 'Choose a truck to place delivery'],
+            //required: [true, 'Choose a truck to place delivery'],
             unique: true
         },
 
         deliveryId: {
             type: String,
-            required: [true, 'Choose a delivery'],
+            //required: [true, 'Choose a delivery'],
             unique: true
         },
 
@@ -37,19 +37,6 @@ const Packaging = new mongoose.Schema(
             required: [true, 'Please enter the Z coordinate'],
             index: true,
         },
-
-        timeToLoad: {
-            type: Number,
-            required: [true, 'Please enter the time needed to Load the delivery'],
-            index: true,
-        },
-
-        timeToUnload: {
-            type: Number,
-            required: [true, 'Please enter the time needed to Unload the delivery'],
-            index: true,
-        },
-
     },
     { timestamps: true },
 );

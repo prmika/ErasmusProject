@@ -19,7 +19,7 @@ export default class PackagingController implements IPackagingController {
             const packagingOrError = await this.packagingServiceInstance.getPackaging(req.params.packagingId) as Result<IPackagingDTO>;
 
             if (packagingOrError.isFailure) {
-                return res.status(402).send();
+                return res.status(404).send();
             }
 
             const packagingDTO = packagingOrError.getValue();
@@ -35,7 +35,7 @@ export default class PackagingController implements IPackagingController {
             const packagingOrError = await this.packagingServiceInstance.getAllPackages() as Result<IPackagingDTO[]>;
 
             if (packagingOrError.isFailure) {
-                return res.status(402).send();
+                return res.status(404).send();
             }
 
             const packagingDTOs = packagingOrError.getValue();
@@ -50,7 +50,7 @@ export default class PackagingController implements IPackagingController {
         try {
             const packagingOrError = await this.packagingServiceInstance.createPackaging(req.body as IPackagingDTO) as Result<IPackagingDTO>;
             if (packagingOrError.isFailure) {
-                return res.status(402).send();
+                return res.status(404).send();
             }
 
             const packagingDTO = packagingOrError.getValue();

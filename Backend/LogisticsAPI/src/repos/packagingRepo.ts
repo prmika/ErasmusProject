@@ -50,8 +50,6 @@ export default class PackagingRepo implements IPackagingRepo {
         packagingDocument.placementX = packaging.placementX;
         packagingDocument.placementY = packaging.placementY;
         packagingDocument.placementZ = packaging.placementZ;
-        packagingDocument.timeToLoad = packaging.timeToLoad;
-        packagingDocument.timeToUnload = packaging.timeToUnload;
         await packagingDocument.save();
 
         return packaging;

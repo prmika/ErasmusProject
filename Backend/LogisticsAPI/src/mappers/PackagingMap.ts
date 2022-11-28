@@ -17,9 +17,7 @@ export class PackagingMap extends Mapper<Packaging> {
       deliveryId: packaging.deliveryId,
       placementX: packaging.placementX,
       placementY: packaging.placementY,
-      placementZ: packaging.placementZ,
-      timeToLoad: packaging.timeToLoad,
-      timeToUnload: packaging.timeToUnload
+      placementZ: packaging.placementZ
     } as IPackagingDTO;
   }
 
@@ -41,9 +39,7 @@ export class PackagingMap extends Mapper<Packaging> {
       deliveryId: packaging.deliveryId,
       placementX: packaging.placementX,
       placementY: packaging.placementY,
-      placementZ: packaging.placementZ,
-      timeToLoad: packaging.timeToLoad,
-      timeToUnload: packaging.timeToUnload
+      placementZ: packaging.placementZ
     }
   }
 }

@@ -5,6 +5,4 @@ export interface IPackagingPersistence {
     placementX: Number;
     placementY: Number;
     placementZ: Number;
-    timeToLoad: Number;
-    timeToUnload: Number;
   }

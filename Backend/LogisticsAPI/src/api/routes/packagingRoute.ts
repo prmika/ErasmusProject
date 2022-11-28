@@ -22,9 +22,7 @@ export default (app: Router) => {
         deliveryId: Joi.string().required(),
         placementX: Joi.number().required(),
         placementY: Joi.number().required(),
-        placementZ: Joi.number().required(),
-        timeToLoad: Joi.number().required(),
-        timeToUnload: Joi.number().required()
+        placementZ: Joi.number().required()
       })
     }),
     (req, res, next) => ctrl.createPackaging(req, res, next));
@@ -39,9 +37,7 @@ export default (app: Router) => {
         deliveryId: Joi.string().required(),
         placementX: Joi.number().required(),
         placementY: Joi.number().required(),
-        placementZ: Joi.number().required(),
-        timeToLoad: Joi.number().required(),
-        timeToUnload: Joi.number().required()
+        placementZ: Joi.number().required()
       }),
     }),
     (req, res, next) => ctrl.updatePackaging(req, res, next));

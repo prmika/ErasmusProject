@@ -6,14 +6,13 @@ import { PackagingId } from "./packagingId";
 
 import { IPackagingDTO } from "../dto/IPackagingDTO";
 
+
 interface PackagingProps {
     truckToPlace: string;
     deliveryId: string;
     placementX: Number;
     placementY: Number;
     placementZ: Number;
-    timeToLoad: Number;
-    timeToUnload: Number;
 }
 
 export class Packaging extends AggregateRoot<PackagingProps> {
@@ -65,22 +64,6 @@ export class Packaging extends AggregateRoot<PackagingProps> {
     this.props.placementZ = value;
   }
 
-  get timeToLoad (): Number {
-    return this.props.timeToLoad;
-  }
-
-  set timeToLoad ( value: Number) {
-    this.props.timeToLoad = value;
-  }
-
-  get timeToUnload (): Number {
-    return this.props.timeToUnload;
-  }
-
-  set timeToUnload ( value: Number) {
-    this.props.timeToUnload = value;
-  }
-
   private constructor (props: PackagingProps, id?: UniqueEntityID) {
     super(props, id);
   }
@@ -91,17 +74,15 @@ export class Packaging extends AggregateRoot<PackagingProps> {
     const placementX = packagingDTO.placementX;
     const placementY = packagingDTO.placementY;
     const placementZ = packagingDTO.placementZ;
-    const timeToLoad = packagingDTO.timeToLoad;
-    const timeToUnload = packagingDTO.timeToUnload;
 
     /*if ((!!product === false || product.length === 0) && (!!width === false || width === 0) && (!!height === false || height === 0) && (!!depth === false || depth === 0) && (!!weight === false || weight === 0) && (!!timeToLoad === false || timeToLoad === 0)) {
       return Result.fail<Packaging>('Must provide all the package properties!')
     }*/
-    if ((!!truckToPlace === false || truckToPlace.length === 0) && (!!deliveryId === false || deliveryId.length === 0) && (!!placementX === false || placementX < 0 || placementX >= 10) && (!!placementY === false || placementY < 0 || placementY >= 20) && (!!placementZ === false || placementZ < 0 || placementZ >= 8) && (!!timeToLoad === false || timeToLoad === 0) && (!!timeToUnload === false || timeToUnload === 0)) {
+    if ((!!truckToPlace === false || truckToPlace.length === 0) && (!!deliveryId === false || deliveryId.length === 0) && (!!placementX === false || placementX < 0 || placementX >= 10) && (!!placementY === false || placementY < 0 || placementY >= 20) && (!!placementZ === false || placementZ < 0 || placementZ >= 8)) {
       return Result.fail<Packaging>('Must provide all the package properties!')
     }
     else {
-      const packaging = new Packaging({ truckToPlace: truckToPlace, deliveryId: deliveryId, placementX: placementX, placementY: placementY, placementZ: placementZ, timeToLoad: timeToLoad, timeToUnload: timeToUnload }, id);
+      const packaging = new Packaging({ truckToPlace: truckToPlace, deliveryId: deliveryId, placementX: placementX, placementY: placementY, placementZ: placementZ }, id);
       return Result.ok<Packaging>(packaging)
     }
   }
