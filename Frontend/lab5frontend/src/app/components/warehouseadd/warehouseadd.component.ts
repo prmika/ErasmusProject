@@ -13,19 +13,19 @@ export class WarehouseAddComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  //Define all the fields necessary for a warehouse
   id: string | undefined;
   designation: string | undefined;
   address: string | undefined;
   latitude: number | undefined;
   longitude: number | undefined;
 
-  notAllFieldsHaveDataErrorHidden = true;
-  warehouseWasSuccessfullyAddedHidden = true;
-  warehouseWasNotAddedErrorHidden = true;
+  notAllFieldsHaveDataErrorHidden = true; //Shows error when not all data was given
+  warehouseWasSuccessfullyAddedHidden = true; //Show success message when warehouse was successfully created
+  warehouseWasNotAddedErrorHidden = true; //Show failure message when there were errors while trying to create the warehouse
 
-  addWarehouse(): void {
-    if ((this.id != undefined && this.id != "" && this.id.toUpperCase().includes("W")) && (this.designation != undefined && this.designation != "") &&
+  addWarehouse(): void { //Function to create a new warehouse
+    if ((this.id != undefined && this.id != "" && this.id.toUpperCase().includes("W")) && (this.designation != undefined && this.designation != "") && //Will check if none of the fields are undefined and in the right format, if so the code will continue executing
       (this.address != undefined && this.address != "") &&
       (this.latitude != undefined) &&
       (this.longitude != undefined)) {
@@ -36,22 +36,22 @@ export class WarehouseAddComponent implements OnInit {
         "latitude": this.latitude,
         "longitude": this.longitude
       }
-      this.warehouseService.addWarehouse(body as Warehouse).subscribe({
+      this.warehouseService.addWarehouse(body as Warehouse).subscribe({ //Will call the service to create the warehouse
         next: (v) => {
-          this.warehouseWasSuccessfullyAddedHidden = false;
-          setTimeout(() => {window.location.href = 'warehouses'; this.warehouseWasSuccessfullyAddedHidden = true;}, 5000)      
+          this.warehouseWasSuccessfullyAddedHidden = false; //Show success message
+          setTimeout(() => {window.location.href = 'warehouses'; this.warehouseWasSuccessfullyAddedHidden = true;}, 5000) //Will redirect to warehouse listing page and hide success message after 5 seconds
         },
         error: (e) => {
-          this.warehouseWasNotAddedErrorHidden = false;
+          this.warehouseWasNotAddedErrorHidden = false; //Will show failure message
           console.error("Internal Server Error, the POST request for a new Warehouse couldn't be processed. Try again later.");
-          setTimeout(() => {this.warehouseWasNotAddedErrorHidden = true;}, 5000)    
+          setTimeout(() => {this.warehouseWasNotAddedErrorHidden = true;}, 5000) //Will reset failure message after 5 seconds
         },
       })
     }
     else{
-      this.notAllFieldsHaveDataErrorHidden = false;
+      this.notAllFieldsHaveDataErrorHidden = false; //Will show failure message because not all fields have data
       console.error("Not all necessary fields for a new warehouse were filled in. POST Request can only be executed when this is the case.");
-      setTimeout(() => this.notAllFieldsHaveDataErrorHidden = true, 5000)
+      setTimeout(() => this.notAllFieldsHaveDataErrorHidden = true, 5000) //Will reset failure message because not all fields have data after 5 seconds
     }
   }
 }

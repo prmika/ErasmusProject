@@ -1,4 +1,4 @@
-<nav class="navbar is-link" role="navigation" aria-label="main navigation">
+<nav class="navbar is-link" role="navigation" aria-label="main navigation"> <!-- This whole nav section shows the navbar that will be on top of each page/component -->
   <div class="navbar-brand">
     <div class="navbar-item" style="cursor: default;">
       <i class="fa fa-truck" aria-hidden="true" style="margin-right: 5px;"></i>
@@ -29,6 +29,14 @@
       <a class="navbar-item" routerLink="/warehouse-routes">
         Warehouse Routes
       </a>
+
+      <a class="navbar-item" routerLink="/packages">
+        Packages
+      </a>
+
+      <a class="navbar-item" routerLink="/planning">
+        Planning
+      </a>
     </div>
 
     <div class="navbar-end">
@@ -45,4 +53,4 @@
     </div>
   </div>
 </nav>
-<router-outlet></router-outlet>
+<router-outlet></router-outlet> <!-- Makes it possible to switch between pages/components-->

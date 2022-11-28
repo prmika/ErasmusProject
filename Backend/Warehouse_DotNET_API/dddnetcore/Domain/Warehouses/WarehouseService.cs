@@ -18,7 +18,7 @@ namespace DDDNetCore.Domain.Warehouses
 
         public List<Warehouse> GetAllWarehouses()
         {
-            return _unitOfWork.WarehouseRepository.GetAll().ToList();
+            return _unitOfWork.WarehouseRepository.GetAll().OrderBy(warehouse => warehouse.Id.Substring(1,warehouse.Id.Length-1)).ToList();
         }
 
         public Warehouse GetOneWarehouse(string id)

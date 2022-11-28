@@ -20,38 +20,37 @@ export class DeliveryDetailComponent implements OnInit {
 
   deliveryDateFormatted: string = "";
 
-  constructor(private route: ActivatedRoute,
-    private deliveryService: DeliveryService,
-    private warehouseService: WarehouseService) { }
+  constructor(private route: ActivatedRoute, //We need this to read the current route url
+    private deliveryService: DeliveryService, //Service to work with the data. This is in connection with the delivery backend and the database.
+    private warehouseService: WarehouseService) { } //Service to work with the data. This is in connection with the warehouse backend and the database.
 
   ngOnInit(): void {
     this.getDelivery();
     this.warehouseService.getWarehouses().subscribe({
       next: (v) => {
-        v.forEach(warehouse => this.warehouseIds.push(warehouse.id));
-        this.warehouseIds.sort();
+        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each reeceived warehouse the id will be pushed to the warehouseIds list.
+        this.warehouseIds.sort(); //WarehouseIds list will be sorted.
         if (this.warehouseIds.length < 1) {
-          this.min1WarehouseSuccessfullyLoaded = false;
+          this.min1WarehouseSuccessfullyLoaded = false; //If less than one warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.
         }
         else {
-          this.min1WarehouseSuccessfullyLoaded = true;
+          this.min1WarehouseSuccessfullyLoaded = true; //Set to true so that the form is visible
         }
       },
       error: (e) => {
         console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no deliveries can't be updated at the moment. Try again later.");
-        this.min1WarehouseSuccessfullyLoaded = false;
+        this.min1WarehouseSuccessfullyLoaded = false; //When there's an error to load warehouses it shouldn't be possible to create a delivery.
       },
     })
   }
 
   getDelivery(): void {
-    const id = String(this.route.snapshot.paramMap.get('id'));
-    console.log(id)
-    this.deliveryService.getDelivery(id)
+    const id = String(this.route.snapshot.paramMap.get('id')); //Reads the delivery id parameter at the end of the route url
+    this.deliveryService.getDelivery(id) //Uses deliveryservice to get the delivery data associated with the entered id.
       .subscribe({
         next: (v) => {
           this.delivery = v
-          this.deliveryDateFormatted = this.delivery.deliveryDate.split("T")[0];
+          this.deliveryDateFormatted = this.delivery.deliveryDate.split("T")[0]; //Format the received data in a format that the frontend understands (by removing the time part)
         },
         error: (e) => {
           console.error("Internal Server Error, the GET request for delivery couldn't be processed. Try again later.");
@@ -61,29 +60,29 @@ export class DeliveryDetailComponent implements OnInit {
   }
 
   updateDelivery(): void {
-    if (this.delivery) {
-      if ((this.delivery.warehouseID != undefined) &&
+    if (this.delivery) { 
+      if ((this.delivery.warehouseID != undefined) && //Checks if all the necessary data is present 
         (this.delivery.weight != undefined && this.delivery.weight > 0) &&
         (this.delivery.deliveryDate != undefined) &&
         (this.delivery.timeToPickup != undefined && this.delivery.timeToPickup > 0) &&
         (this.delivery.timeToPlace != undefined && this.delivery.timeToPlace > 0)) {
 
         this.delivery.deliveryDate = this.deliveryDateFormatted;
-        this.deliveryService.updateDelivery(this.delivery.id, this.delivery).subscribe({
+        this.deliveryService.updateDelivery(this.delivery.id, this.delivery).subscribe({ //Uses deliveryservice to update the delivery based on the data the delivery variable has (this might have been changed by the user in the template thanks to the ngModel)
           next: (v) => {
-            this.successnotificationHidden = false;
+            this.successnotificationHidden = false; //Show success message
             console.log(v);
             setTimeout(() => {
               this.successnotificationHidden = true;
               window.location.href = 'deliveries';
-            }, 4000)
+            }, 4000) //Will redirect to delivery listing page and hide success message after 4 seconds
           },
           error: (e) => {
-            this.errornotificationHidden = false;
+            this.errornotificationHidden = false; //Will show failure message
             console.error("Internal Server Error, the PUT request couldn't be processed. Try again later.");
             setTimeout(() => {
               this.errornotificationHidden = true;
-            }, 4000)
+            }, 4000) //Will reset failure message after 4 seconds
           },
         })
       }
