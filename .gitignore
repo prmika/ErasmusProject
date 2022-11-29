@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+Backend/Warehouse_DotNET_API/dddnetcore/obj/Debug/net6.0/DDDNetCore.GeneratedMSBuildEditorConfig.editorconfig
+*.cache
+Backend/Warehouse_DotNET_API/dddnetcore/obj/Debug/net6.0/project.razor.json
