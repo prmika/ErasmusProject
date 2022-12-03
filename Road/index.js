@@ -2,6 +2,7 @@ import * as THREE from "./three.module.js";
 import * as dat from "./lil-gui.module.min.js";
 import { OrbitControls } from "./OrbitControls.js";
 import {CircleGeometry} from "./three.module.js";
+import { FBXLoader } from 'https://cdn.skypack.dev/three@0.138.0/examples/jsm/loaders/FBXLoader';
 const gui = new dat.GUI()
 
 //////////////////////////////////////////////////////
@@ -96,9 +97,11 @@ const visibleWidthAtZDepth = ( depth, camera ) => {
     return height * camera.aspect;
 };
 
+
+
 //////////////////////////////////////////////
 /////////////CREATION OF PLANE///////////////
-console.log(camera.position.z);
+
 const planeGeometry = new THREE.PlaneGeometry(visibleWidthAtZDepth(camera.position.z - 5, camera),visibleHeightAtZDepth(camera.position.z - 5, camera),10,10);
 const planeMaterial = new THREE.MeshPhongMaterial({color: 0xFF0000, side: THREE.DoubleSide}); //MeshPhongMaterial : Material that reacts to the light
 planeMaterial.flatShading = true;
@@ -107,8 +110,11 @@ const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 
 
 
-/////////////////////////////////////////////////////////////////
-/////////////////DEFINITION OF CITIES////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+/////////////////DEFINITION OF CITIES AND WAREHOUSES////////////////////////////
+
+//Warehouses :
+
 //longitude, latitude, altitude OR in three js axis : z, x, y
 const positions = [[8.2451,40.9321,250], [8.6410,41.0072,550], [8.7613,42.1115,200], [8.6210,41.2279,700], [8.6963, 41.1844, 350]];
 
@@ -191,6 +197,30 @@ const line = new THREE.Line( lineGeometry, lineMaterial );
 lineMaterial.linewidth = 3;
 scene.add( line );
 
+//////////////////////////////////////////////
+//////////IMPORT OF WAREHOUSE MODEL///////////
+
+let modelScale = 0.001;
+const loader = new FBXLoader();
+let warehouses = [];
+
+for (let i = 0; i<positions.length;i++) {
+    loader.load('warehouse_model.fbx', function (warehouseModel) {
+        warehouseModel.traverse(function (child) {
+            if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
+        });
+        warehouseModel.scale.set(modelScale, modelScale, modelScale);
+
+        warehouses.push(warehouseModel);
+        warehouses[i].position.set(positions[i][0] - circleRadius * 3, positions[i][1], positions[i][2]);
+        scene.add(warehouses[i]);
+        console.log(warehouses[i].position);
+
+    });
+}
 //////////////////////////////////////////
 ////////////INFINITE LOOP/////////////////
 function animate(){
