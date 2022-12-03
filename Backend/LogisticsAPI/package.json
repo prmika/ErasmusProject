@@ -61,6 +61,7 @@
     "mongodb": "^4.2.1",
     "mongoose": "^6.1.0",
     "morgan": "^1.10.0",
+    "node-fetch": "^2.6.7",
     "nodemon": "^2.0.20",
     "nyc": "^15.1.0",
     "pac-proxy-agent": "^5.0.0",
