@@ -34,7 +34,7 @@ export class WarehousesComponent implements OnInit {
       error: (e) => {
         console.error("Internal Server Error, the GET request for warehouses couldn't be processed. Try again later."); //Show error when warehouses can't get loaded.
         this.warehousesSuccessfullyLoaded = false;
-        setTimeout(() => window.location.reload(), 5000)
+        setTimeout(() => window.location.reload(), 5000) //Reload page every 5 seconds
       },
     });
   }
