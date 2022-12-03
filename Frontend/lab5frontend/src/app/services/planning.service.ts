@@ -14,7 +14,7 @@ export class PlanningService {
   constructor(
     private http: HttpClient) { }
 
-  getPlanning(): String[] {
-    return ["1","3","4"];
+  getPlanning(): Number[] {
+    return [17, 8, 3, 12, 1, 14, 11, 9]; //Only returns static data now, as no http server could be set up.
   }
 }
