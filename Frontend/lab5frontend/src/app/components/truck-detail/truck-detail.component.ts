@@ -13,23 +13,23 @@ import { Router } from 'express';
 })
 export class TruckDetailComponent implements OnInit {
 
+  //Fields to store truck data and values to hide notifications
   truck: Truck | undefined;
   successnotificationHidden = true;
   errornotificationHidden = true;
 
   constructor(
-    private route: ActivatedRoute,
-    private truckService: TruckService,
-    private location: Location
+    private route: ActivatedRoute, //We need this to read the current route url
+    private truckService: TruckService, //Service to work with the data. This is in connection with the truck backend and the database.
   ) { }
 
   ngOnInit(): void {
-    this.getTruck();
+    this.getTruck(); //Load the detailed truck data when loading this page
   }
 
   getTruck(): void {
-    const id = String(this.route.snapshot.paramMap.get('id'));
-    this.truckService.getTruck(id)
+    const id = String(this.route.snapshot.paramMap.get('id')); //Reads the truck id parameter at the end of the route url
+    this.truckService.getTruck(id) //Uses truckservice to get the truck data associated with the entered id.
       .subscribe({
         next: (v) => {
           this.truck = v
@@ -42,22 +42,22 @@ export class TruckDetailComponent implements OnInit {
   }
 
   updateTruck(): void {
-    if (this.truck) {
-      this.truckService.updateTruck(this.truck.id, this.truck).subscribe({
+    if (this.truck) { //Truck can't be undefined
+      this.truckService.updateTruck(this.truck.id, this.truck).subscribe({ //Uses truckservice to update the truck based on the data the truck parameter has (this might have been changed by the user in the template thanks to the ngModel)
         next: (v) => {
-          this.successnotificationHidden = false;
+          this.successnotificationHidden = false; //Show success message
           console.log(v);
           setTimeout(() => {
             this.successnotificationHidden = true;
             window.location.href = 'trucks';
-          }, 4000)
+          }, 4000) //Will redirect to truck listing page and hide success message after 4 seconds
         },
         error: (e) => {
-          this.errornotificationHidden = false;
+          this.errornotificationHidden = false; //Will show failure message
           console.error("Internal Server Error, the PUT request couldn't be processed. Try again later.");
           setTimeout(() => {
             this.errornotificationHidden = true;
-          }, 4000)
+          }, 4000) //Will reset failure message after 4 seconds
         },
       })
     }
