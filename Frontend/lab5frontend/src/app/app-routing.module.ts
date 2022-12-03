@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { DeliveryDetailComponent } from './components/delivery-detail/delivery-detail.component';
 import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.component';
+import { PackageaddComponent } from './components/packageadd/packageadd.component';
+import { PackagesComponent } from './components/packages/packages.component';
 import { PlanningComponent } from './components/planning/planning.component';
 import { TruckDetailComponent } from './components/truck-detail/truck-detail.component';
 import { TruckComponent } from './components/truck/truck.component';
@@ -29,6 +31,8 @@ const routes: Routes = [ //Defines all the routes users can go to
   { path: 'warehouse-route/create', component: WarehouseRoutesaddComponent },
   { path: 'warehouse-route/:id', component: WarehouseRoutesDetailComponent },
   { path: 'planning', component: PlanningComponent },
+  { path: 'packages', component: PackagesComponent },
+  { path: 'package/create', component: PackageaddComponent },
   { path: '**', redirectTo: '/trucks', pathMatch: 'full' }] //When no route is recognized, the users will be redirected to the trucks route.
 
 @NgModule({
