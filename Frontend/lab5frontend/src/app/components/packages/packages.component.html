@@ -1,0 +1,35 @@
+<div style="text-align: center;"><button class="button is-info" routerLink="/package/create" style="margin: 15px"><i class="fa fa-plus"
+    aria-hidden="true"></i>Package a new delivery</button></div>
+  <div *ngIf="packagesSuccessfullyLoaded && packages.length > 0">
+      <div class="card" *ngFor="let package of packages">
+        <div class="card-content">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="http://blog.hireahelper.com/wp-content/uploads/2015/09/Uhaul-with-Boxes.jpg" alt="Packaging photo">
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4">Package</p>
+              <p class="subtitle is-6">Id - {{package.id}}</p>
+            </div>
+          </div>
+          <div class="content">
+            <p><i class="fa fa-truck"></i><b> Truck Id</b> - {{package.truckToPlace}}</p>
+            <p><i class="fa fa-map-marker"></i><b> Delivery Id</b> - {{package.deliveryId}}</p>
+            <p><i class="fa fa-expand"></i><b> Position in truck (X)</b> - {{package.placementX}}</p>
+            <p><i class="fa fa-expand"></i><b> Position in truck (Y)</b> - {{package.placementY}}</p>
+            <p><i class="fa fa-expand"></i><b> Position in truck (Z)</b> - {{package.placementZ}}</p>
+            <p><button class="button is-warning" routerLink="/package/{{package.id}}"><i class="fa fa-pencil-square-o"
+                  aria-hidden="true"></i>Update</button></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!packagesSuccessfullyLoaded">
+      <div class="notification is-danger">
+        There was an error while trying to load the packaging data. Please try again later.<br>
+        The page will be reloaded every 5 seconds.
+      </div>
+    </div>
+  
