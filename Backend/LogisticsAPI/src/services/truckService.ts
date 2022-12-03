@@ -7,6 +7,7 @@ import ITruckService from './IServices/ITruckService';
 import { Result } from "../core/logic/Result";
 import { TruckMap } from "../mappers/TruckMap";
 import Logger from '../loaders/logger';
+import { TruckId } from '../domain/truckId';
 
 @Service()
 export default class TruckService implements ITruckService {
@@ -50,7 +51,7 @@ export default class TruckService implements ITruckService {
   public async createTruck(truckDTO: ITruckDTO): Promise<Result<ITruckDTO>> {
     try {
 
-      const truckOrError = await Truck.create(truckDTO);
+      const truckOrError = await Truck.create(truckDTO,new TruckId(truckDTO.id));
 
       if (truckOrError.isFailure) {
         return Result.fail<ITruckDTO>(truckOrError.errorValue());
