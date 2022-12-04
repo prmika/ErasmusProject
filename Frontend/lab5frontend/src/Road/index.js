@@ -106,6 +106,7 @@ const planeGeometry = new THREE.PlaneGeometry(visibleWidthAtZDepth(camera.positi
 const planeMaterial = new THREE.MeshPhongMaterial({color: 0xFF0000, side: THREE.DoubleSide}); //MeshPhongMaterial : Material that reacts to the light
 planeMaterial.flatShading = true;
 const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+
 //scene.add(planeMesh);
 
 
@@ -152,16 +153,16 @@ let scaleY = (2 * visibleHeightAtZDepth(camera.position.z - 5,camera))/(yMax-yMi
 let offsetY = -yMin * 2 * visibleHeightAtZDepth(camera.position.z,camera) / (yMax - yMin) - visibleHeightAtZDepth(camera.position.z,camera);
 
 for (let i = 0; i < positions.length; i++){
-    positions[i][2] = positions[i][2] - zMax - 5 - circleRadius;
-
+    positions[i][2] = positions[i][2] - 2 * zMax - 3;
+/*
     positions[i][0] = positions[i][0] * scaleX + offsetX;
     positions[i][1] = positions[i][1] * scaleY + offsetY;
+*/
 
-    /*
-
+/*
     positions[i][0] = positions[i][0] * (2 * visibleWidthAtZDepth(positions[i][2],camera))/(xMax-xMin) + (-xMin * 2 * visibleWidthAtZDepth(positions[i][2],camera) / (xMax - xMin) - visibleHeightAtZDepth(positions[i][2],camera));
     positions[i][1] = positions[i][1] * (2 * visibleHeightAtZDepth(positions[i][2],camera))/(yMax-yMin) + (-yMin * 2 * visibleHeightAtZDepth(positions[i][2],camera) / (yMax - yMin) - visibleHeightAtZDepth(positions[i][2],camera));
-    */
+*/
     console.log("position point après "+i+" : "+positions[i]);
 }
 const axesHelper = new THREE.AxesHelper( 5 );
@@ -181,7 +182,7 @@ for (let i=0; i < positions.length; i++){
     scene.add(cities[i]);
 }
 
-camera.position.z = 5; //We move back the camera to see the cube
+camera.position.z = +5; //We move back the camera to see the cube
 controls.update(); //Must be called after any manual changes to the camera's transform
 
 /////////////////////////////////////////////
