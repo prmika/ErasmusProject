@@ -12,20 +12,20 @@ export class TruckComponent implements OnInit {
   constructor(private truckService: TruckService) { }
 
   ngOnInit(): void {
-    this.getTrucks();
+    this.getTrucks(); //Load truck data when user loads this page
   }
 
-  trucks: Truck[] = [];
+  trucks: Truck[] = []; //Trucks will be stored here
   trucksSuccessfullyLoaded = true;
-  getTrucks(): void {
+  getTrucks(): void { //Will load all the truck data via the truckservice
     this.truckService.getTrucks().subscribe({
       next: (v) => {
-        this.trucks = v
+        this.trucks = v //Assign result to the truck list
       },
       error: (e) => {
         this.trucksSuccessfullyLoaded = false;
         console.error("Internal Server Error, the GET request for trucks couldn't be processed. Try again later.");
-        setTimeout(() => window.location.reload(), 5000)
+        setTimeout(() => window.location.reload(), 5000) //Reload page every 5 seconds
       },
     });
   }

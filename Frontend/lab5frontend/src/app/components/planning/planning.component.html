@@ -1,55 +1,48 @@
 <div style="margin: 20px">
-    <p class="create-title"><i class="fa fa-file-text"></i> Planning</p>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">TruckId</label>
-                <p class="control has-icons-left">
-                    <span class="select">
-                        <select [(ngModel)]="truckId">
-                            <option *ngFor="let option of truckIds" [value]="option">{{option}}</option>
-                        </select>
-                    </span>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-truck"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Date</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="date" [(ngModel)]="selectedDate" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-calendar"></i>
-                    </span>
-                </p>
-            </div>
+  <p class="create-title"><i class="fa fa-file-text"></i> Planning</p>
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field">
+        <label class="label">Date</label>
+        <p class="control is-expanded has-icons-left">
+          <input class="input" type="date" [(ngModel)]="selectedDate" required>
+          <span class="icon is-small is-left">
+            <i class="fa fa-calendar"></i>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 30px">
+    <button class="button is-info" style="text-align: center;" (click)="retrievePlanning()">
+      Retrieve planning
+    </button>
+  </div>
+  <div class="card" *ngIf="planning">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="https://c1.staticflickr.com/4/3549/3655190237_3dce0b3c7f.jpg" alt="Planning photo">
+          </figure>
         </div>
-    </div>
-    <div style="text-align: center; margin-top: 30px">
-        <button class="button is-info" style="text-align: center;" (click)="retrievePlanning()">
-            Retrieve planning
-        </button>
-    </div>
-    <div class="card" *ngIf="planning">
-        <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <img src="https://c1.staticflickr.com/4/3549/3655190237_3dce0b3c7f.jpg" alt="Planning photo">
-              </figure>
-            </div>
-            <div class="media-content">
-              <p class="title is-4">Planning</p>
-              <p class="subtitle is-6">The truck will do the following warehouses (in order of presence):</p>
-            </div>
-          </div>
-          <div class="content">
-            <ol>
-                <li *ngFor="let warehouseName of planning"> {{warehouseName}}</li>
-            </ol>
-            
-          </div>
+        <div class="media-content">
+          <p class="title is-4">Planning</p>
+          <p class="subtitle is-6">The truck will do the following warehouses (in order of presence):</p>
         </div>
       </div>
+      <div class="content">
+        <ol>
+          <li *ngFor="let warehouseName of planning"> {{warehouseName}}</li>
+        </ol>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!deliveryDataNotFoundHidden">
+  <div class="notification is-danger">
+    No delivery path was found for {{selectedDate}}. Please try again later.<br>
+    (for now only 2022-12-05 is supported)
+  </div>
 </div>

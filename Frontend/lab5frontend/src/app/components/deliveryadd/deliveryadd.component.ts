@@ -15,7 +15,7 @@ export class DeliveryaddComponent implements OnInit {
   ngOnInit(): void {
     this.warehouseService.getWarehouses().subscribe({
       next: (v) => {
-        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each reeceived warehouse the id will be pushed to the warehouseIds list.
+        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each received warehouse the id will be pushed to the warehouseIds list.
         this.warehouseIds.sort(); //WarehouseIds list will be sorted.
         if(this.warehouseIds.length < 1){
           this.min1WarehouseSuccessfullyLoaded = false; //If less than one warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.

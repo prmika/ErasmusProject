@@ -10,9 +10,9 @@ import { WarehouseService } from 'src/app/services/warehouse.service';
 })
 export class WarehouseDetailComponent implements OnInit {
 
-  warehouse: Warehouse | undefined;
-  successnotificationHidden = true;
-  errornotificationHidden = true;
+  warehouse: Warehouse | undefined; //Stores warehouse data
+  successnotificationHidden = true; //Stores value to hide message (should be showed when warehouse is successfully updated)
+  errornotificationHidden = true; //Stores value to hide message (should be showed when warehouse had errors while updating)
 
   constructor(
     private route: ActivatedRoute, //We need this to read the current route url
@@ -38,7 +38,7 @@ export class WarehouseDetailComponent implements OnInit {
   }
 
   updateWarehouse(): void {
-    if (this.warehouse) {
+    if (this.warehouse) { //Warehouse can't be undefined
       this.warehouseService.updateWarehouse(this.warehouse.id, this.warehouse).subscribe({ //Uses warehouseservice to update the warehouse based on the data the warehouse parameter has (this might have been changed by the user in the template thanks to the ngModel)
         next: (v) => {
           this.successnotificationHidden = false; //Show success message

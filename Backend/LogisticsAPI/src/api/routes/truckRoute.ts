@@ -18,6 +18,7 @@ export default (app: Router) => {
   route.post('',
     celebrate({
       body: Joi.object({
+        id: Joi.string().required(),
         tare: Joi.number().required(),
         load_capacity: Joi.number().required(),
         max_battery_charge: Joi.number().required(),

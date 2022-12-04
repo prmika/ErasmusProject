@@ -18,6 +18,8 @@ import { DeliveryDetailComponent } from './components/delivery-detail/delivery-d
 import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.component';
 import { PackagesComponent } from './components/packages/packages.component';
 import { PlanningComponent } from './components/planning/planning.component';
+import { PackageaddComponent } from './components/packageadd/packageadd.component';
+import { PackageDetailComponent } from './components/package-detail/package-detail.component';
 
 @NgModule({
   declarations: [ //Declares all the Components so that we can use them.
@@ -35,7 +37,9 @@ import { PlanningComponent } from './components/planning/planning.component';
     DeliveryDetailComponent,
     DeliveryaddComponent,
     PackagesComponent,
-    PlanningComponent
+    PlanningComponent,
+    PackageaddComponent,
+    PackageDetailComponent
   ],
   imports: [ //Imports certain modules that we need to have the application working correctly.
     BrowserModule,
