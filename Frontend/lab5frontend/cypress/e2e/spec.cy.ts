@@ -133,6 +133,11 @@ describe('Testing page for warehouse creation', () => {
 
     cy.get('*[class^="button is-info"]').click();
   })
+
+  it('Checking if the Return button works', () => {
+    cy.get('*[id^="retButton"]').click();
+    cy.url().should('include', '/warehouses');
+  })
 })
 
 describe('Testing page for truck creation', () => {
@@ -163,6 +168,11 @@ describe('Testing page for truck creation', () => {
     cy.get('*[class^="button is-info"]').click();
   })
 
+  it('Checking if the Return button works', () => {
+    cy.get('*[id^="retButton"]').click();
+    cy.url().should('include', '/trucks');
+  })
+
 })
 
 
@@ -171,29 +181,8 @@ describe('Testing page for delivery creation', () => {
   it('Button navigates to the creation form', () => {
     cy.visit('/deliveries');
     cy.get('button').click();
-    // cy.url().should('include', '/delivery/create');
   })
 
-  /*it('All the forms are empty', () => {
-    cy.get('input').should('be.empty');
-  })
-
-  it('Adding Delivery button exists and works', () => {
-    cy.get('*[class^="button is-info"]').click();
-  })
-
-  it('Adding an actual delivery', () => {
-
-    cy.get('*[placeholder^="e.g. BE4SZ5"]').type('BETEST');
-    cy.get('*[placeholder^="e.g. 7500 kg"]').type('7400');
-    cy.get('*[placeholder^="e.g. 100 km"]').type('100');
-    cy.get('*[placeholder^="e.g. 4300 kg"]').type('4000');
-    cy.get('*[placeholder^="e.g. 60 min"]').type('59');
-    cy.get('*[placeholder^="e.g. 80 kWh"]').type('81');
-
-    cy.get('*[class^="button is-info"]').click();
-  })
-  */
 })
 
 
@@ -202,29 +191,8 @@ describe('Testing page for route creation', () => {
   it('Button navigates to the creation form', () => {
     cy.visit('/warehouse-routes');
     cy.get('button').click();
-    // cy.url().should('include', '/route/create');
   })
 
-  /*it('All the forms are empty', () => {
-    cy.get('input').should('be.empty');
-  })
-
-  it('Adding Delivery button exists and works', () => {
-    cy.get('*[class^="button is-info"]').click();
-  })
-
-  it('Adding an actual delivery', () => {
-
-    cy.get('*[placeholder^="e.g. BE4SZ5"]').type('BETEST');
-    cy.get('*[placeholder^="e.g. 7500 kg"]').type('7400');
-    cy.get('*[placeholder^="e.g. 100 km"]').type('100');
-    cy.get('*[placeholder^="e.g. 4300 kg"]').type('4000');
-    cy.get('*[placeholder^="e.g. 60 min"]').type('59');
-    cy.get('*[placeholder^="e.g. 80 kWh"]').type('81');
-
-    cy.get('*[class^="button is-info"]').click();
-  })
-  */
 })
 
 
@@ -233,29 +201,8 @@ describe('Testing page for package creation', () => {
   it('Button navigates to the creation form', () => {
     cy.visit('/packages');
     cy.get('button').click();
-    // cy.url().should('include', '/delivery/create');
   })
 
-  /*it('All the forms are empty', () => {
-    cy.get('input').should('be.empty');
-  })
-
-  it('Adding Delivery button exists and works', () => {
-    cy.get('*[class^="button is-info"]').click();
-  })
-
-  it('Adding an actual delivery', () => {
-
-    cy.get('*[placeholder^="e.g. BE4SZ5"]').type('BETEST');
-    cy.get('*[placeholder^="e.g. 7500 kg"]').type('7400');
-    cy.get('*[placeholder^="e.g. 100 km"]').type('100');
-    cy.get('*[placeholder^="e.g. 4300 kg"]').type('4000');
-    cy.get('*[placeholder^="e.g. 60 min"]').type('59');
-    cy.get('*[placeholder^="e.g. 80 kWh"]').type('81');
-
-    cy.get('*[class^="button is-info"]').click();
-  })
-  */
 })
 
 describe('Testing option updating a truck', () => {
@@ -270,5 +217,5 @@ describe('Testing option updating a truck', () => {
     cy.get(' * [placeholder^= "tare"').type('1500');
     cy.get('*[id^="save"]').click();
   })
-
+  
 })
