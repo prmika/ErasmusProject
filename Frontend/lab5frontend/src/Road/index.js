@@ -8,7 +8,7 @@ const gui = new dat.GUI()
 
 //////////////////////////////////////////////////////
 /////////////////CREATION OF GUI//////////////////////
-
+//We will use it on the sprint C. It is useless for the sprint B.
 const world = {
     circle: {
         radius: 10,
@@ -76,14 +76,16 @@ scene.add(light);
 //////////////////////////////////////////////
 ////////////CREATION OF LIGHT 2/////////////////
 
+//We add an ambient light to be able to see the objects from anywhere
 const backLight = new THREE.AmbientLight(0xFFFFFF, 1); //1 is the bright of the light (1 is the max)
 
 scene.add(backLight);
 
 /////////////////////////////////////////////////////////
 /////////////CREATION OF CAMERA CONTROLLER///////////////
-const controls = new OrbitControls( camera, renderer.domElement );
 
+//We create a new Orbit controller. We will use it at the end of the file.
+const controls = new OrbitControls( camera, renderer.domElement );
 
 //Source of visibleHeightAtZDepth and visibleWidthAtZDepth: https://discourse.threejs.org/t/functions-to-calculate-the-visible-width-height-at-a-given-z-depth-from-a-perspective-camera/269
 const visibleHeightAtZDepth = ( depth, camera ) => {
@@ -109,6 +111,7 @@ const visibleWidthAtZDepth = ( depth, camera ) => {
 //////////////////////////////////////////////
 /////////////CREATION OF PLANE///////////////
 
+//This plane is not useful. We just use it to debug the program.
 const planeGeometry = new THREE.PlaneGeometry(visibleWidthAtZDepth(camera.position.z - 5, camera),visibleHeightAtZDepth(camera.position.z - 5, camera),10,10);
 const planeMaterial = new THREE.MeshPhongMaterial({color: 0xFF0000, side: THREE.DoubleSide}); //MeshPhongMaterial : Material that reacts to the light
 planeMaterial.flatShading = true;
@@ -124,14 +127,18 @@ const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 //longitude, latitude, altitude OR in three js axis : z, x, y
 const positions = [[8.2451,40.9321,250], [8.6410,41.0072,550], [8.7613,42.1115,200], [8.6210,41.2279,700], [8.6963, 41.1844, 350]];
 
+//We define the radius of the circles that will represents the cities.
 const circleRadius = 3;
 // const circleRadius = visibleHeightAtZDepth(camera.position.z - 5,camera) / (positions.length * 2);
 const circleGeometry = new THREE.CircleGeometry(circleRadius,50,0);
 const circleMaterial = new THREE.MeshPhongMaterial({color: 0x00FF00, side: THREE.DoubleSide});
+
+//This array will contain all the cities.
 let cities = [];
 
-
+//These values will allow us to replace the camera and the center of the orbit controller according to the positions of the cities.
 let xMin = 0, xMax = 0, yMin = 0, yMax = 0, zMax = 0;
+
 //We convert Geographical coordinates into Cartesian coordinates
 for (let i = 0; i < positions.length; i++){
     //Formula x=... in the doc Data.pdf
@@ -143,7 +150,7 @@ for (let i = 0; i < positions.length; i++){
     //Formula z=... in the doc Data.pdf
     positions[i][2] = ( (50 - 0) / (800 - 0) ) * (positions[i][2] - 0) + 0;
 
-
+    //We determine the extreme values of x, y and z from all the cities to readjust the orbit controller and to move the camera as needed.
     if (positions[i][0] < xMin) xMin = positions[i][0] - circleRadius;
     if (positions[i][0] > xMax) xMax = positions[i][0] + circleRadius;
     if (positions[i][1] < yMin) yMin = positions[i][1] - circleRadius;
@@ -161,6 +168,8 @@ let scaleY = (2 * visibleHeightAtZDepth(camera.position.z - 5,camera))/(yMax-yMi
 let offsetY = -yMin * 2 * visibleHeightAtZDepth(camera.position.z,camera) / (yMax - yMin) - visibleHeightAtZDepth(camera.position.z,camera);
 */
 
+
+//We move the cities in front of us
 for (let i = 0; i < positions.length; i++){
     positions[i][2] = positions[i][2] - 2 * zMax - 3;
 /*
@@ -174,6 +183,8 @@ for (let i = 0; i < positions.length; i++){
 */
     console.log("position point après "+i+" : "+positions[i]);
 }
+
+//We create a visual representation of the 3 axis to debug
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
 console.log("xMin: "+xMin);
@@ -184,23 +195,24 @@ console.log("zMax: "+zMax);
 console.log("visibleWidthAtDepth: "+ visibleWidthAtZDepth(camera.position.z - 5, camera));
 console.log("visibleHeightAtDepth: "+ visibleHeightAtZDepth(camera.position.z - 5, camera));
 
-
+//We add the circles representing the cities in the scene.
 for (let i=0; i < positions.length; i++){
     cities.push(new THREE.Mesh(circleGeometry,circleMaterial));
     cities[i].position.set(positions[i][0],positions[i][1],positions[i][2]);
     scene.add(cities[i]);
 }
 
-camera.position.z = +5; //We move back the camera to see the cube
+camera.position.z = +5; //We move back the camera to better see the cities.
 controls.update(); //Must be called after any manual changes to the camera's transform
 
 //////////////////////////////////////////////
 //////////IMPORT OF WAREHOUSE MODEL///////////
 
-let modelScale = 0.005;
+let modelScale = 0.005; //This is the scale factor of the warehouse model, to avoid it to be huge.
 const loader = new FBXLoader();
-let warehouses = [];
+let warehouses = []; //This array will contain all the warehouses models.
 
+//We add a warehouse 3d model in the scene at the side of each city.
 for (let i = 0; i<positions.length;i++) {
     loader.load('warehouse_model.fbx', function (warehouseModel) {
         warehouseModel.traverse(function (child) {
@@ -219,19 +231,24 @@ for (let i = 0; i<positions.length;i++) {
     });
 }
 
+//This function allows us to generate a integer number higher than 0 and lower strictly than max.
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
+//This function add a road between the city 1 and the city 2
 function addRoadBetweenCities(city1,city2){
     //////////////////////////////////////////////////////
 /////////////CREATION OF ORIENTED PLANE///////////////
     let roadGeometry = new THREE.BufferGeometry();
 
-    let connectorLength = 6;
+    //let connectorLength = 6;
     let roadWidth = 1;
 
-
+    //This array contains all the points needed to form the triangles that will form the road. 2 triangles will form a rectangle.
+    // The (+ roadWidth/2) and (- roadWidth/2) are used to center the road with the circle of the cities.
+    // The (+ (positions[city2][0] - positions[city1][0]) * 0.1) and (- (positions[city2][0] - positions[city1][0]) * 0.1) are used to orient the connector to the next city, and to set up the length of this connector.
+    //The (positions(city][2]-0.01) puts the road in the bottom (infinitesimal) of the city.
     const vertices = new Float32Array( [
         //First Connector
         positions[city1][0], positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //centre bas OK
@@ -298,36 +315,40 @@ function addRoadBetweenCities(city1,city2){
 */
 
     roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    //We set the roads in red and we enable the DoubleSide attribute which allows us to see the road from the two sides.
     const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, side: DoubleSide } );
     console.log(roadMaterial);
     const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
     scene.add(roadMesh);
 }
 
+//We connect each city to 2 other random cities.
 for (let i=0; i<positions.length; i++){
-    let randomCity = 0;
+    let randomCity = 0; //We generate the random id of the city.
     do{
         randomCity = getRandomInt(positions.length);
-    }while(randomCity == i);
-    addRoadBetweenCities(i,randomCity);
+    }while(randomCity == i); //This makes impossible to connect a city to itself.
+    addRoadBetweenCities(i,randomCity); //We connect the 2 cities.
     let randomCity2
     do{
         randomCity2 = getRandomInt(positions.length);
-        addRoadBetweenCities(i, randomCity2);
-    }while (randomCity2 == randomCity || randomCity2 == i);
+        addRoadBetweenCities(i, randomCity2); //We connect the 2 cities.
+    }while (randomCity2 == randomCity || randomCity2 == i); //This makes impossible to connect a city to itself or to the precedent city.
 
 }
 
-controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] );
+controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
 //////////////////////////////////////////
 ////////////INFINITE LOOP/////////////////
+
+//This is the infinite loop that animates the scene
 function animate(){
     requestAnimationFrame(animate);
-    controls.update();
+    controls.update(); //We update the orbit controller
     renderer.render(scene, camera);
 }
 
-animate();
+animate(); //We call the function that animates the scene.
 
 /*
 function addRoadBetweenCities(city1,city2){
