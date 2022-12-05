@@ -232,72 +232,62 @@ for (let i = 0; i<positions.length;i++) {
     });
 }
 
-//////////////////////////////////////////////////////
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function addRoadBetweenCities(city1,city2){
+    //////////////////////////////////////////////////////
 /////////////CREATION OF ORIENTED PLANE///////////////
-let roadGeometry = new THREE.BufferGeometry();
+    let roadGeometry = new THREE.BufferGeometry();
 
-/*
-const vertices = new Float32Array( [
-    -50,-42.66184789440637,-74.875, //gauche bas OK
-    26.695079426578772,-36.76147077309908,-56.125, //droite bas
-    26.695079426578772,-35.76147077309908,-56.125, //droite haut
-
-    26.695079426578772,-35.76147077309908,-56.125, //droite haut
-    -50,-41.66184789440637,-74.875, //gauche haut OK
-    -50,-42.66184789440637,-74.875 //gauche bas OK
-] );
-*/
-
-let connectorLength = 6;
-const vertices = new Float32Array( [
-    //First Connector
-    positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
-    positions[0][0]+connectorLength, positions[0][1],  positions[0][2], //droite bas OK
-    positions[0][0]+connectorLength, positions[0][1]+1,  positions[0][2], //droite haut OK
+    let connectorLength = 6;
+    let roadWidth = 1;
+    const vertices = new Float32Array( [
+        //First Connector
+        positions[city1][0], positions[city1][1],  positions[city1][2], //gauche bas OK
+        positions[city1][0] + connectorLength, positions[city1][1],  positions[city1][2], //droite bas OK
+        positions[city1][0] + connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
 
 
-    positions[0][0] + connectorLength, positions[0][1]+1,  positions[0][2], //droite haut OK
-    positions[0][0], positions[0][1]+1,  positions[0][2], //gauche haut OK
-    positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
+        positions[city1][0] + connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
+        positions[city1][0], positions[city1][1] + roadWidth,  positions[city1][2], //gauche haut OK
+        positions[city1][0], positions[city1][1],  positions[city1][2], //gauche bas OK
 
-    //The ramp
-    positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
-    positions[1][0] - connectorLength,  positions[1][1],  positions[1][2], //droite bas
-    positions[1][0] - connectorLength,  positions[1][1]+1,  positions[1][2], //droite haut
+        //The ramp
+        positions[city1][0] + connectorLength, positions[city1][1],  positions[city1][2], //gauche bas OK
+        positions[city2][0] - connectorLength,  positions[city2][1],  positions[city2][2], //droite bas
+        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //droite haut
 
-    positions[1][0] - connectorLength,  positions[1][1]+1,  positions[1][2], //droite haut
-    positions[0][0] +connectorLength, positions[0][1]+1,  positions[0][2], //gauche haut OK
-    positions[0][0] +connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
+        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //droite haut
+        positions[city1][0] +connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //gauche haut OK
+        positions[city1][0] +connectorLength, positions[city1][1],  positions[city1][2], //gauche bas OK
 
-    //Second Connector
-    positions[1][0]-connectorLength, positions[1][1],  positions[1][2], //gauche bas OK
-    positions[1][0], positions[1][1],  positions[1][2], //droite bas OK
-    positions[1][0], positions[1][1]+1,  positions[1][2], //droite haut OK
-
-
-    positions[1][0], positions[1][1]+1,  positions[1][2], //droite haut OK
-    positions[1][0]-connectorLength, positions[1][1]+1,  positions[1][2], //gauche haut OK
-    positions[1][0]-connectorLength, positions[1][1],  positions[1][2] //gauche bas OK
-] );
+        //Second Connector
+        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2], //gauche bas OK
+        positions[city2][0], positions[city2][1],  positions[city2][2], //droite bas OK
+        positions[city2][0], positions[city2][1] + roadWidth,  positions[city2][2], //droite haut OK
 
 
-console.log("Position2: "+ positions[2]);
-/*
-const vertices = new Float32Array( [
-    -1.0, -1.0,  1.0, //bas gauche
-    1.0, -1.0,  1.0, //bas droite
-    1.0,  1.0,  1.0, //haut droite
+        positions[city2][0], positions[city2][1]+1,  positions[city2][2], //droite haut OK
+        positions[city2][0]-connectorLength, positions[city2][1]+1,  positions[city2][2], //gauche haut OK
+        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2] //gauche bas OK
+    ] );
 
-    1.0,  1.0,  1.0, //haut droite
-    -1.0,  1.0,  1.0, //haut gauche
-    -1.0, -1.0,  1.0 //bas gauche
-] );
-*/
-roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-console.log(roadMaterial);
-const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
-scene.add(roadMesh);
+    roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+    console.log(roadMaterial);
+    const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
+    scene.add(roadMesh);
+}
+
+for (let i=0; i<positions.length; i++){
+    let randomCity = 0;
+    do{
+        randomCity = getRandomInt(positions.length);
+    }while(randomCity == i);
+    addRoadBetweenCities(i,randomCity);
+}
 
 controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] );
 //////////////////////////////////////////
@@ -310,4 +300,49 @@ function animate(){
 
 animate();
 
-root /home/debian/actions-runner/node-app/LAPR5Pipeline/LAPR5Pipeline/build;
+/*
+function addRoadBetweenCities(city1,city2){
+    //////////////////////////////////////////////////////
+/////////////CREATION OF ORIENTED PLANE///////////////
+    let roadGeometry = new THREE.BufferGeometry();
+
+    let connectorLength = 6;
+    let roadWidth = 1;
+    const vertices = new Float32Array( [
+        //First Connector
+        positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
+        positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //droite bas OK
+        positions[0][0] + connectorLength, positions[0][1] + roadWidth,  positions[0][2], //droite haut OK
+
+
+        positions[0][0] + connectorLength, positions[0][1] + roadWidth,  positions[0][2], //droite haut OK
+        positions[0][0], positions[0][1] + roadWidth,  positions[0][2], //gauche haut OK
+        positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
+
+        //The ramp
+        positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
+        positions[1][0] - connectorLength,  positions[1][1],  positions[1][2], //droite bas
+        positions[1][0] - connectorLength,  positions[1][1] + roadWidth,  positions[1][2], //droite haut
+
+        positions[1][0] - connectorLength,  positions[1][1] + roadWidth,  positions[1][2], //droite haut
+        positions[0][0] +connectorLength, positions[0][1] + roadWidth,  positions[0][2], //gauche haut OK
+        positions[0][0] +connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
+
+        //Second Connector
+        positions[1][0]-connectorLength, positions[1][1],  positions[1][2], //gauche bas OK
+        positions[1][0], positions[1][1],  positions[1][2], //droite bas OK
+        positions[1][0], positions[1][1] + roadWidth,  positions[1][2], //droite haut OK
+
+
+        positions[1][0], positions[1][1]+1,  positions[1][2], //droite haut OK
+        positions[1][0]-connectorLength, positions[1][1]+1,  positions[1][2], //gauche haut OK
+        positions[1][0]-connectorLength, positions[1][1],  positions[1][2] //gauche bas OK
+    ] );
+
+    roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+    console.log(roadMaterial);
+    const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
+    scene.add(roadMesh);
+}
+*/
