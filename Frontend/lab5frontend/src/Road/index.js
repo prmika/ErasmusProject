@@ -224,7 +224,8 @@ for (let i = 0; i<positions.length;i++) {
             }
         });
         warehouseModel.scale.set(modelScale, modelScale, modelScale);
-        warehouseModel.rotateY(60);
+        warehouseModel.rotateY(1.5707963268);
+        warehouseModel.rotateZ(1.5707963268);
 
         warehouses.push(warehouseModel);
         warehouses[i].position.set(positions[i][0] - circleRadius * 3, positions[i][1], positions[i][2]);
