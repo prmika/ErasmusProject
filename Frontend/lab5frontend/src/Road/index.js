@@ -1,4 +1,4 @@
-import * as THREE from "./three.module.js";
+import * as THREE from "three";
 import * as dat from "./lil-gui.module.min.js";
 import { OrbitControls } from "./OrbitControls.js";
 import {CircleGeometry} from "./three.module.js";
@@ -31,6 +31,11 @@ gui.add(world.circle, 'y', -50, 50).
 onChange(() => {
 
     cities[1].position.set(cities[1].position.x, world.circle.y, cities[1].position.z);
+});
+gui.add(world.circle, 'z', -5, 5).
+onChange(() => {
+
+    cities[1].position.set(cities[1].position.x, cities[1].position.y, world.circle.z);
 });
 gui.add(world.circle, 'z', -5, 5).
 onChange(() => {
@@ -78,6 +83,7 @@ scene.add(backLight);
 /////////////CREATION OF CAMERA CONTROLLER///////////////
 const controls = new OrbitControls( camera, renderer.domElement );
 
+
 //Source of visibleHeightAtZDepth and visibleWidthAtZDepth: https://discourse.threejs.org/t/functions-to-calculate-the-visible-width-height-at-a-given-z-depth-from-a-perspective-camera/269
 const visibleHeightAtZDepth = ( depth, camera ) => {
     // compensate for cameras not positioned at z=0
@@ -106,10 +112,8 @@ const planeGeometry = new THREE.PlaneGeometry(visibleWidthAtZDepth(camera.positi
 const planeMaterial = new THREE.MeshPhongMaterial({color: 0xFF0000, side: THREE.DoubleSide}); //MeshPhongMaterial : Material that reacts to the light
 planeMaterial.flatShading = true;
 const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-
+//planeMesh.rotateZ(Math.pow(Math.atan((positions[1][1]-positions[0][1])/(positions[1][0]-positions[0][0])),2));
 //scene.add(planeMesh);
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////DEFINITION OF CITIES AND WAREHOUSES////////////////////////////
@@ -119,7 +123,8 @@ const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 //longitude, latitude, altitude OR in three js axis : z, x, y
 const positions = [[8.2451,40.9321,250], [8.6410,41.0072,550], [8.7613,42.1115,200], [8.6210,41.2279,700], [8.6963, 41.1844, 350]];
 
-const circleRadius = visibleHeightAtZDepth(camera.position.z - 5,camera) / (positions.length * 2);
+const circleRadius = 3;
+// const circleRadius = visibleHeightAtZDepth(camera.position.z - 5,camera) / (positions.length * 2);
 const circleGeometry = new THREE.CircleGeometry(circleRadius,50,0);
 const circleMaterial = new THREE.MeshPhongMaterial({color: 0x00FF00, side: THREE.DoubleSide});
 let cities = [];
@@ -147,10 +152,13 @@ for (let i = 0; i < positions.length; i++){
     console.log("position point avant "+i+" : "+positions[i]);
 
 }
+
+/*
 let scaleX = (2 * visibleWidthAtZDepth(camera.position.z - 5,camera))/(xMax-xMin);
 let offsetX = -xMin * 2 * visibleWidthAtZDepth(camera.position.z,camera) / (xMax - xMin) - visibleHeightAtZDepth(camera.position.z,camera);
 let scaleY = (2 * visibleHeightAtZDepth(camera.position.z - 5,camera))/(yMax-yMin);
 let offsetY = -yMin * 2 * visibleHeightAtZDepth(camera.position.z,camera) / (yMax - yMin) - visibleHeightAtZDepth(camera.position.z,camera);
+*/
 
 for (let i = 0; i < positions.length; i++){
     positions[i][2] = positions[i][2] - 2 * zMax - 3;
@@ -189,11 +197,13 @@ controls.update(); //Must be called after any manual changes to the camera's tra
 //////////CREATION OF LINE///////////////////
 const lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 const points = [];
+
 points.push( new THREE.Vector3( positions[0][0], positions[0][1], positions[0][2] ) );
 //points.push( new THREE.Vector3( positions[0][0], positions[0][1], positions[0][2] ) );
 points.push( new THREE.Vector3( positions[1][0], positions[1][1], positions[1][2]) );
 
 const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
+
 const line = new THREE.Line( lineGeometry, lineMaterial );
 lineMaterial.linewidth = 3;
 scene.add( line );
@@ -201,7 +211,7 @@ scene.add( line );
 //////////////////////////////////////////////
 //////////IMPORT OF WAREHOUSE MODEL///////////
 
-let modelScale = 0.001;
+let modelScale = 0.005;
 const loader = new FBXLoader();
 let warehouses = [];
 
@@ -214,14 +224,82 @@ for (let i = 0; i<positions.length;i++) {
             }
         });
         warehouseModel.scale.set(modelScale, modelScale, modelScale);
+        warehouseModel.rotateY(60);
 
         warehouses.push(warehouseModel);
         warehouses[i].position.set(positions[i][0] - circleRadius * 3, positions[i][1], positions[i][2]);
         scene.add(warehouses[i]);
-        console.log(warehouses[i].position);
-
     });
 }
+
+//////////////////////////////////////////////////////
+/////////////CREATION OF ORIENTED PLANE///////////////
+let roadGeometry = new THREE.BufferGeometry();
+
+/*
+const vertices = new Float32Array( [
+    -50,-42.66184789440637,-74.875, //gauche bas OK
+    26.695079426578772,-36.76147077309908,-56.125, //droite bas
+    26.695079426578772,-35.76147077309908,-56.125, //droite haut
+
+    26.695079426578772,-35.76147077309908,-56.125, //droite haut
+    -50,-41.66184789440637,-74.875, //gauche haut OK
+    -50,-42.66184789440637,-74.875 //gauche bas OK
+] );
+*/
+
+let connectorLength = 6;
+const vertices = new Float32Array( [
+    //First Connector
+    positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
+    positions[0][0]+connectorLength, positions[0][1],  positions[0][2], //droite bas OK
+    positions[0][0]+connectorLength, positions[0][1]+1,  positions[0][2], //droite haut OK
+
+
+    positions[0][0] + connectorLength, positions[0][1]+1,  positions[0][2], //droite haut OK
+    positions[0][0], positions[0][1]+1,  positions[0][2], //gauche haut OK
+    positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
+
+    //The ramp
+    positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
+    positions[1][0] - connectorLength,  positions[1][1],  positions[1][2], //droite bas
+    positions[1][0] - connectorLength,  positions[1][1]+1,  positions[1][2], //droite haut
+
+    positions[1][0] - connectorLength,  positions[1][1]+1,  positions[1][2], //droite haut
+    positions[0][0] +connectorLength, positions[0][1]+1,  positions[0][2], //gauche haut OK
+    positions[0][0] +connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
+
+    //Second Connector
+    positions[1][0]-connectorLength, positions[1][1],  positions[1][2], //gauche bas OK
+    positions[1][0], positions[1][1],  positions[1][2], //droite bas OK
+    positions[1][0], positions[1][1]+1,  positions[1][2], //droite haut OK
+
+
+    positions[1][0], positions[1][1]+1,  positions[1][2], //droite haut OK
+    positions[1][0]-connectorLength, positions[1][1]+1,  positions[1][2], //gauche haut OK
+    positions[1][0]-connectorLength, positions[1][1],  positions[1][2] //gauche bas OK
+] );
+
+
+console.log("Position2: "+ positions[2]);
+/*
+const vertices = new Float32Array( [
+    -1.0, -1.0,  1.0, //bas gauche
+    1.0, -1.0,  1.0, //bas droite
+    1.0,  1.0,  1.0, //haut droite
+
+    1.0,  1.0,  1.0, //haut droite
+    -1.0,  1.0,  1.0, //haut gauche
+    -1.0, -1.0,  1.0 //bas gauche
+] );
+*/
+roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+console.log(roadMaterial);
+const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
+scene.add(roadMesh);
+
+controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] );
 //////////////////////////////////////////
 ////////////INFINITE LOOP/////////////////
 function animate(){
@@ -231,3 +309,5 @@ function animate(){
 }
 
 animate();
+
+root /home/debian/actions-runner/node-app/LAPR5Pipeline/LAPR5Pipeline/build;
