@@ -310,6 +310,12 @@ for (let i=0; i<positions.length; i++){
         randomCity = getRandomInt(positions.length);
     }while(randomCity == i);
     addRoadBetweenCities(i,randomCity);
+    let randomCity2
+    do{
+        randomCity2 = getRandomInt(positions.length);
+        addRoadBetweenCities(i, randomCity2);
+    }while (randomCity2 == randomCity || randomCity2 == i);
+
 }
 
 controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] );
