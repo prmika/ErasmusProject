@@ -234,33 +234,33 @@ function addRoadBetweenCities(city1,city2){
 
     const vertices = new Float32Array( [
         //First Connector
-        positions[city1][0], positions[city1][1],  positions[city1][2], //centre bas OK
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1],  positions[city1][2], //droite bas OK
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
+        positions[city1][0], positions[city1][1],  positions[city1][2] - 0.01, //centre bas OK
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1],  positions[city1][2] - 0.01, //droite bas OK
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2] - 0.01, //droite haut OK
 
 
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
-        positions[city1][0], positions[city1][1] + roadWidth,  positions[city1][2], //centre haut OK
-        positions[city1][0], positions[city1][1],  positions[city1][2], //centre bas OK
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2] - 0.01, //droite haut OK
+        positions[city1][0], positions[city1][1] + roadWidth,  positions[city1][2] - 0.01, //centre haut OK
+        positions[city1][0], positions[city1][1],  positions[city1][2] - 0.01, //centre bas OK
 
         //The ramp
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1],  positions[city1][2], //connector1 (gauche) bas OK
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1],  positions[city2][2], //connector2(droite) bas
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1] + roadWidth,  positions[city2][2], //connector2(droite) haut
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1],  positions[city1][2] - 0.01, //connector1 (gauche) bas OK
+        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1],  positions[city2][2] - 0.01, //connector2(droite) bas
+        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1] + roadWidth,  positions[city2][2] - 0.01, //connector2(droite) haut
 
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1] + roadWidth,  positions[city2][2], //connector2(droite) haut
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2], //connector1(gauche) haut OK
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1],  positions[city1][2], //connector1(gauche) bas OK
+        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1] + roadWidth,  positions[city2][2] - 0.01, //connector2(droite) haut
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2] - 0.01, //connector1(gauche) haut OK
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1],  positions[city1][2] - 0.01, //connector1(gauche) bas OK
 
         //Second Connector
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1],  positions[city2][2], //gauche bas OK
-        positions[city2][0], positions[city2][1],  positions[city2][2], //centre bas OK
-        positions[city2][0], positions[city2][1] + roadWidth,  positions[city2][2], //centre haut OK
+        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1],  positions[city2][2] - 0.01, //gauche bas OK
+        positions[city2][0], positions[city2][1],  positions[city2][2] - 0.01, //centre bas OK
+        positions[city2][0], positions[city2][1] + roadWidth,  positions[city2][2] - 0.01, //centre haut OK
 
 
-        positions[city2][0], positions[city2][1]+1,  positions[city2][2], //centre haut OK
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1]+1,  positions[city2][2], //gauche haut OK
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1],  positions[city2][2] //gauche bas OK
+        positions[city2][0], positions[city2][1]+1,  positions[city2][2] - 0.01, //centre haut OK
+        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1]+1,  positions[city2][2] - 0.01, //gauche haut OK
+        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1],  positions[city2][2] - 0.01 //gauche bas OK
     ] );
 
 
