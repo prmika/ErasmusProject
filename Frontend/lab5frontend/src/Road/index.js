@@ -194,21 +194,6 @@ for (let i=0; i < positions.length; i++){
 camera.position.z = +5; //We move back the camera to see the cube
 controls.update(); //Must be called after any manual changes to the camera's transform
 
-/////////////////////////////////////////////
-//////////CREATION OF LINE///////////////////
-const lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-const points = [];
-
-points.push( new THREE.Vector3( positions[0][0], positions[0][1], positions[0][2] ) );
-//points.push( new THREE.Vector3( positions[0][0], positions[0][1], positions[0][2] ) );
-points.push( new THREE.Vector3( positions[1][0], positions[1][1], positions[1][2]) );
-
-const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
-
-const line = new THREE.Line( lineGeometry, lineMaterial );
-lineMaterial.linewidth = 3;
-scene.add( line );
-
 //////////////////////////////////////////////
 //////////IMPORT OF WAREHOUSE MODEL///////////
 
