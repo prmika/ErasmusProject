@@ -3,6 +3,7 @@ import * as dat from "./lil-gui.module.min.js";
 import { OrbitControls } from "./OrbitControls.js";
 import {CircleGeometry} from "./three.module.js";
 import { FBXLoader } from 'https://cdn.skypack.dev/three@0.138.0/examples/jsm/loaders/FBXLoader';
+import {DoubleSide} from "three";
 const gui = new dat.GUI()
 
 //////////////////////////////////////////////////////
@@ -276,7 +277,7 @@ function addRoadBetweenCities(city1,city2){
     ] );
 
     roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
+    const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, side: DoubleSide } );
     console.log(roadMaterial);
     const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
     scene.add(roadMesh);
