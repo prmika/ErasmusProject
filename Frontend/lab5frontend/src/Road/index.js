@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import * as dat from "./lil-gui.module.min.js";
 import { OrbitControls } from "./OrbitControls.js";
-import {CircleGeometry} from "./three.module.js";
+import {CircleGeometry} from "three";
 import { FBXLoader } from 'https://cdn.skypack.dev/three@0.138.0/examples/jsm/loaders/FBXLoader';
 import {DoubleSide} from "three";
 const gui = new dat.GUI()
@@ -245,6 +245,41 @@ function addRoadBetweenCities(city1,city2){
 
     let connectorLength = 6;
     let roadWidth = 1;
+
+/*
+    const vertices = new Float32Array( [
+        //First Connector
+        positions[city1][0], positions[city1][1],  positions[city1][2], //centre bas OK
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1],  positions[city1][2] + (positions[city2][2] - positions[city1][2]) * 0.1, //droite bas OK
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2] + (positions[city2][2] - positions[city1][2]) * 0.1, //droite haut OK
+
+
+        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth,  positions[city1][2] + (positions[city2][2] - positions[city1][2]) * 0.1, //droite haut OK
+        positions[city1][0], positions[city1][1] + roadWidth,  positions[city1][2], //centre haut OK
+        positions[city1][0], positions[city1][1],  positions[city1][2], //centre bas OK
+
+        //The ramp
+        positions[city1][0] + connectorLength, positions[city1][1],  positions[city1][2], //connector1 (gauche) bas OK
+        positions[city2][0] - connectorLength,  positions[city2][1],  positions[city2][2], //connector2(droite) bas
+        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //connector2(droite) haut
+
+        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //connector2(droite) haut
+        positions[city1][0] +connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //connector1(gauche) haut OK
+        positions[city1][0] +connectorLength, positions[city1][1],  positions[city1][2], //connector1(gauche) bas OK
+
+        //Second Connector
+        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2], //gauche bas OK
+        positions[city2][0], positions[city2][1],  positions[city2][2], //centre bas OK
+        positions[city2][0], positions[city2][1] + roadWidth,  positions[city2][2], //centre haut OK
+
+
+        positions[city2][0], positions[city2][1]+1,  positions[city2][2], //centre haut OK
+        positions[city2][0]-connectorLength, positions[city2][1]+1,  positions[city2][2], //gauche haut OK
+        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2] //gauche bas OK
+    ] );
+
+ */
+
     const vertices = new Float32Array( [
         //First Connector
         positions[city1][0], positions[city1][1],  positions[city1][2], //gauche bas OK
@@ -275,6 +310,7 @@ function addRoadBetweenCities(city1,city2){
         positions[city2][0]-connectorLength, positions[city2][1]+1,  positions[city2][2], //gauche haut OK
         positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2] //gauche bas OK
     ] );
+
 
     roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
     const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, side: DoubleSide } );
