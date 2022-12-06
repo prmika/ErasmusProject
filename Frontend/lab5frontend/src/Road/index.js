@@ -125,7 +125,25 @@ const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 //Warehouses :
 
 //longitude, latitude, altitude OR in three js axis : z, x, y
-const positions = [[8.2451,40.9321,250], [8.6410,41.0072,550], [8.7613,42.1115,200], [8.6210,41.2279,700], [8.6963, 41.1844, 350]];
+const positions = [
+    [8.2451,40.9321,250],
+    [8.6410,41.0072,550],
+    [8.7613,42.1115,200],
+    [8.6210,41.2279,700],
+    [8.6963, 41.1844, 350],
+    [8.4770, 40.8387, 750],
+    [8.3304, 41.2052, 0],
+    [8.6291, 41.1579, 600],
+    [8.7609, 41.3804, 400],
+    [8.5483, 40.9268, 100],
+    [8.4738, 41.3431, 650],
+    [8.4907, 40.9005, 300],
+    [8.5600, 41.3391, 450],
+    [8.3956, 40.8430, 50],
+    [8.4983, 41.1887, 800],
+    [8.7479, 41.3517, 150],
+    [8.6118, 41.1239, 500]
+];
 
 //We define the radius of the circles that will represents the cities.
 const circleRadius = 3;
@@ -243,7 +261,17 @@ function addRoadBetweenCities(city1,city2){
     let roadGeometry = new THREE.BufferGeometry();
 
     //let connectorLength = 6;
-    let roadWidth = 1;
+    const roadWidth = 1;
+    //connectorScale1/2 are used to harmonize the size of all city connectors. The size will be 1.5 times the circle radius
+    const connectorScale1 = 1.5 * circleRadius/Math.abs((positions[city2][0] - positions[city1][0]));
+    const connectorScale2 = 1.5 * circleRadius/Math.abs((positions[city1][0] - positions[city2][0]));
+    //These two variables are used to orient the city connectors to the next warehouse.
+    const orientXCity1ToRoad = (positions[city2][0] - positions[city1][0]) * connectorScale1;
+    const orientXRoadToCity2 = (positions[city1][0] - positions[city2][0]) * connectorScale2;
+    /*
+    const orientYCity1ToRoad = (positions[city2][1] - positions[city1][1]) * connectorScale1;
+    const orientYRoadToCity2 = (positions[city1][1] - positions[city2][1]) * connectorScale1;
+    */
 
     //This array contains all the points needed to form the triangles that will form the road. 2 triangles will form a rectangle.
     // The (+ roadWidth/2) and (- roadWidth/2) are used to center the road with the circle of the cities.
@@ -252,32 +280,32 @@ function addRoadBetweenCities(city1,city2){
     const vertices = new Float32Array( [
         //First Connector
         positions[city1][0], positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //centre bas OK
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //droite bas OK
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //droite haut OK
+        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //droite bas OK
+        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //droite haut OK
 
 
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //droite haut OK
+        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //droite haut OK
         positions[city1][0], positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //centre haut OK
         positions[city1][0], positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //centre bas OK
 
         //The ramp
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //connector1 (gauche) bas OK
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) bas
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) haut
+        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //connector1 (gauche) bas OK
+        positions[city2][0] + orientXRoadToCity2,  positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) bas
+        positions[city2][0] + orientXRoadToCity2,  positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) haut
 
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1,  positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) haut
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //connector1(gauche) haut OK
-        positions[city1][0] + (positions[city2][0] - positions[city1][0]) * 0.1, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //connector1(gauche) bas OK
+        positions[city2][0] + orientXRoadToCity2,  positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) haut
+        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //connector1(gauche) haut OK
+        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //connector1(gauche) bas OK
 
         //Second Connector
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //gauche bas OK
+        positions[city2][0] + orientXRoadToCity2, positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //gauche bas OK
         positions[city2][0], positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //centre bas OK
         positions[city2][0], positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //centre haut OK
 
 
         positions[city2][0], positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //centre haut OK
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //gauche haut OK
-        positions[city2][0] + (positions[city1][0] - positions[city2][0]) * 0.1, positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01 //gauche bas OK
+        positions[city2][0] + orientXRoadToCity2, positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //gauche haut OK
+        positions[city2][0] + orientXRoadToCity2, positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01 //gauche bas OK
     ] );
 
 
@@ -329,12 +357,13 @@ for (let i=0; i<positions.length; i++){
         randomCity = getRandomInt(positions.length);
     }while(randomCity == i); //This makes impossible to connect a city to itself.
     addRoadBetweenCities(i,randomCity); //We connect the 2 cities.
+    /*
     let randomCity2
     do{
-        randomCity2 = getRandomInt(positions.length);
-        addRoadBetweenCities(i, randomCity2); //We connect the 2 cities.
+       randomCity2 = getRandomInt(positions.length);
+       addRoadBetweenCities(i, randomCity2); //We connect the 2 cities.
     }while (randomCity2 == randomCity || randomCity2 == i); //This makes impossible to connect a city to itself or to the precedent city.
-
+    */
 }
 
 controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
@@ -346,6 +375,7 @@ function animate(){
     requestAnimationFrame(animate);
     controls.update(); //We update the orbit controller
     renderer.render(scene, camera);
+    console.log(camera.position);
 }
 
 animate(); //We call the function that animates the scene.
