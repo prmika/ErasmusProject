@@ -11,12 +11,9 @@ import { Result } from "../core/logic/Result";
 import { PackagingMap } from "../mappers/PackagingMap";
 import Logger from '../loaders/logger';
 import { ITruckDTO } from '../dto/ITruckDTO';
-import fetch from 'node-fetch';
-const https = require('https');
 
-const httpsAgent = new https.Agent({
-      rejectUnauthorized: false,
-    });
+
+
 
 @Service()
 export default class PackagingService implements IPackagingService {

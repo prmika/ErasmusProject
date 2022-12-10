@@ -28,7 +28,7 @@ namespace DDDNetCore.Domain.Warehouses
 
         public Warehouse AddWarehouse(WarehouseDto warehouse)
         {
-            Warehouse warehouseToCreate = new Warehouse(warehouse.Id, warehouse.Designation, warehouse.Address, warehouse.Latitude, warehouse.Longitude);
+            Warehouse warehouseToCreate = new Warehouse(warehouse.Id, warehouse.Designation, warehouse.Address, warehouse.Latitude, warehouse.Longitude, warehouse.IsActive);
             _unitOfWork.WarehouseRepository.Create(warehouseToCreate);
             _unitOfWork.Commit();
             return warehouseToCreate;
@@ -36,7 +36,7 @@ namespace DDDNetCore.Domain.Warehouses
 
         public Warehouse UpdateWarehouse(WarehouseDto warehouse)
         {
-            Warehouse warehouseToUpdate = new Warehouse(warehouse.Id, warehouse.Designation, warehouse.Address, warehouse.Latitude, warehouse.Longitude);
+            Warehouse warehouseToUpdate = new Warehouse(warehouse.Id, warehouse.Designation, warehouse.Address, warehouse.Latitude, warehouse.Longitude, warehouse.IsActive);
             _unitOfWork.WarehouseRepository.Update(warehouseToUpdate);
             _unitOfWork.Commit();
             return warehouseToUpdate;

@@ -30,6 +30,10 @@ namespace DDDSample1.Infrastructure.Warehouses
                 .IsRequired()
                 .HasColumnType("float");
 
+            builder.Property(x => x.IsActive)
+                .IsRequired()
+                .HasColumnType("BIT");
+
 
             //builder.Property<bool>("_active").HasColumnName("Active");
         }
