@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\cypress",
+    "\\cypress\\e2e",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\components",
+    "\\src\\app\\components\\truckadd"
+  ],
+  "SelectedNode": "\\src\\app\\components\\truckadd\\truckadd.component.html",
+  "PreviewInSolutionExplorer": false
+}

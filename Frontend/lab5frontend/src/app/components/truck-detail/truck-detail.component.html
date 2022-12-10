@@ -37,7 +37,7 @@
                 </p>
                 <p><i class="fa fa-arrows-alt"></i><b> Load Capacity (kg)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="tare" style="width: 150px;"
+                    <input class="input" type="number" placeholder="Load Capacity" style="width: 150px;"
                         [(ngModel)]="truck.load_capacity" min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
@@ -45,7 +45,7 @@
                 </p>
                 <p><i class="fa fa-clock-o"></i><b> Fast Charging Time (min)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="tare" style="width: 150px;"
+                    <input class="input" type="number" placeholder="Fast Charging Time" style="width: 150px;"
                         [(ngModel)]="truck.fast_charging_time" min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
@@ -53,7 +53,7 @@
                 </p>
                 <p><i class="fa fa-battery-full"></i><b> Max Battery Charge (kWh)</b></p>
                 <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="tare" style="width: 150px;"
+                    <input class="input" type="number" placeholder="Max Battery Charge" style="width: 150px;"
                         [(ngModel)]="truck.max_battery_charge" min="1" required>
                     <span class="icon is-small is-left">
                         <i class="fa fa-arrow-circle-right"></i>
@@ -61,7 +61,7 @@
                 </p>
                 <div class="field is-grouped is-grouped">
                     <p class="control">
-                        <a class="button is-primary" (click)="updateTruck()">
+                        <a class="button is-primary" id="save" (click)="updateTruck()">
                             Save Changes
                         </a>
                     </p>
