@@ -9,6 +9,11 @@ import { DeliveryService } from 'src/app/services/delivery.service';
 })
 export class DeliveriesComponent implements OnInit {
 
+  filters = ["warehouseId", "deliveryDate", "timeToPickup", "timeToPlace", "weight"];
+  chosenFilter = this.filters[0];
+  stringFilterValue: string | undefined;
+  numericFilterValue: Number | undefined;
+
   constructor(private deliveryService: DeliveryService) { }
 
   ngOnInit(): void {
@@ -17,14 +22,15 @@ export class DeliveriesComponent implements OnInit {
 
   deliveries: Delivery[] = []; //Deliveries will be stored here
   deliveriesSuccessfullyLoaded = true;
+
   getDeliveries(): void { //Will load all the delivery data via the deliveryservice
     this.deliveryService.getDeliveries().subscribe({
       next: (v) => {
         this.deliveries = v
         this.deliveries.sort((d1, d2) => { //Sort loaded delivery data
-          if(d1.id > d2.id) {
+          if (d1.id > d2.id) {
             return 1;
-          } else if(d1.id < d2.id) {
+          } else if (d1.id < d2.id) {
             return -1;
           } else {
             return 0;
@@ -37,6 +43,53 @@ export class DeliveriesComponent implements OnInit {
         setTimeout(() => window.location.reload(), 5000) //Reload page every 5 seconds
       },
     });
+  }
+
+  filterData(): void {
+    if (this.chosenFilter == "warehouseId" || this.chosenFilter == "deliveryDate") {
+      if (this.stringFilterValue != undefined && this.stringFilterValue != "") {
+        this.deliveryService.getDeliveries().subscribe({
+          next: (v) => {
+            if (this.chosenFilter == "warehouseId") {
+              this.deliveries = v.filter(del => del.warehouseID == this.stringFilterValue);
+            }
+            else {
+              console.log(this.stringFilterValue)
+              this.deliveries = v.filter(del => del.deliveryDate.split("T")[0] == this.stringFilterValue);
+            }
+          },
+          error: (e) => {
+            console.error("Internal Server Error while trying to filter the data. Try again later.");
+          },
+        });
+      }
+      else{
+        this.getDeliveries();
+      }
+    }
+    else {
+      if (this.numericFilterValue != undefined) {
+        this.deliveryService.getDeliveries().subscribe({
+          next: (v) => {
+            if (this.chosenFilter == "timeToPickup") {
+              this.deliveries = v.filter(del => del.timeToPickup == this.numericFilterValue);
+            }
+            else if (this.chosenFilter == "timeToPlace") {
+              this.deliveries = v.filter(del => del.timeToPlace == this.numericFilterValue);
+            }
+            else {
+              this.deliveries = v.filter(del => del.weight == this.numericFilterValue);
+            }
+          },
+          error: (e) => {
+            console.error("Internal Server Error while trying to filter the data. Try again later.");
+          },
+        });
+      }
+      else{
+        this.getDeliveries();
+      }
+    }
   }
 
 

@@ -1,35 +1,82 @@
-<div style="text-align: center;"><button class="button is-info" routerLink="/delivery/create" style="margin: 15px"><i class="fa fa-plus"
-    aria-hidden="true"></i>Create new Delivery</button></div>
-  <div *ngIf="deliveriesSuccessfullyLoaded && deliveries.length > 0">
-      <div class="card" *ngFor="let delivery of deliveries">
-        <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <img src="https://discountboxprinting.com/wp-content/uploads/2021/01/Custom-Shipping-Boxes-with-Logo.jpg" alt="Delivery photo">
-              </figure>
-            </div>
-            <div class="media-content">
-              <p class="title is-4">Delivery</p>
-              <p class="subtitle is-6">{{delivery.id}}</p>
-            </div>
-          </div>
-          <div class="content">
-            <p><i class="fa fa-home"></i><b> WarehouseId</b> - {{delivery.warehouseID}}</p>
-            <p><i class="fa fa-balance-scale"></i><b> Weight</b> - {{delivery.weight}} kg</p>
-            <p><i class="fa fa-calendar"></i><b> Delivery Date</b> - {{delivery.deliveryDate.split("T")[0]}}</p>
-            <p><i class="fa fa-clock-o"></i><b> Time To Place</b> - {{delivery.timeToPlace}} min</p>
-            <p><i class="fa fa-clock-o"></i><b> Time To Pickup</b> - {{delivery.timeToPickup}} min</p>
-            <p><button class="button is-warning" routerLink="/delivery/{{delivery.id}}"><i class="fa fa-pencil-square-o"
-                  aria-hidden="true"></i>Update</button></p>
-          </div>
+<div style="text-align: center;"><button class="button is-info" routerLink="/delivery/create" style="margin: 15px"><i
+      class="fa fa-plus" aria-hidden="true"></i>Create new Delivery</button></div>
+<div id="filtersegment" style="margin: 20px">
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field">
+        <label class="label">Filter Option</label>
+        <p class="control has-icons-left">
+          <span class="select">
+            <select [(ngModel)]="chosenFilter">
+              <option *ngFor="let option of filters" [value]="option">{{option}}</option>
+            </select>
+          </span>
+        </p>
+      </div>
+      <div class="field" *ngIf="chosenFilter == 'warehouseId'">
+        <label class="label">Value</label>
+        <p class="control is-expanded has-icons-left">
+          <input class="input" type="text" placeholder="Enter the value you want to filter on"
+            [(ngModel)]="stringFilterValue" required>
+        </p>
+      </div>
+      <div class="field" *ngIf="chosenFilter == 'deliveryDate'">
+        <label class="label">Value</label>
+        <p class="control is-expanded has-icons-left">
+          <input class="input" type="date" [(ngModel)]="stringFilterValue" required>
+        </p>
+      </div>
+      <div class="field"
+        *ngIf="chosenFilter == 'timeToPickup' || chosenFilter == 'timeToPlace' || chosenFilter == 'weight'">
+        <label class="label">Value</label>
+        <p class="control is-expanded has-icons-left">
+          <input class="input" type="number" [(ngModel)]="numericFilterValue" min="0" required
+            placeholder="Enter the value you want to filter on">
+        </p>
+      </div>
+      <div class="field">
+        <label class="label" style="color: white;">Save filter</label>
+        <button class="button is-dark" style="text-align: center;" (click)="filterData()">
+          Filter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="deliveriesSuccessfullyLoaded && deliveries.length > 0">
         </div>
       </div>
     </div>
-    <div *ngIf="!deliveriesSuccessfullyLoaded">
-      <div class="notification is-danger">
-        There was an error while trying to load the deliveries data. Please try again later.<br>
-        The page will be reloaded every 5 seconds.
+  </div>
+  <div class="card" *ngFor="let delivery of deliveries">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="https://discountboxprinting.com/wp-content/uploads/2021/01/Custom-Shipping-Boxes-with-Logo.jpg"
+              alt="Delivery photo">
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4">Delivery</p>
+          <p class="subtitle is-6">{{delivery.id}}</p>
+        </div>
+      </div>
+      <div class="content">
+        <p><i class="fa fa-home"></i><b> WarehouseId</b> - {{delivery.warehouseID}}</p>
+        <p><i class="fa fa-balance-scale"></i><b> Weight</b> - {{delivery.weight}} kg</p>
+        <p><i class="fa fa-calendar"></i><b> Delivery Date</b> - {{delivery.deliveryDate.split("T")[0]}}</p>
+        <p><i class="fa fa-clock-o"></i><b> Time To Place</b> - {{delivery.timeToPlace}} min</p>
+        <p><i class="fa fa-clock-o"></i><b> Time To Pickup</b> - {{delivery.timeToPickup}} min</p>
+        <p><button class="button is-warning" routerLink="/delivery/{{delivery.id}}"><i class="fa fa-pencil-square-o"
+              aria-hidden="true"></i>Update</button></p>
       </div>
     </div>
-  
+  </div>
+</div>
+<div *ngIf="!deliveriesSuccessfullyLoaded">
+  <div class="notification is-danger">
+    There was an error while trying to load the deliveries data. Please try again later.<br>
+    The page will be reloaded every 5 seconds.
+  </div>
+</div>
