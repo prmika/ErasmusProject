@@ -9,6 +9,9 @@ import { DeliveryService } from 'src/app/services/delivery.service';
 })
 export class DeliveriesComponent implements OnInit {
 
+  sortfilters = ["id", "warehouseId", "deliveryDate", "timeToPickup", "timeToPlace", "weight"];
+  chosenSorting = this.sortfilters[0];
+
   filters = ["warehouseId", "deliveryDate", "timeToPickup", "timeToPlace", "weight"];
   chosenFilter = this.filters[0];
   stringFilterValue: string | undefined;
@@ -92,6 +95,64 @@ export class DeliveriesComponent implements OnInit {
     }
   }
 
+  sortData(): void {
+    this.deliveries = this.deliveries.sort((d1, d2) => { //Sort loaded delivery data
+      if (this.chosenSorting == "id") {
+        if (d1.id > d2.id) {
+          return 1;
+        } else if (d1.id < d2.id) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      else if (this.chosenSorting == "warehouseId") {
+        if (d1.warehouseID > d2.warehouseID) {
+          return 1;
+        } else if (d1.warehouseID < d2.warehouseID) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      else if (this.chosenSorting == "deliveryDate") {
+        if (d1.deliveryDate > d2.deliveryDate) {
+          return 1;
+        } else if (d1.deliveryDate < d2.deliveryDate) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      else if (this.chosenSorting == "timeToPickup") {
+        if (d1.timeToPickup > d2.timeToPickup) {
+          return 1;
+        } else if (d1.timeToPickup < d2.timeToPickup) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      else if (this.chosenSorting == "timeToPlace") {
+        if (d1.timeToPlace > d2.timeToPlace) {
+          return 1;
+        } else if (d1.timeToPlace < d2.timeToPlace) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+      else {
+        if (d1.weight > d2.weight) {
+          return 1;
+        } else if (d1.weight < d2.weight) {
+          return -1;
+        } else {
+          return 0;
+        }
+      }
+    });
+  }
 
 
 }

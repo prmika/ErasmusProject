@@ -44,6 +44,18 @@
   </div>
 </div>
 <div *ngIf="deliveriesSuccessfullyLoaded && deliveries.length > 0">
+  <div id="sortsegment" style="margin: 20px">
+    <div class="field is-horizontal">
+      <div class="field-body">
+        <div class="field">
+          <label class="label">Sorting Option</label>
+          <p class="control has-icons-left">
+            <span class="select">
+              <select [(ngModel)]="chosenSorting" (change)="sortData()">
+                <option *ngFor="let option of sortfilters" [value]="option">{{option}}</option>
+              </select>
+            </span>
+          </p>
         </div>
       </div>
     </div>
