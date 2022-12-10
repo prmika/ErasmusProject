@@ -4,4 +4,5 @@ export interface Warehouse {
     address: string;
     latitude: number;
     longitude: number;
+    isActive: Boolean;
 }

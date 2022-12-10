@@ -27,14 +27,15 @@ export class WarehouseAddComponent implements OnInit {
   addWarehouse(): void { //Function to create a new warehouse
     if ((this.id != undefined && this.id != "" && this.id.toUpperCase().includes("W")) && (this.designation != undefined && this.designation != "") && //Will check if none of the fields are undefined and in the right format, if so the code will continue executing
       (this.address != undefined && this.address != "") &&
-      (this.latitude != undefined) &&
-      (this.longitude != undefined)) {
+      (this.latitude != undefined && this.latitude != 0) &&
+      (this.longitude != undefined && this.longitude != 0)) {
       let body = {
         "id": this.id,
         "designation": this.designation,
         "address": this.address,
         "latitude": this.latitude,
-        "longitude": this.longitude
+        "longitude": this.longitude,
+        "isActive": true
       }
       this.warehouseService.addWarehouse(body as Warehouse).subscribe({ //Will call the service to create the warehouse
         next: (v) => {
