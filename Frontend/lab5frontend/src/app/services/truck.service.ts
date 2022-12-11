@@ -16,23 +16,23 @@ export class TruckService {
     private http: HttpClient) { }
 
   getTrucks(): Observable<Truck[]> {
-    return this.http.get<Truck[]>("http://localhost:3000/api/v1/trucks")
+    return this.http.get<Truck[]>("http://217.160.104.201:3000/api/v1/trucks")
   }
 
   getTruck(id: string): Observable<Truck> {
-    const url = `http://localhost:3000/api/v1/trucks/${id}`;
+    const url = `http://217.160.104.201:3000/api/v1/trucks/${id}`;
     return this.http.get<Truck>(url);
   }
 
 
   updateTruck(id: string, truck: Truck): Observable<any> {
-    const url = `http://localhost:3000/api/v1/trucks/${id}`;
+    const url = `http://217.160.104.201:3000/api/v1/trucks/${id}`;
     return this.http.put(url, truck, this.httpOptions);
   }
 
 
   addTruck(truck: Truck): Observable<Truck> {
-    const url = 'http://localhost:3000/api/v1/trucks'
+    const url = 'http://217.160.104.201:3000/api/v1/trucks'
     return this.http.post<Truck>(url, truck, this.httpOptions);
   }
 }
