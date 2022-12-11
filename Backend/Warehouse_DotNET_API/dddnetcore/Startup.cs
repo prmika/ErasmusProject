@@ -54,7 +54,6 @@ namespace DDDSample1
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
