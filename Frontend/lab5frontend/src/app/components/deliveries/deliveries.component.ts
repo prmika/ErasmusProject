@@ -17,6 +17,13 @@ export class DeliveriesComponent implements OnInit {
   stringFilterValue: string | undefined;
   numericFilterValue: Number | undefined;
 
+  amountFilters = [1, 5, 10, 25];
+  amountOfShowedItems = this.amountFilters[0];
+  totalAmountOfPages = 0;
+  currentPage = 0;
+  previousPage = 0;
+  nextPage = 0;
+
   constructor(private deliveryService: DeliveryService) { }
 
   ngOnInit(): void {
@@ -29,7 +36,15 @@ export class DeliveriesComponent implements OnInit {
   getDeliveries(): void { //Will load all the delivery data via the deliveryservice
     this.deliveryService.getDeliveries().subscribe({
       next: (v) => {
-        this.deliveries = v
+        this.totalAmountOfPages = Math.ceil(v.length / this.amountOfShowedItems);
+        this.currentPage = 1;
+        this.nextPage = 2;
+        if (this.totalAmountOfPages > 1) {
+          this.deliveries = v.slice(0, this.amountOfShowedItems)
+        }
+        else {
+          this.deliveries = v
+        }
         this.deliveries.sort((d1, d2) => { //Sort loaded delivery data
           if (d1.id > d2.id) {
             return 1;
@@ -45,6 +60,46 @@ export class DeliveriesComponent implements OnInit {
         this.deliveriesSuccessfullyLoaded = false;
         setTimeout(() => window.location.reload(), 5000) //Reload page every 5 seconds
       },
+    });
+  }
+
+  goToNextPage(): void {
+    if (this.nextPage <= this.totalAmountOfPages) {
+      this.previousPage++;
+      this.currentPage++;
+      this.nextPage++;
+      this.getDeliveriesPaged();
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.previousPage > 0) {
+      this.previousPage--;
+      this.currentPage--;
+      this.nextPage--;
+      this.getDeliveriesPaged();
+    }
+  }
+
+  updateAmountOfItems(): void {
+    this.currentPage = 1;
+    this.nextPage = 2;
+    this.getDeliveriesPaged();
+    this.totalAmountOfPages = Math.ceil(this.deliveries.length / this.amountOfShowedItems);
+    
+  }
+
+  getDeliveriesPaged(): void {
+    this.deliveryService.getDeliveriesPaged(this.currentPage, this.amountOfShowedItems).subscribe({
+      next: (v) => {
+        this.deliveries = v;
+        this.deliveriesSuccessfullyLoaded = true;
+      },
+      error: (e) => {
+        console.error("Internal Server Error, the GET request for deliveries by page and item amount couldn't be processed. Try again later."); //Show error when deliveries can't get loaded.
+        this.deliveriesSuccessfullyLoaded = false;
+        setTimeout(() => window.location.reload(), 5000) //Reload page every 5 seconds
+      }
     });
   }
 
@@ -66,7 +121,7 @@ export class DeliveriesComponent implements OnInit {
           },
         });
       }
-      else{
+      else {
         this.getDeliveries();
       }
     }
@@ -89,7 +144,7 @@ export class DeliveriesComponent implements OnInit {
           },
         });
       }
-      else{
+      else {
         this.getDeliveries();
       }
     }

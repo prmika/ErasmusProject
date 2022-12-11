@@ -19,6 +19,10 @@ export class DeliveryService {
     return this.http.get<Delivery[]>("https://localhost:5001/api/Deliveries")
   }
 
+  getDeliveriesPaged(page: Number, amount: Number): Observable<Delivery[]> {
+    return this.http.get<Delivery[]>(`https://localhost:5001/api/Deliveries/paged?page=${page}&amount=${amount}`)
+  }
+
   getDelivery(id: string): Observable<Delivery> {
     const url = `https://localhost:5001/api/Deliveries/${id}`;
     return this.http.get<Delivery>(url);

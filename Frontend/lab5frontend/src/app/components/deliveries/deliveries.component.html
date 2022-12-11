@@ -85,6 +85,29 @@
       </div>
     </div>
   </div>
+  <div style="margin: 10px; margin-top: 35px">
+    <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+      <a class="pagination-previous" *ngIf="previousPage > 0" (click)="goToPreviousPage()">Previous</a>
+      <a class="pagination-next" *ngIf="nextPage <= totalAmountOfPages" (click)="goToNextPage()">Next page</a>
+      <ul class="pagination-list">
+        <li *ngIf="previousPage > 0"><a class="pagination-link" aria-label="Go to previous page"
+            (click)="goToPreviousPage()">{{previousPage}}</a></li>
+        <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">{{currentPage}}</a></li>
+        <li *ngIf="nextPage <= totalAmountOfPages"><a class="pagination-link" aria-label="Go to next page"
+            (click)="goToNextPage()">{{nextPage}}</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="field" style="text-align: center; margin: 15px">
+    <label class="label">Amount of showed items</label>
+    <p class="control has-icons-left">
+      <span class="select">
+        <select [(ngModel)]="amountOfShowedItems" (change)="updateAmountOfItems()">
+          <option *ngFor="let option of amountFilters" [value]="option">{{option}}</option>
+        </select>
+      </span>
+    </p>
+  </div>
 </div>
 <div *ngIf="!deliveriesSuccessfullyLoaded">
   <div class="notification is-danger">
