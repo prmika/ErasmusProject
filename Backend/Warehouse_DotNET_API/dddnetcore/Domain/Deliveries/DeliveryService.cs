@@ -23,6 +23,11 @@ namespace DDDNetCore.Domain.Deliveries
             return _unitOfWork.DeliveryRepository.GetAll().ToList();
         }
 
+        public List<Delivery> GetAllDeliveriesPaged(int page, int numberOfItems)
+        {
+            return _unitOfWork.DeliveryRepository.GetAllPaged(page,numberOfItems).ToList();
+        }
+
         public Delivery GetOneDelivery(string id)
         {
             return _unitOfWork.DeliveryRepository.GetById(id);

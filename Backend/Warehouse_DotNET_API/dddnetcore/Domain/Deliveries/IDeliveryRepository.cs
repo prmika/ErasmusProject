@@ -8,6 +8,8 @@ namespace DDDSample1.Domain.Deliveries
     public interface IDeliveryRepository
     {
         public IEnumerable<Delivery> GetAll();
+
+        public IEnumerable<Delivery> GetAllPaged(int page, int numberOfItems);
         public Delivery GetById(string id);
         public Delivery Create(Delivery delivery);
         public void Update(Delivery delivery);

@@ -23,17 +23,28 @@ namespace DDDSample1.Controllers
         private  IDeliveryService deliveryService;
         
         
-        
-
         public DeliveriesController(BackendContext context, IDeliveryService deliveryService)
         {
             this._context = context;
             this.deliveryService = deliveryService;
         }
+
         [HttpGet]
         public ActionResult ReadAll()
         {
             var result = deliveryService.GetAllDeliveries();
+
+            if (result.Any() == false)
+            {
+                return NotFound("No deliveries could be found");
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("paged")]
+        public ActionResult ReadAllPaged(int page, int amount)
+        {
+            var result = deliveryService.GetAllDeliveriesPaged(page, amount);
 
             if (result.Any() == false)
             {

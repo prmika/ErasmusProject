@@ -28,6 +28,12 @@ namespace DDDSample1.Infrastructure.Deliveries
             return _backendContext.Deliveries;
         }
 
+        public IEnumerable<Delivery> GetAllPaged(int page, int numberOfItems)
+        {
+            int amountToSkip = (page - 1) * numberOfItems;
+            return _backendContext.Deliveries.Skip(amountToSkip).Take(numberOfItems);
+        }
+
         public Delivery GetById(string id)
         {
              return _backendContext.Deliveries.Where(delivery => delivery.Id == id).FirstOrDefault();
