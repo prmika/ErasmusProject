@@ -12,9 +12,9 @@ const gui = new dat.GUI()
 const world = {
     circle: {
         radius: 10,
-        x: 0,
-        y: 0,
-        z:0
+        x: 1,
+        y: 1,
+        z: 1
     }
 }
 gui.add(world.circle, 'radius', 1, 5).
@@ -32,11 +32,6 @@ gui.add(world.circle, 'y', -50, 50).
 onChange(() => {
 
     cities[1].position.set(cities[1].position.x, world.circle.y, cities[1].position.z);
-});
-gui.add(world.circle, 'z', -5, 5).
-onChange(() => {
-
-    cities[1].position.set(cities[1].position.x, cities[1].position.y, world.circle.z);
 });
 gui.add(world.circle, 'z', -5, 5).
 onChange(() => {
@@ -175,7 +170,7 @@ for (let i = 0; i < positions.length; i++){
     if (positions[i][1] > yMin) yMax = positions[i][1] + circleRadius;
     if (i == 0) zMax = positions[i][2]
     else if (positions[i][2] > zMax) zMax = positions[i][2];
-    console.log("position point avant "+i+" : "+positions[i]);
+    //console.log("position point avant "+i+" : "+positions[i]);
 
 }
 
@@ -199,19 +194,20 @@ for (let i = 0; i < positions.length; i++){
     positions[i][0] = positions[i][0] * (2 * visibleWidthAtZDepth(positions[i][2],camera))/(xMax-xMin) + (-xMin * 2 * visibleWidthAtZDepth(positions[i][2],camera) / (xMax - xMin) - visibleHeightAtZDepth(positions[i][2],camera));
     positions[i][1] = positions[i][1] * (2 * visibleHeightAtZDepth(positions[i][2],camera))/(yMax-yMin) + (-yMin * 2 * visibleHeightAtZDepth(positions[i][2],camera) / (yMax - yMin) - visibleHeightAtZDepth(positions[i][2],camera));
 */
-    console.log("position point après "+i+" : "+positions[i]);
+   // console.log("position point après "+i+" : "+positions[i]);
 }
 
 //We create a visual representation of the 3 axis to debug
 const axesHelper = new THREE.AxesHelper( 5 );
 scene.add( axesHelper );
-console.log("xMin: "+xMin);
+/*console.log("xMin: "+xMin);
 console.log("xMax: "+xMax);
 console.log("yMin: "+yMin);
 console.log("yMax: "+yMax);
 console.log("zMax: "+zMax);
 console.log("visibleWidthAtDepth: "+ visibleWidthAtZDepth(camera.position.z - 5, camera));
 console.log("visibleHeightAtDepth: "+ visibleHeightAtZDepth(camera.position.z - 5, camera));
+*/
 
 //We add the circles representing the cities in the scene.
 for (let i=0; i < positions.length; i++){
@@ -261,7 +257,7 @@ function addRoadBetweenCities(city1,city2){
     let roadGeometry = new THREE.BufferGeometry();
 
     //let connectorLength = 6;
-    const roadWidth = 1;
+    const roadWidth = 2;
     //connectorScale1/2 are used to harmonize the size of all city connectors. The size will be 1.5 times the circle radius
     const connectorScale1 = 1.5 * circleRadius/Math.abs((positions[city2][0] - positions[city1][0]));
     const connectorScale2 = 1.5 * circleRadius/Math.abs((positions[city1][0] - positions[city2][0]));
@@ -343,9 +339,9 @@ function addRoadBetweenCities(city1,city2){
 */
 
     roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    //We set the roads in red and we enable the DoubleSide attribute which allows us to see the road from the two sides.
-    const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, side: DoubleSide } );
-    console.log(roadMaterial);
+    //We set the roads in asphalt grey and we enable the DoubleSide attribute which allows us to see the road from the two sides.
+    const roadMaterial = new THREE.MeshBasicMaterial( { color:  0x666460, side: DoubleSide } );
+    //console.log(roadMaterial);
     const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
     scene.add(roadMesh);
 }
@@ -375,7 +371,7 @@ function animate(){
     requestAnimationFrame(animate);
     controls.update(); //We update the orbit controller
     renderer.render(scene, camera);
-    console.log(camera.position);
+    //console.log(camera.position);
 }
 
 animate(); //We call the function that animates the scene.
