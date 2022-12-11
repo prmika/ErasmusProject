@@ -7,6 +7,7 @@ import IDeliveryPathService from './IServices/IDeliveryPathService';
 import { Result } from "../core/logic/Result";
 import { DeliveryPathMap } from "../mappers/DeliveryPathMap";
 import Logger from '../loaders/logger';
+import { DeliveryPathId } from '../domain/deliverypathId';
 
 @Service()
 export default class DeliveryPathService implements IDeliveryPathService {
@@ -50,7 +51,7 @@ export default class DeliveryPathService implements IDeliveryPathService {
     public async createDeliveryPath(deliverypathDTO: IDeliveryPathDTO): Promise<Result<IDeliveryPathDTO>> {
         try {
 
-            const deliverypathOrError = await DeliveryPath.create(deliverypathDTO);
+            const deliverypathOrError = await DeliveryPath.create(deliverypathDTO,new DeliveryPathId(deliverypathDTO.id));
 
             if (deliverypathOrError.isFailure) {
                 return Result.fail<IDeliveryPathDTO>(deliverypathOrError.errorValue());

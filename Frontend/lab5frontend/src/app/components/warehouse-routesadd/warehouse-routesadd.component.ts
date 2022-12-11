@@ -56,7 +56,10 @@ export class WarehouseRoutesaddComponent implements OnInit {
     (this.time != undefined && this.time > 0) &&
     (this.used_battery != undefined && this.used_battery > 0) &&
     (this.extra_time_when_charging_required != undefined && this.extra_time_when_charging_required > 0)){
+      let date: Date = new Date(); 
+      let bodyId = `${this.departure_warehouseId}TO${this.destination_warehouseId}_${date.getDate()}_${date.getMonth()}_${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
       let body = {
+        "id": bodyId,
         "departure_warehouseId": this.departure_warehouseId,
         "destination_warehouseId": this.destination_warehouseId,
         "distance": this.distance,
