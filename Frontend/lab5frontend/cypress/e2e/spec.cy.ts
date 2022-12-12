@@ -16,7 +16,7 @@ describe('Testing routing for warehouses', () => {
   })
 
   it('Navigates to warehouses', () => {
-    cy.visit('/warehouses');
+    cy.get('*[id^="war"]').click({ force: true });
     cy.url().should('include', '/warehouses');
     cy.contains('Create new Warehouse');
   })
@@ -32,8 +32,8 @@ describe('Testing routing for deliveries', () => {
     cy.contains('Deliveries');
   })
 
-  it('Navigates to warehouses', () => {
-    cy.visit('/deliveries');
+  it('Navigates to deliveries', () => {
+    cy.get('*[id^="deliver"]').click({ force: true });
     cy.url().should('include', '/deliveries');
     cy.contains('Create new Delivery');
   })
@@ -50,7 +50,7 @@ describe('Testing routing for trucks', () => {
   })
 
   it('Navigates to warehouses', () => {
-    cy.visit('/trucks');
+    cy.get('*[id^="trucks"]').click({ force: true });
     cy.url().should('include', '/trucks');
     cy.contains('Create new Truck');
   })
@@ -66,8 +66,8 @@ describe('Testing routing for Warehouse Routes', () => {
     cy.contains('Warehouse Routes');
   })
 
-  it('Navigates to warehouses', () => {
-    cy.visit('/warehouse-routes');
+  it('Navigates to routes', () => {
+    cy.get('*[id^="routes"]').click({ force: true });
     cy.url().should('include', '/warehouse-routes');
     cy.contains('Create new Warehouse Route');
   })
@@ -84,7 +84,7 @@ describe('Testing routing for Packages', () => {
   })
 
   it('Navigates to packages', () => {
-    cy.visit('/packages');
+    cy.get('*[id^="package"]').click({ force: true });
     cy.url().should('include', '/packages');
     cy.contains('Package a new delivery');
   })
@@ -101,7 +101,7 @@ describe('Testing routing for Planning', () => {
   })
 
   it('Navigates to Planning', () => {
-    cy.visit('/planning');
+    cy.get('*[id^="plan"]').click({ force: true });
     cy.url().should('include', '/planning');
   })
 
@@ -168,10 +168,6 @@ describe('Testing page for truck creation', () => {
     cy.get('*[class^="button is-info"]').click();
   })
 
-  it('Checking if the Return button works', () => {
-    cy.get('*[id^="retButton"]').click();
-    cy.url().should('include', '/trucks');
-  })
 
 })
 
@@ -180,8 +176,24 @@ describe('Testing page for delivery creation', () => {
 
   it('Button navigates to the creation form', () => {
     cy.visit('/deliveries');
-    cy.get('button').click();
+    cy.get('button:first').click();
   })
+
+  it('Adding Delivery button exists and works', () => {
+    cy.get('*[class^="button is-info"]').click();
+  })
+
+  it('Adding an actual Delivery', () => {
+
+    cy.get('*[placeholder^="e.g. D01"]').type('D11');
+    cy.get('*[placeholder^="e.g. 50kg"]').type('30');
+    cy.get('*[placeholder^="e.g. 60 min"]').type('50');
+    cy.get('*[placeholder^="e.g. 30 min"]').type('30');
+    cy.get('*[id^="dateDel"]').type('2022-12-15');
+
+    cy.get('*[class^="button is-info"]').click();
+  })
+
 
 })
 
@@ -193,6 +205,20 @@ describe('Testing page for route creation', () => {
     cy.get('button').click();
   })
 
+  it('Adding Route button exists and works', () => {
+    cy.get('*[class^="button is-info"]').click();
+  })
+
+  it('Adding an actual Route', () => {
+
+    cy.get('*[placeholder^="e.g. 100km"]').type('120');
+    cy.get('*[placeholder^="e.g. 64 kWh"]').type('50');
+    cy.get('*[placeholder^="e.g. 60 min"]').type('50');
+    cy.get('*[placeholder^="e.g. 20 min"]').type('17');
+
+    cy.get('*[class^="button is-info"]').click();
+  })
+
 })
 
 
@@ -201,6 +227,16 @@ describe('Testing page for package creation', () => {
   it('Button navigates to the creation form', () => {
     cy.visit('/packages');
     cy.get('button').click();
+  })
+
+  it('Adding an actual Package', () => {
+
+    cy.get('*[placeholder^="e.g. 25"]').type('24');
+    cy.get('*[placeholder^="e.g. 3"]').type('5');
+    cy.get('*[placeholder^="e.g. 0"]').type('0');
+    cy.get('*[id^="IdSelect"]').type('D11');
+
+    cy.get('*[class^="button is-info"]').click();
   })
 
 })
@@ -217,5 +253,21 @@ describe('Testing option updating a truck', () => {
     cy.get(' * [placeholder^= "tare"').type('1500');
     cy.get('*[id^="save"]').click();
   })
-  
+
+})
+
+
+describe('Testing option updating a Warehouse', () => {
+
+  it('Update button exists and navigates to the update form', () => {
+    cy.visit('/warehouses');
+    cy.get('*[class^="button is-warning"]:first').click();
+  })
+
+  it('Updating the data', () => {
+    cy.get(' * [placeholder^= "Latitude"').clear();
+    cy.get(' * [placeholder^= "Latitude"').type('45');
+
+  })
+
 })
