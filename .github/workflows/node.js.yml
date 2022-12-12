@@ -24,7 +24,7 @@ jobs:
       working-directory: ./Backend/LogisticsAPI
       run: | 
         npm install
-        sudo npm install -g nodemon
+        npm install -g nodemon
         npm install --save reflect-metadata rxjs
     - name: install angular dependencies
       working-directory: ./Frontend/lab5frontend
