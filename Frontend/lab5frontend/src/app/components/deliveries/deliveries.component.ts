@@ -82,6 +82,7 @@ export class DeliveriesComponent implements OnInit {
   }
 
   updateAmountOfItems(): void {
+    this.previousPage = 0;
     this.currentPage = 1;
     this.nextPage = 2;
     this.getDeliveriesPaged();
