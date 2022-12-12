@@ -20,14 +20,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Node Part
-      working-directory: /home/debian/FullProjectLAPR5/Backend/LogisticsAPI
+    - name: install node dependencies
+      working-directory: ./Backend/LogisticsAPI
       run: | 
-        npm i
-        npm run start
-    - name: Dotnet Part
-      working-directory: /home/debian/FullProjectLAPR5/Backend/Warehouse_DotNET_API/dddnetcore
-      run: dotnet run
-    - name: Dotnet Part
-      working-directory: /home/debian/FullProjectLAPR5/Frontend/lab5frontend
-      run: ng serve --host 0.0.0.0
+        npm install
+        sudo npm install -g nodemon
+        npm install --save reflect-metadata rxjs
+    - name: install angular dependencies
+      working-directory: ./Frontend/lab5frontend
+      run: | 
+        npm install
+        npm install -g @angular/cli@latest
+    - name: Pm2 job runner
+      run: | 
+        pm2 start ecosystemAll.config.js
+        pm2 ps
