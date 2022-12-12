@@ -16,23 +16,23 @@ export class WarehouseService {
     private http: HttpClient) { }
 
   getWarehouses(): Observable<Warehouse[]> {
-    return this.http.get<Warehouse[]>("http://217.160.104.201:5000/api/Warehouses") //Perform GET request to the backend API URL (to get all warehouses)
+    return this.http.get<Warehouse[]>("http://localhost:5000/api/Warehouses") //Perform GET request to the backend API URL (to get all warehouses)
   }
 
   getWarehouse(id: string): Observable<Warehouse> {
-    const url = `http://217.160.104.201:5000/api/Warehouses/${id}`; 
+    const url = `http://localhost:5000/api/Warehouses/${id}`; 
     return this.http.get<Warehouse>(url); //Perform GET request to the backend API URL with an id (to get one specific warehouse)
   }
 
 
   updateWarehouse(id: string, warehouse: Warehouse): Observable<any> {
-    const url = `http://217.160.104.201:5000/api/Warehouses/${id}`; 
+    const url = `http://localhost:5000/api/Warehouses/${id}`; 
     return this.http.put(url, warehouse, this.httpOptions); //Perform UPDATE request to the backend API URL (to update warehouse)
   }
 
 
   addWarehouse(warehouse: Warehouse): Observable<Warehouse> {
-    const url = 'http://217.160.104.201:5000/api/Warehouses'
+    const url = 'http://localhost:5000/api/Warehouses'
     return this.http.post<Warehouse>(url, warehouse, this.httpOptions); //Perform POST request to the backend API URL (to create new warehouse)
   }
 }
