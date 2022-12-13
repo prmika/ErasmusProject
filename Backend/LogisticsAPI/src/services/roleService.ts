@@ -29,6 +29,22 @@ export default class RoleService implements IRoleService {
     }
   }
 
+  public async getAllRoles(): Promise<Result<IRoleDTO[]>> {
+    try {
+      const Roles = await this.roleRepo.findAll();
+
+      if (Roles === null) {
+        return Result.fail<IRoleDTO[]>("No Roles were found.");
+      }
+      else {
+        let RoleDTOMappedResults = [] as IRoleDTO[];
+        Roles.forEach(Role => RoleDTOMappedResults.push(RoleMap.toDTO(Role) as IRoleDTO))
+        return Result.ok<IRoleDTO[]>(RoleDTOMappedResults)
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
 
   public async createRole(roleDTO: IRoleDTO): Promise<Result<IRoleDTO>> {
     try {
