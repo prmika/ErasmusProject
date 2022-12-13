@@ -74,7 +74,7 @@ export class Truck extends AggregateRoot<TruckProps> {
     const autonomy = truckDTO.autonomy;
     const fast_charging_time = truckDTO.fast_charging_time;
 
-    if ((id.toValue().length < 6 || id.toValue().length > 6) || (!!tare === false || tare === 0) || (!!load_capacity === false || load_capacity === 0) || (!!max_battery_charge === false || max_battery_charge === 0) 
+    if ((id.toValue().toString().length < 6 || id.toValue().toString().length > 6) || (!!tare === false || tare === 0) || (!!load_capacity === false || load_capacity === 0) || (!!max_battery_charge === false || max_battery_charge === 0) 
     && (!!autonomy === false || autonomy === 0) || (!!fast_charging_time === false || fast_charging_time === 0)) {
       return Result.fail<Truck>('Must provide all the truck properties and id (aka licenseplate) needs a length of 6!')
     } else {
