@@ -1,9 +1,11 @@
 import * as THREE from "three";
 import * as dat from "./lil-gui.module.min.js";
-import { OrbitControls } from "./OrbitControls.js";
-import {CircleGeometry} from "three";
+import { OrbitControls } from "./three.js-master/examples/jsm/controls/OrbitControls.js"
+import {CircleGeometry, Object3D} from "three";
 import { FBXLoader } from 'https://cdn.skypack.dev/three@0.138.0/examples/jsm/loaders/FBXLoader';
 import {DoubleSide} from "three";
+import { GLTFLoader } from "./GLTFLoader.js";
+
 const gui = new dat.GUI()
 
 //////////////////////////////////////////////////////
@@ -61,6 +63,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(devicePixelRatio); //Avoid jagging of meshes
 document.body.appendChild(renderer.domElement);
 
+
+//////////////////////////////////////////////
+///////////CREATION OF A SUN//////////////////
+let sunLight = new THREE.AmbientLight(0xffeeaa);
+scene.add(sunLight);
+
 //////////////////////////////////////////////
 ////////////CREATION OF LIGHT/////////////////
 
@@ -107,7 +115,8 @@ const visibleWidthAtZDepth = ( depth, camera ) => {
 /////////////CREATION OF PLANE///////////////
 
 //This plane is not useful. We just use it to debug the program.
-const planeGeometry = new THREE.PlaneGeometry(visibleWidthAtZDepth(camera.position.z - 5, camera),visibleHeightAtZDepth(camera.position.z - 5, camera),10,10);
+const planeGeometry = new THREE.PlaneGeometry(2,2,10,10);
+console.log(planeGeometry);
 const planeMaterial = new THREE.MeshPhongMaterial({color: 0xFF0000, side: THREE.DoubleSide}); //MeshPhongMaterial : Material that reacts to the light
 planeMaterial.flatShading = true;
 const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -220,10 +229,24 @@ camera.position.z = +5; //We move back the camera to better see the cities.
 controls.update(); //Must be called after any manual changes to the camera's transform
 
 //////////////////////////////////////////////
+////////////IMPORT OF TRUCK MODEL/////////////
+const loader = new GLTFLoader();
+let truck;
+new GLTFLoader().load('truck2.glb', (truckModel) => {
+    truck = truckModel.scene;
+    if(positions[0]) truck.position.set(positions[0][0],positions[0][1],positions[0][2]);
+    truck.rotateX(Math.PI/2);
+    scene.add(truck);
+});
+
+
+const truckScale = 0.05;
+
+
+//////////////////////////////////////////////
 //////////IMPORT OF WAREHOUSE MODEL///////////
 
 let modelScale = 0.005; //This is the scale factor of the warehouse model, to avoid it to be huge.
-const loader = new FBXLoader();
 let warehouses = []; //This array will contain all the warehouses models.
 
 //We add a warehouse 3d model in the scene at the side of each city.
@@ -255,6 +278,9 @@ function addRoadBetweenCities(city1,city2){
     //////////////////////////////////////////////////////
 /////////////CREATION OF ORIENTED PLANE///////////////
     let roadGeometry = new THREE.BufferGeometry();
+    //We load the texture of the road
+    let loader = new THREE.TextureLoader();
+
 
     //let connectorLength = 6;
     const roadWidth = 2;
@@ -304,44 +330,14 @@ function addRoadBetweenCities(city1,city2){
         positions[city2][0] + orientXRoadToCity2, positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01 //gauche bas OK
     ] );
 
-
-/*
-    const vertices = new Float32Array( [
-        //First Connector
-        positions[city1][0], positions[city1][1],  positions[city1][2], //gauche bas OK
-        positions[city1][0] + connectorLength, positions[city1][1],  positions[city1][2], //droite bas OK
-        positions[city1][0] + connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
-
-
-        positions[city1][0] + connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
-        positions[city1][0], positions[city1][1] + roadWidth,  positions[city1][2], //gauche haut OK
-        positions[city1][0], positions[city1][1],  positions[city1][2], //gauche bas OK
-
-        //The ramp
-        positions[city1][0] + connectorLength, positions[city1][1],  positions[city1][2], //gauche bas OK
-        positions[city2][0] - connectorLength,  positions[city2][1],  positions[city2][2], //droite bas
-        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //droite haut
-
-        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //droite haut
-        positions[city1][0] +connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //gauche haut OK
-        positions[city1][0] +connectorLength, positions[city1][1],  positions[city1][2], //gauche bas OK
-
-        //Second Connector
-        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2], //gauche bas OK
-        positions[city2][0], positions[city2][1],  positions[city2][2], //droite bas OK
-        positions[city2][0], positions[city2][1] + roadWidth,  positions[city2][2], //droite haut OK
-
-
-        positions[city2][0], positions[city2][1]+1,  positions[city2][2], //droite haut OK
-        positions[city2][0]-connectorLength, positions[city2][1]+1,  positions[city2][2], //gauche haut OK
-        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2] //gauche bas OK
-    ] );
-*/
-
+    let texture_road = loader.load('texture_road.jpg');
+    texture_road.wrapS = THREE.RepeatWrapping;
+    texture_road.wrapT = THREE.RepeatWrapping;
     roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    let texture_sky = loader.load('texture_sky.jpg');
+    scene.background = texture_sky;
     //We set the roads in asphalt grey and we enable the DoubleSide attribute which allows us to see the road from the two sides.
-    const roadMaterial = new THREE.MeshBasicMaterial( { color:  0x666460, side: DoubleSide } );
-    //console.log(roadMaterial);
+    const roadMaterial = new THREE.MeshBasicMaterial( { map: texture_road, side: DoubleSide } );
     const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
     scene.add(roadMesh);
 }
@@ -363,62 +359,80 @@ for (let i=0; i<positions.length; i++){
 }
 
 controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
+
+
+
 //////////////////////////////////////////
 ////////////INFINITE LOOP/////////////////
 
+// Vector to represent the truck's movement
+let movement = new THREE.Vector3();
+let rotation = new THREE.Vector3();
+
+
+// Event listeners to handle key down and key up events
+window.addEventListener('keydown', onKeyDown);
+//window.addEventListener('keyup', onKeyUp);
+function onKeyDown(event) {
+    if(truck) console.log(truck.quaternion.x);
+    // update the movement vector based on the key that was pressed
+    switch (event.keyCode) {
+
+        case 90: // Z key
+            if(truck) {
+                console.log(truck);
+                let truckDirection = truck.mesh.getWorldDirection();
+                truck.position.x += truckDirection.x;
+                truck.position.y += truckDirection.y;
+            }
+            break;
+        case 81: // Q key
+            if(truck) truck.rotation.y += 0.1;
+            break;
+        case 83: // S key
+            if(truck) truck.position.y -= 0.1;
+            break;
+        case 68: // D key
+            if(truck) truck.rotation.y -= 0.1;
+            break;
+    }
+}
+
+// function onKeyUp(event) {
+//     // update the movement vector based on the key that was released
+//     switch (event.keyCode) {
+//         case 90: // Z key
+//             movement.y = 0;
+//             break;
+//         case 81: // Q key
+//             if(truck) truck.rotation.z = 0;
+//             break;
+//         case 83: // S key
+//             if(truck) truck.position.y = 0.1;
+//             break;
+//         case 68: // D key
+//             rotation.z = 0;
+//             break;
+//     }
+// }
+// function updateTruck() {
+//     // update the truck's position based on the movement vector
+//     if(truck) truck.position.add(movement);
+//     //if(truck) truck.rotation.set(rotation);
+//
+//     // update the truck's direction based on the movement vector
+//     if (movement.x !== 0 || movement.z !== 0) {
+//         if(truck) truck.lookAt(truck.position.clone().add(movement));
+//     }
+// }
+
+
 //This is the infinite loop that animates the scene
 function animate(){
+    //if(truck) updateTruck();
     requestAnimationFrame(animate);
     controls.update(); //We update the orbit controller
     renderer.render(scene, camera);
-    //console.log(camera.position);
 }
 
 animate(); //We call the function that animates the scene.
-
-/*
-function addRoadBetweenCities(city1,city2){
-    //////////////////////////////////////////////////////
-/////////////CREATION OF ORIENTED PLANE///////////////
-    let roadGeometry = new THREE.BufferGeometry();
-
-    let connectorLength = 6;
-    let roadWidth = 1;
-    const vertices = new Float32Array( [
-        //First Connector
-        positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
-        positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //droite bas OK
-        positions[0][0] + connectorLength, positions[0][1] + roadWidth,  positions[0][2], //droite haut OK
-
-
-        positions[0][0] + connectorLength, positions[0][1] + roadWidth,  positions[0][2], //droite haut OK
-        positions[0][0], positions[0][1] + roadWidth,  positions[0][2], //gauche haut OK
-        positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
-
-        //The ramp
-        positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
-        positions[1][0] - connectorLength,  positions[1][1],  positions[1][2], //droite bas
-        positions[1][0] - connectorLength,  positions[1][1] + roadWidth,  positions[1][2], //droite haut
-
-        positions[1][0] - connectorLength,  positions[1][1] + roadWidth,  positions[1][2], //droite haut
-        positions[0][0] +connectorLength, positions[0][1] + roadWidth,  positions[0][2], //gauche haut OK
-        positions[0][0] +connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
-
-        //Second Connector
-        positions[1][0]-connectorLength, positions[1][1],  positions[1][2], //gauche bas OK
-        positions[1][0], positions[1][1],  positions[1][2], //droite bas OK
-        positions[1][0], positions[1][1] + roadWidth,  positions[1][2], //droite haut OK
-
-
-        positions[1][0], positions[1][1]+1,  positions[1][2], //droite haut OK
-        positions[1][0]-connectorLength, positions[1][1]+1,  positions[1][2], //gauche haut OK
-        positions[1][0]-connectorLength, positions[1][1],  positions[1][2] //gauche bas OK
-    ] );
-
-    roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-    console.log(roadMaterial);
-    const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
-    scene.add(roadMesh);
-}
-*/
