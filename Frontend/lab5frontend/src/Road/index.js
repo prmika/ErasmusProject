@@ -135,9 +135,13 @@ const positions = [
 ];
 
 //We define the radius of the circles that will represent the cities.
+let textureLoader = new THREE.TextureLoader();
+let texture_city = textureLoader.load('./textures/texture_road.jpg');
+texture_city.wrapS = THREE.RepeatWrapping;
+texture_city.wrapT = THREE.RepeatWrapping;
 const circleRadius = 3;
 const circleGeometry = new THREE.CircleGeometry(circleRadius,50,0);
-const circleMaterial = new THREE.MeshPhongMaterial({color: 0x00FF00, side: THREE.DoubleSide});
+const circleMaterial = new THREE.MeshBasicMaterial({map: texture_city, side: THREE.DoubleSide});
 
 //This array will contain all the cities.
 let cities = [];
@@ -205,6 +209,7 @@ console.log("visibleHeightAtDepth: "+ visibleHeightAtZDepth(camera.position.z - 
 //We add the circles representing the cities in the scene.
 for (let i=0; i < positions.length; i++){
     cities.push(new THREE.Mesh(circleGeometry,circleMaterial));
+
     cities[i].position.set(positions[i][0],positions[i][1],positions[i][2]);
     scene.add(cities[i]);
 }
@@ -277,7 +282,7 @@ for (let i=0; i<positions.length; i++){
 */
 }
 
-controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
+controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, (positions[0][2]+positions[1][2])/2 ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
 
 
 
