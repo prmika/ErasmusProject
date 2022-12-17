@@ -1,9 +1,12 @@
 import * as THREE from "three";
 import * as dat from "./lil-gui.module.min.js";
-import { OrbitControls } from "./OrbitControls.js";
-import {CircleGeometry} from "three";
+import { OrbitControls } from "./three.js-master/examples/jsm/controls/OrbitControls.js"
+import {CircleGeometry, Object3D} from "three";
 import { FBXLoader } from 'https://cdn.skypack.dev/three@0.138.0/examples/jsm/loaders/FBXLoader';
 import {DoubleSide} from "three";
+import { GLTFLoader } from "./GLTFLoader.js";
+import { Road } from "./Road.js";
+
 const gui = new dat.GUI()
 
 //////////////////////////////////////////////////////
@@ -61,6 +64,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(devicePixelRatio); //Avoid jagging of meshes
 document.body.appendChild(renderer.domElement);
 
+
+//////////////////////////////////////////////
+///////////CREATION OF A SUN//////////////////
+let sunLight = new THREE.AmbientLight(0xffeeaa);
+scene.add(sunLight);
+
 //////////////////////////////////////////////
 ////////////CREATION OF LIGHT/////////////////
 
@@ -101,25 +110,10 @@ const visibleWidthAtZDepth = ( depth, camera ) => {
     return height * camera.aspect;
 };
 
-
-
-//////////////////////////////////////////////
-/////////////CREATION OF PLANE///////////////
-
-//This plane is not useful. We just use it to debug the program.
-const planeGeometry = new THREE.PlaneGeometry(visibleWidthAtZDepth(camera.position.z - 5, camera),visibleHeightAtZDepth(camera.position.z - 5, camera),10,10);
-const planeMaterial = new THREE.MeshPhongMaterial({color: 0xFF0000, side: THREE.DoubleSide}); //MeshPhongMaterial : Material that reacts to the light
-planeMaterial.flatShading = true;
-const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
-//planeMesh.rotateZ(Math.pow(Math.atan((positions[1][1]-positions[0][1])/(positions[1][0]-positions[0][0])),2));
-//scene.add(planeMesh);
-
 ////////////////////////////////////////////////////////////////////////////////
-/////////////////DEFINITION OF CITIES AND WAREHOUSES////////////////////////////
+/////////////////DEFINITION OF WAREHOUSES LOCATIONS////////////////////////////
 
-//Warehouses :
-
-//longitude, latitude, altitude OR in three js axis : z, x, y
+//Warehouses longitude, latitude, altitude OR in three js axis : z, x, y
 const positions = [
     [8.2451,40.9321,250],
     [8.6410,41.0072,550],
@@ -140,11 +134,14 @@ const positions = [
     [8.6118, 41.1239, 500]
 ];
 
-//We define the radius of the circles that will represents the cities.
+//We define the radius of the circles that will represent the cities.
+let textureLoader = new THREE.TextureLoader();
+let texture_city = textureLoader.load('./textures/texture_road.jpg');
+texture_city.wrapS = THREE.RepeatWrapping;
+texture_city.wrapT = THREE.RepeatWrapping;
 const circleRadius = 3;
-// const circleRadius = visibleHeightAtZDepth(camera.position.z - 5,camera) / (positions.length * 2);
 const circleGeometry = new THREE.CircleGeometry(circleRadius,50,0);
-const circleMaterial = new THREE.MeshPhongMaterial({color: 0x00FF00, side: THREE.DoubleSide});
+const circleMaterial = new THREE.MeshBasicMaterial({map: texture_city, side: THREE.DoubleSide});
 
 //This array will contain all the cities.
 let cities = [];
@@ -212,6 +209,7 @@ console.log("visibleHeightAtDepth: "+ visibleHeightAtZDepth(camera.position.z - 
 //We add the circles representing the cities in the scene.
 for (let i=0; i < positions.length; i++){
     cities.push(new THREE.Mesh(circleGeometry,circleMaterial));
+
     cities[i].position.set(positions[i][0],positions[i][1],positions[i][2]);
     scene.add(cities[i]);
 }
@@ -220,15 +218,29 @@ camera.position.z = +5; //We move back the camera to better see the cities.
 controls.update(); //Must be called after any manual changes to the camera's transform
 
 //////////////////////////////////////////////
+////////////IMPORT OF TRUCK MODEL/////////////
+const loader = new GLTFLoader();
+let truck;
+new GLTFLoader().load("./models/gltf/truck.glb", (truckModel) => {
+    truck = truckModel.scene;
+    if(positions[0]) truck.position.set(positions[0][0],positions[0][1],positions[0][2]);
+    truck.rotateX(Math.PI/2);
+    scene.add(truck);
+});
+
+
+const truckScale = 0.05;
+
+
+//////////////////////////////////////////////
 //////////IMPORT OF WAREHOUSE MODEL///////////
 
 let modelScale = 0.005; //This is the scale factor of the warehouse model, to avoid it to be huge.
-const loader = new FBXLoader();
 let warehouses = []; //This array will contain all the warehouses models.
 
 //We add a warehouse 3d model in the scene at the side of each city.
 for (let i = 0; i<positions.length;i++) {
-    loader.load('warehouse_model.fbx', function (warehouseModel) {
+    loader.load('./models/fbx/warehouse_model.fbx', function (warehouseModel) {
         warehouseModel.traverse(function (child) {
             if (child.isMesh) {
                 child.castShadow = true;
@@ -251,174 +263,100 @@ function getRandomInt(max) {
 }
 
 //This function add a road between the city 1 and the city 2
-function addRoadBetweenCities(city1,city2){
-    //////////////////////////////////////////////////////
-/////////////CREATION OF ORIENTED PLANE///////////////
-    let roadGeometry = new THREE.BufferGeometry();
-
-    //let connectorLength = 6;
-    const roadWidth = 2;
-    //connectorScale1/2 are used to harmonize the size of all city connectors. The size will be 1.5 times the circle radius
-    const connectorScale1 = 1.5 * circleRadius/Math.abs((positions[city2][0] - positions[city1][0]));
-    const connectorScale2 = 1.5 * circleRadius/Math.abs((positions[city1][0] - positions[city2][0]));
-    //These two variables are used to orient the city connectors to the next warehouse.
-    const orientXCity1ToRoad = (positions[city2][0] - positions[city1][0]) * connectorScale1;
-    const orientXRoadToCity2 = (positions[city1][0] - positions[city2][0]) * connectorScale2;
-    /*
-    const orientYCity1ToRoad = (positions[city2][1] - positions[city1][1]) * connectorScale1;
-    const orientYRoadToCity2 = (positions[city1][1] - positions[city2][1]) * connectorScale1;
-    */
-
-    //This array contains all the points needed to form the triangles that will form the road. 2 triangles will form a rectangle.
-    // The (+ roadWidth/2) and (- roadWidth/2) are used to center the road with the circle of the cities.
-    // The (+ (positions[city2][0] - positions[city1][0]) * 0.1) and (- (positions[city2][0] - positions[city1][0]) * 0.1) are used to orient the connector to the next city, and to set up the length of this connector.
-    //The (positions(city][2]-0.01) puts the road in the bottom (infinitesimal) of the city.
-    const vertices = new Float32Array( [
-        //First Connector
-        positions[city1][0], positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //centre bas OK
-        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //droite bas OK
-        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //droite haut OK
-
-
-        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //droite haut OK
-        positions[city1][0], positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //centre haut OK
-        positions[city1][0], positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //centre bas OK
-
-        //The ramp
-        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //connector1 (gauche) bas OK
-        positions[city2][0] + orientXRoadToCity2,  positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) bas
-        positions[city2][0] + orientXRoadToCity2,  positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) haut
-
-        positions[city2][0] + orientXRoadToCity2,  positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //connector2(droite) haut
-        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] + roadWidth/2,  positions[city1][2] - 0.01, //connector1(gauche) haut OK
-        positions[city1][0] + orientXCity1ToRoad, positions[city1][1] - roadWidth/2,  positions[city1][2] - 0.01, //connector1(gauche) bas OK
-
-        //Second Connector
-        positions[city2][0] + orientXRoadToCity2, positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //gauche bas OK
-        positions[city2][0], positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01, //centre bas OK
-        positions[city2][0], positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //centre haut OK
-
-
-        positions[city2][0], positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //centre haut OK
-        positions[city2][0] + orientXRoadToCity2, positions[city2][1] + roadWidth/2,  positions[city2][2] - 0.01, //gauche haut OK
-        positions[city2][0] + orientXRoadToCity2, positions[city2][1] - roadWidth/2,  positions[city2][2] - 0.01 //gauche bas OK
-    ] );
-
-
-/*
-    const vertices = new Float32Array( [
-        //First Connector
-        positions[city1][0], positions[city1][1],  positions[city1][2], //gauche bas OK
-        positions[city1][0] + connectorLength, positions[city1][1],  positions[city1][2], //droite bas OK
-        positions[city1][0] + connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
-
-
-        positions[city1][0] + connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //droite haut OK
-        positions[city1][0], positions[city1][1] + roadWidth,  positions[city1][2], //gauche haut OK
-        positions[city1][0], positions[city1][1],  positions[city1][2], //gauche bas OK
-
-        //The ramp
-        positions[city1][0] + connectorLength, positions[city1][1],  positions[city1][2], //gauche bas OK
-        positions[city2][0] - connectorLength,  positions[city2][1],  positions[city2][2], //droite bas
-        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //droite haut
-
-        positions[city2][0] - connectorLength,  positions[city2][1] + roadWidth,  positions[city2][2], //droite haut
-        positions[city1][0] +connectorLength, positions[city1][1] + roadWidth,  positions[city1][2], //gauche haut OK
-        positions[city1][0] +connectorLength, positions[city1][1],  positions[city1][2], //gauche bas OK
-
-        //Second Connector
-        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2], //gauche bas OK
-        positions[city2][0], positions[city2][1],  positions[city2][2], //droite bas OK
-        positions[city2][0], positions[city2][1] + roadWidth,  positions[city2][2], //droite haut OK
-
-
-        positions[city2][0], positions[city2][1]+1,  positions[city2][2], //droite haut OK
-        positions[city2][0]-connectorLength, positions[city2][1]+1,  positions[city2][2], //gauche haut OK
-        positions[city2][0]-connectorLength, positions[city2][1],  positions[city2][2] //gauche bas OK
-    ] );
-*/
-
-    roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    //We set the roads in asphalt grey and we enable the DoubleSide attribute which allows us to see the road from the two sides.
-    const roadMaterial = new THREE.MeshBasicMaterial( { color:  0x666460, side: DoubleSide } );
-    //console.log(roadMaterial);
-    const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
-    scene.add(roadMesh);
-}
+let route = new Road(1,2,3);
+console.log(route);
 
 //We connect each city to 2 other random cities.
 for (let i=0; i<positions.length; i++){
     let randomCity = 0; //We generate the random id of the city.
     do{
-        randomCity = getRandomInt(positions.length);
-    }while(randomCity == i); //This makes impossible to connect a city to itself.
-    addRoadBetweenCities(i,randomCity); //We connect the 2 cities.
-    /*
-    let randomCity2
+        route.city2 = getRandomInt(positions.length);
+    }while(route.city2 == i); //This makes impossible to connect a city to itself
+    route.city1 = i;
+    route.addToScene(circleRadius, positions, scene);// We connect the 2 cities.
+/*
     do{
-       randomCity2 = getRandomInt(positions.length);
-       addRoadBetweenCities(i, randomCity2); //We connect the 2 cities.
-    }while (randomCity2 == randomCity || randomCity2 == i); //This makes impossible to connect a city to itself or to the precedent city.
-    */
+       route.city2 = getRandomInt(positions.length);
+        route.addToScene(circleRadius, positions, scene);// We connect the 2 cities.
+    }while (route.city2 == randomCity || route.city2 == i); //This makes impossible to connect a city to itself or to the precedent city.
+*/
 }
 
-controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, positions[2][2] ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
+controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, (positions[0][2]+positions[1][2])/2 ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
+
+
+
 //////////////////////////////////////////
 ////////////INFINITE LOOP/////////////////
 
+// Vector to represent the truck's movement
+let movement = new THREE.Vector3();
+let rotation = new THREE.Vector3();
+
+
+// Event listeners to handle key down and key up events
+window.addEventListener('keydown', onKeyDown);
+//window.addEventListener('keyup', onKeyUp);
+function onKeyDown(event) {
+    if(truck) console.log(truck.quaternion.x);
+    // update the movement vector based on the key that was pressed
+    switch (event.keyCode) {
+
+        case 90: // Z key
+            if(truck) {
+                console.log(truck);
+                let truckDirection = truck.mesh.getWorldDirection();
+                truck.position.x += truckDirection.x;
+                truck.position.y += truckDirection.y;
+            }
+            break;
+        case 81: // Q key
+            if(truck) truck.rotation.y += 0.1;
+            break;
+        case 83: // S key
+            if(truck) truck.position.y -= 0.1;
+            break;
+        case 68: // D key
+            if(truck) truck.rotation.y -= 0.1;
+            break;
+    }
+}
+
+// function onKeyUp(event) {
+//     // update the movement vector based on the key that was released
+//     switch (event.keyCode) {
+//         case 90: // Z key
+//             movement.y = 0;
+//             break;
+//         case 81: // Q key
+//             if(truck) truck.rotation.z = 0;
+//             break;
+//         case 83: // S key
+//             if(truck) truck.position.y = 0.1;
+//             break;
+//         case 68: // D key
+//             rotation.z = 0;
+//             break;
+//     }
+// }
+// function updateTruck() {
+//     // update the truck's position based on the movement vector
+//     if(truck) truck.position.add(movement);
+//     //if(truck) truck.rotation.set(rotation);
+//
+//     // update the truck's direction based on the movement vector
+//     if (movement.x !== 0 || movement.z !== 0) {
+//         if(truck) truck.lookAt(truck.position.clone().add(movement));
+//     }
+// }
+
+
 //This is the infinite loop that animates the scene
 function animate(){
+    //if(truck) updateTruck();
     requestAnimationFrame(animate);
     controls.update(); //We update the orbit controller
     renderer.render(scene, camera);
-    //console.log(camera.position);
 }
 
 animate(); //We call the function that animates the scene.
-
-/*
-function addRoadBetweenCities(city1,city2){
-    //////////////////////////////////////////////////////
-/////////////CREATION OF ORIENTED PLANE///////////////
-    let roadGeometry = new THREE.BufferGeometry();
-
-    let connectorLength = 6;
-    let roadWidth = 1;
-    const vertices = new Float32Array( [
-        //First Connector
-        positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
-        positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //droite bas OK
-        positions[0][0] + connectorLength, positions[0][1] + roadWidth,  positions[0][2], //droite haut OK
-
-
-        positions[0][0] + connectorLength, positions[0][1] + roadWidth,  positions[0][2], //droite haut OK
-        positions[0][0], positions[0][1] + roadWidth,  positions[0][2], //gauche haut OK
-        positions[0][0], positions[0][1],  positions[0][2], //gauche bas OK
-
-        //The ramp
-        positions[0][0] + connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
-        positions[1][0] - connectorLength,  positions[1][1],  positions[1][2], //droite bas
-        positions[1][0] - connectorLength,  positions[1][1] + roadWidth,  positions[1][2], //droite haut
-
-        positions[1][0] - connectorLength,  positions[1][1] + roadWidth,  positions[1][2], //droite haut
-        positions[0][0] +connectorLength, positions[0][1] + roadWidth,  positions[0][2], //gauche haut OK
-        positions[0][0] +connectorLength, positions[0][1],  positions[0][2], //gauche bas OK
-
-        //Second Connector
-        positions[1][0]-connectorLength, positions[1][1],  positions[1][2], //gauche bas OK
-        positions[1][0], positions[1][1],  positions[1][2], //droite bas OK
-        positions[1][0], positions[1][1] + roadWidth,  positions[1][2], //droite haut OK
-
-
-        positions[1][0], positions[1][1]+1,  positions[1][2], //droite haut OK
-        positions[1][0]-connectorLength, positions[1][1]+1,  positions[1][2], //gauche haut OK
-        positions[1][0]-connectorLength, positions[1][1],  positions[1][2] //gauche bas OK
-    ] );
-
-    roadGeometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-    const roadMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-    console.log(roadMaterial);
-    const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
-    scene.add(roadMesh);
-}
-*/
