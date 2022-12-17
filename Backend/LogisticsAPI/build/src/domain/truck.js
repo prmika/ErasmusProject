@@ -41,6 +41,13 @@ class Truck extends AggregateRoot_1.AggregateRoot {
     set fast_charging_time(value) {
         this.props.fast_charging_time = value;
     }
+    get truck_status() {
+        return this.props.truck_status;
+    }
+    set truck_status(value) {
+        this.props.truck_status = value;
+    }
+
     constructor(props, id) {
         super(props, id);
     }

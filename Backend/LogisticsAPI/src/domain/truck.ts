@@ -12,6 +12,7 @@ interface TruckProps {
     max_battery_charge: Number;
     autonomy: Number;
     fast_charging_time: Number;
+    truck_status: String;
 }
 
 export class Truck extends AggregateRoot<TruckProps> {
@@ -61,7 +62,15 @@ export class Truck extends AggregateRoot<TruckProps> {
 
   set fast_charging_time ( value: Number) {
     this.props.fast_charging_time = value;
-  }
+    }
+
+    get truck_status(): String {
+        return this.props.truck_status;
+    }
+
+    set truck_status(value: String) {
+        this.props.truck_status = value;
+    }
 
   private constructor (props: TruckProps, id: UniqueEntityID) {
     super(props, id);
@@ -73,12 +82,13 @@ export class Truck extends AggregateRoot<TruckProps> {
     const max_battery_charge = truckDTO.max_battery_charge;
     const autonomy = truckDTO.autonomy;
     const fast_charging_time = truckDTO.fast_charging_time;
+      const truck_status = truckDTO.truck_status;
 
     if ((id.toValue().toString().length < 6 || id.toValue().toString().length > 6) || (!!tare === false || tare === 0) || (!!load_capacity === false || load_capacity === 0) || (!!max_battery_charge === false || max_battery_charge === 0) 
     && (!!autonomy === false || autonomy === 0) || (!!fast_charging_time === false || fast_charging_time === 0)) {
       return Result.fail<Truck>('Must provide all the truck properties and id (aka licenseplate) needs a length of 6!')
     } else {
-      const truck = new Truck({ tare: tare, load_capacity: load_capacity, max_battery_charge: max_battery_charge, autonomy: autonomy, fast_charging_time: fast_charging_time}, id);
+      const truck = new Truck({ tare: tare, load_capacity: load_capacity, max_battery_charge: max_battery_charge, autonomy: autonomy, fast_charging_time: fast_charging_time, truck_status: truck_status}, id);
       return Result.ok<Truck>(truck)
     }
   }

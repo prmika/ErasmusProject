@@ -17,7 +17,8 @@ export class TruckMap extends Mapper<Truck> {
       load_capacity: truck.load_capacity,
       max_battery_charge: truck.max_battery_charge,
       autonomy: truck.autonomy,
-      fast_charging_time: truck.fast_charging_time
+        fast_charging_time: truck.fast_charging_time,
+        truck_status: truck.truck_status
     } as ITruckDTO;
   }
 
@@ -39,7 +40,8 @@ export class TruckMap extends Mapper<Truck> {
       load_capacity: truck.load_capacity,
       max_battery_charge: truck.max_battery_charge,
       autonomy: truck.autonomy,
-      fast_charging_time: truck.fast_charging_time
+      fast_charging_time: truck.fast_charging_time,
+      truck_status: truck.truck_status
     }
   }
 }

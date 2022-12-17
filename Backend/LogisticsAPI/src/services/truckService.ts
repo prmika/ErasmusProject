@@ -81,6 +81,7 @@ export default class TruckService implements ITruckService {
           truck.max_battery_charge = truckDTO.max_battery_charge;
           truck.autonomy = truckDTO.autonomy;
           truck.fast_charging_time = truckDTO.fast_charging_time;
+          truck.truck_status = truckDTO.truck_status;
           await this.truckRepo.save(truck);
 
           const truckDTOResult = TruckMap.toDTO(truck) as ITruckDTO;

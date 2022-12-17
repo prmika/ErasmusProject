@@ -5,5 +5,6 @@ export interface ITruckDTO {
     max_battery_charge: Number;
     autonomy: Number;
     fast_charging_time: Number;
+    truck_status: String;
   }
   
