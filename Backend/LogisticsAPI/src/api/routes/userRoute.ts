@@ -7,6 +7,8 @@ import { IUserDTO } from '../../dto/IUserDTO';
 import middlewares from '../middlewares';
 import { celebrate, Joi } from 'celebrate';
 import winston = require('winston');
+import config from '../../../config';
+import IUserController from '../../controllers/IControllers/IUserController';
 
 var user_controller = require('../../controllers/userController');
 
@@ -14,7 +16,7 @@ const route = Router();
 
 export default (app: Router) => {
   app.use('/auth', route);
-
+  const ctrl = Container.get(config.controllers.user.name) as IUserController;
   route.post(
     '/signup',
     celebrate({
@@ -23,7 +25,8 @@ export default (app: Router) => {
         lastName: Joi.string().required(),
         email: Joi.string().required(),
         password: Joi.string().required(),
-        role: Joi.string().required()
+        role: Joi.string().required(),
+        phoneNr: Joi.string().required()
       }),
     }),
     async (req: Request, res: Response, next: NextFunction) => {
@@ -49,34 +52,7 @@ export default (app: Router) => {
     },
   );
 
-  route.post(
-    '/signin',
-    celebrate({
-      body: Joi.object({
-        email: Joi.string().required(),
-        password: Joi.string().required(),
-      }),
-    }),
-    async (req: Request, res: Response, next: NextFunction) => {
-      const logger = Container.get('logger') as winston.Logger;
-      logger.debug('Calling Sign-In endpoint with body: %o', req.body)
-      try {
-        const { email, password } = req.body;
-        const authServiceInstance = Container.get(AuthService);
-        const result = await authServiceInstance.SignIn(email, password);
-        
-        if( result.isFailure )
-          return res.json().status(403);
-
-        const { userDTO, token } = result.getValue();
-        return res.json({ userDTO, token }).status(200);
-
-      } catch (e) {
-        logger.error('🔥 error: %o',  e );
-        return next(e);
-      }
-    },
-  );
+  route.get('/user/:email', (req, res, next) => ctrl.getUser(req, res, next));
 
   /**
    * @TODO Let's leave this as a place holder for now

@@ -2,7 +2,7 @@ import { Container, Service, Inject } from 'typedi';
 
 import jwt from 'jsonwebtoken';
 import config from '../../config';
-import argon2 from 'argon2';
+import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 
 //import MailerService from './mailer.ts.bak';
@@ -23,21 +23,21 @@ import { Role } from '../domain/role';
 import { Result } from "../core/logic/Result";
 
 @Service()
-export default class UserService implements IUserService{
+export default class UserService implements IUserService {
   constructor(
-      @Inject(config.repos.user.name) private userRepo : IUserRepo,
-      @Inject(config.repos.role.name) private roleRepo : IRoleRepo,
-      @Inject('logger') private logger,
-  ) {}
+    @Inject(config.repos.user.name) private userRepo: IUserRepo,
+    @Inject(config.repos.role.name) private roleRepo: IRoleRepo,
+    @Inject('logger') private logger,
+  ) { }
 
 
   public async SignUp(userDTO: IUserDTO): Promise<Result<{ userDTO: IUserDTO, token: string }>> {
     try {
-      const userDocument = await this.userRepo.findByEmail( userDTO.email );
+      const userDocument = await this.userRepo.findByEmail(userDTO.email);
       const found = !!userDocument;
-  
+
       if (found) {
-        return Result.fail<{userDTO: IUserDTO, token: string}>("User already exists with email=" + userDTO.email);
+        return Result.fail<{ userDTO: IUserDTO, token: string }>("User already exists with email=" + userDTO.email);
       }
 
       /**
@@ -56,20 +56,20 @@ export default class UserService implements IUserService{
        * watches every API call and if it spots a 'password' and 'email' property then
        * it decides to steal them!? Would you even notice that? I wouldn't :/
        */
-      
+
 
       const salt = randomBytes(32);
       this.logger.silly('Hashing password');
-      const hashedPassword = await argon2.hash(userDTO.password, { salt });
+      const hashedPassword = await bcrypt.hash(userDTO.password, 10);
       this.logger.silly('Creating user db record');
 
-      const password = await UserPassword.create({ value: hashedPassword, hashed: true}).getValue();
-      const email = await UserEmail.create( userDTO.email ).getValue();
+      const password = await UserPassword.create({ value: hashedPassword, hashed: true }).getValue();
+      const email = await UserEmail.create(userDTO.email).getValue();
       let role: Role;
 
       const roleOrError = await this.getRole(userDTO.role);
       if (roleOrError.isFailure) {
-        return Result.fail<{userDTO: IUserDTO; token: string}>(roleOrError.error);
+        return Result.fail<{ userDTO: IUserDTO; token: string }>(roleOrError.error);
       } else {
         role = roleOrError.getValue();
       }
@@ -80,6 +80,7 @@ export default class UserService implements IUserService{
         email: email,
         role: role,
         password: password,
+        phoneNr: userDTO.phoneNr
       });
 
       if (userOrError.isFailure) {
@@ -97,37 +98,12 @@ export default class UserService implements IUserService{
       //this.eventDispatcher.dispatch(events.user.signUp, { user: userResult });
 
       await this.userRepo.save(userResult);
-      const userDTOResult = UserMap.toDTO( userResult ) as IUserDTO;
-      return Result.ok<{userDTO: IUserDTO, token: string}>( {userDTO: userDTOResult, token: token} )
+      const userDTOResult = UserMap.toDTO(userResult) as IUserDTO;
+      return Result.ok<{ userDTO: IUserDTO, token: string }>({ userDTO: userDTOResult, token: token })
 
     } catch (e) {
       this.logger.error(e);
       throw e;
-    }
-  }
-
-  public async SignIn(email: string, password: string): Promise<Result<{ userDTO: IUserDTO, token: string }>> {
-
-    const user = await this.userRepo.findByEmail( email );
-
-    if (!user) {
-      throw new Error('User not registered');
-    }
-
-    /**
-     * We use verify from argon2 to prevent 'timing based' attacks
-     */
-    this.logger.silly('Checking password');
-    const validPassword = await argon2.verify(user.password.value, password);
-    if (validPassword) {
-      this.logger.silly('Password is valid!');
-      this.logger.silly('Generating JWT');
-      const token = this.generateToken(user) as string;
-
-      const userDTO = UserMap.toDTO( user ) as IUserDTO;
-      return Result.ok<{userDTO: IUserDTO, token: string}>( {userDTO: userDTO, token: token} );
-    } else {
-      throw new Error('Invalid Password');
     }
   }
 
@@ -152,6 +128,7 @@ export default class UserService implements IUserService{
     const firstName = user.firstName;
     const lastName = user.lastName;
     const role = user.role.id.value;
+    const phoneNr = user.phoneNr;
 
     return jwt.sign(
       {
@@ -160,6 +137,7 @@ export default class UserService implements IUserService{
         role: role,
         firstName: firstName,
         lastName: lastName,
+        phoneNr: phoneNr,
         exp: exp.getTime() / 1000,
       },
       config.jwtSecret,
@@ -167,16 +145,29 @@ export default class UserService implements IUserService{
   }
 
 
-  private async getRole (roleId: string): Promise<Result<Role>> {
+  private async getRole(name: string): Promise<Result<Role>> {
 
-    const role = await this.roleRepo.findByDomainId( roleId );
+    const role = await this.roleRepo.findByName(name);
     const found = !!role;
 
     if (found) {
       return Result.ok<Role>(role);
     } else {
-      return Result.fail<Role>("Couldn't find role by id=" + roleId);
+      return Result.fail<Role>("Couldn't find role with name =" + name);
     }
   }
 
+  public async getUser(email: string): Promise<Result<IUserDTO>> {
+
+    const user = await this.userRepo.findByEmail(email);
+    const found = !!user;
+
+    if (found) {
+      const userDTOResult = UserMap.toDTO( user ) as IUserDTO;
+      userDTOResult.password = "Not readable"
+      return Result.ok<IUserDTO>(userDTOResult);
+    } else {
+      return Result.fail<IUserDTO>("Couldn't find user with email =" + email);
+    }
+  }
 }

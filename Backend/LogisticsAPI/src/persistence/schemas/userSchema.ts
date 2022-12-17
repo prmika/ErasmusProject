@@ -35,6 +35,11 @@ const User = new mongoose.Schema(
       type: String,
       default: 'user',
     },
+
+    phoneNr: {
+      type: String,
+      required: [true, 'Please enter phone nr']
+    },
   },
   { timestamps: true },
 );
