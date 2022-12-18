@@ -20,6 +20,10 @@ export class PackagesService {
     return this.http.get<Packaging[]>("http://217.160.104.201:3000/api/v1/packages")
   }
 
+  getPackagesPaged(page: Number, amount: Number): Observable<Packaging[]> {
+    return this.http.get<Packaging[]>(`http://217.160.104.201:3000/api/v1/packages/paged?page=${page}&amount=${amount}`)
+  }
+
   getPackage(id: string): Observable<Packaging> {
     const url = `http://217.160.104.201:3000/api/v1/packages/${id}`;
     return this.http.get<Packaging>(url);

@@ -1,35 +1,109 @@
-<div style="text-align: center;"><button class="button is-info" routerLink="/package/create" style="margin: 15px"><i class="fa fa-plus"
-    aria-hidden="true"></i>Package a new delivery</button></div>
-  <div *ngIf="packagesSuccessfullyLoaded && packages.length > 0">
-      <div class="card" *ngFor="let package of packages">
-        <div class="card-content">
-          <div class="media">
-            <div class="media-left">
-              <figure class="image is-48x48">
-                <img src="http://blog.hireahelper.com/wp-content/uploads/2015/09/Uhaul-with-Boxes.jpg" alt="Packaging photo">
-              </figure>
-            </div>
-            <div class="media-content">
-              <p class="title is-4">Package</p>
-              <p class="subtitle is-6">Id - {{package.id}}</p>
-            </div>
-          </div>
-          <div class="content">
-            <p><i class="fa fa-truck"></i><b> Truck Id</b> - {{package.truckToPlace}}</p>
-            <p><i class="fa fa-map-marker"></i><b> Delivery Id</b> - {{package.deliveryId}}</p>
-            <p><i class="fa fa-expand"></i><b> Position in truck (X)</b> - {{package.placementX}}</p>
-            <p><i class="fa fa-expand"></i><b> Position in truck (Y)</b> - {{package.placementY}}</p>
-            <p><i class="fa fa-expand"></i><b> Position in truck (Z)</b> - {{package.placementZ}}</p>
-            <p><button class="button is-warning" routerLink="/package/{{package.id}}"><i class="fa fa-pencil-square-o"
-                  aria-hidden="true"></i>Update</button></p>
-          </div>
+<div style="text-align: center;"><button class="button is-info" routerLink="/package/create" style="margin: 15px"><i
+      class="fa fa-plus" aria-hidden="true"></i>Package a new delivery</button></div>
+<div id="filtersegment" style="margin: 20px">
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field">
+        <label class="label">Filter Option</label>
+        <p class="control has-icons-left">
+          <span class="select">
+            <select [(ngModel)]="chosenFilter">
+              <option *ngFor="let option of filters" [value]="option">{{option}}</option>
+            </select>
+          </span>
+        </p>
+      </div>
+      <div class="field" *ngIf="chosenFilter == 'truckToPlace'">
+        <label class="label">Value</label>
+        <p class="control is-expanded has-icons-left">
+          <input class="input" type="text" placeholder="Enter the value you want to filter on"
+            [(ngModel)]="stringFilterValue" required>
+        </p>
+      </div>
+      <div class="field" *ngIf="chosenFilter == 'deliveryId'">
+        <label class="label">Value</label>
+        <p class="control is-expanded has-icons-left">
+          <input class="input" type="text" placeholder="Enter the value you want to filter on" [(ngModel)]="stringFilterValue" required>
+        </p>
+      </div>
+      <div class="field">
+        <label class="label" style="color: white;">Save filter</label>
+        <button class="button is-dark" style="text-align: center;" (click)="filterData()">
+          Filter
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="packagesSuccessfullyLoaded && packages.length > 0">
+  <div id="sortsegment" style="margin: 20px">
+    <div class="field is-horizontal">
+      <div class="field-body">
+        <div class="field">
+          <label class="label">Sorting Option</label>
+          <p class="control has-icons-left">
+            <span class="select">
+              <select [(ngModel)]="chosenSorting" (change)="sortData()">
+                <option *ngFor="let option of sortfilters" [value]="option">{{option}}</option>
+              </select>
+            </span>
+          </p>
         </div>
       </div>
     </div>
-    <div *ngIf="!packagesSuccessfullyLoaded">
-      <div class="notification is-danger">
-        There was an error while trying to load the packaging data. Please try again later.<br>
-        The page will be reloaded every 5 seconds.
+  </div>    
+  <div class="card" *ngFor="let package of packages">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="http://blog.hireahelper.com/wp-content/uploads/2015/09/Uhaul-with-Boxes.jpg" alt="Packaging photo">
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4">Package</p>
+          <p class="subtitle is-6">Id - {{package.id}}</p>
+        </div>
+      </div>
+      <div class="content">
+        <p><i class="fa fa-truck"></i><b> Truck Id</b> - {{package.truckToPlace}}</p>
+        <p><i class="fa fa-map-marker"></i><b> Delivery Id</b> - {{package.deliveryId}}</p>
+        <p><i class="fa fa-expand"></i><b> Position in truck (X)</b> - {{package.placementX}}</p>
+        <p><i class="fa fa-expand"></i><b> Position in truck (Y)</b> - {{package.placementY}}</p>
+        <p><i class="fa fa-expand"></i><b> Position in truck (Z)</b> - {{package.placementZ}}</p>
+        <p><button class="button is-warning" routerLink="/package/{{package.id}}"><i class="fa fa-pencil-square-o"
+              aria-hidden="true"></i>Update</button></p>
       </div>
     </div>
+  </div>
+  <div style="margin: 10px; margin-top: 35px">
+    <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
+      <a class="pagination-previous" *ngIf="previousPage > 0" (click)="goToPreviousPage()">Previous</a>
+      <a class="pagination-next" *ngIf="nextPage <= totalAmountOfPages" (click)="goToNextPage()">Next page</a>
+      <ul class="pagination-list">
+        <li *ngIf="previousPage > 0"><a class="pagination-link" aria-label="Go to previous page"
+            (click)="goToPreviousPage()">{{previousPage}}</a></li>
+        <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">{{currentPage}}</a></li>
+        <li *ngIf="nextPage <= totalAmountOfPages"><a class="pagination-link" aria-label="Go to next page"
+            (click)="goToNextPage()">{{nextPage}}</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="field" style="text-align: center; margin: 15px">
+    <label class="label">Amount of showed items</label>
+    <p class="control has-icons-left">
+      <span class="select">
+        <select [(ngModel)]="amountOfShowedItems" (change)="updateAmountOfItems()">
+          <option *ngFor="let option of amountFilters" [value]="option">{{option}}</option>
+        </select>
+      </span>
+    </p>
+  </div>
+</div>
+<div *ngIf="!packagesSuccessfullyLoaded">
+  <div class="notification is-danger">
+    There was an error while trying to load the packaging data. Please try again later.<br>
+    The page will be reloaded every 5 seconds.
+  </div>
+</div>
   
