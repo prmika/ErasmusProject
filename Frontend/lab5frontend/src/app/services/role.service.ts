@@ -16,7 +16,7 @@ export class RoleService {
     private http: HttpClient) { }
 
   getRoles(): Observable<Role>{
-    const url = 'http://localhost:3000/api/roles'
+    const url = 'http://217.160.104.201:3000/api/roles'
     return this.http.get<Role>(url, this.httpOptions);
   }
 

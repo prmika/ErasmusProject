@@ -16,27 +16,27 @@ export class DeliveryService {
     private http: HttpClient) { }
 
   getDeliveries(): Observable<Delivery[]> {
-    return this.http.get<Delivery[]>("http://localhost:5000/api/Deliveries")
+    return this.http.get<Delivery[]>("http://217.160.104.201:5000/api/Deliveries")
   }
 
   getDeliveriesPaged(page: Number, amount: Number): Observable<Delivery[]> {
-    return this.http.get<Delivery[]>(`http://localhost:5000/api/Deliveries/paged?page=${page}&amount=${amount}`)
+    return this.http.get<Delivery[]>(`http://217.160.104.201:5000/api/Deliveries/paged?page=${page}&amount=${amount}`)
   }
 
   getDelivery(id: string): Observable<Delivery> {
-    const url = `http://localhost:5000/api/Deliveries/${id}`;
+    const url = `http://217.160.104.201:5000/api/Deliveries/${id}`;
     return this.http.get<Delivery>(url);
   }
 
 
   updateDelivery(id: string, delivery: Delivery): Observable<any> {
-    const url = `http://localhost:5000/api/Deliveries/${id}`;
+    const url = `http://217.160.104.201:5000/api/Deliveries/${id}`;
     return this.http.put(url, delivery, this.httpOptions);
   }
 
 
   addDelivery(delivery: Delivery): Observable<Delivery> {
-    const url = 'http://localhost:5000/api/Deliveries'
+    const url = 'http://217.160.104.201:5000/api/Deliveries'
     return this.http.post<Delivery>(url, delivery, this.httpOptions);
   }
 }
