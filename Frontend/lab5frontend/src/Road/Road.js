@@ -84,7 +84,7 @@ export class Road {
         //Ajouter la rotation
         testRoad.lookAt(vecteurRoute);
         //testRoad.translate((positions[this.city1][0]+positions[this.city2][0])/2, (positions[this.city1][1]+positions[this.city2][1])/2, (positions[this.city1][2]+positions[this.city2][2])/2);
-        let testRoadMesh = new THREE.Mesh(testRoad, new THREE.MeshBasicMaterial({map: texture_road, side: THREE.DoubleSide}));
+        let testRoadMesh = new THREE.Mesh(testRoad, new THREE.MeshStandardMaterial({map: texture_road, side: THREE.DoubleSide}));
         testRoadMesh.position.set((positions[this.city1][0]+positions[this.city2][0])/2, (positions[this.city1][1]+positions[this.city2][1])/2, (positions[this.city1][2]+positions[this.city2][2])/2);
         //mesh1.rotateX(Math.pow(Math.atan((positions[this.city2][1]-positions[this.city1][1]) / (positions[this.city2][0]-positions[this.city1][0])),2));
         //scene.add(testRoadMesh);
@@ -119,6 +119,12 @@ export class Road {
         const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
         const connector1Mesh = new THREE.Mesh(connector1Geometry, roadMaterial);
         const connector2Mesh = new THREE.Mesh(connector2Geometry, roadMaterial);
+        roadMesh.receiveShadow = true;
+        roadMesh.castShadow = true;
+        connector1Mesh.receiveShadow = true;
+        connector1Mesh.castShadow = true;
+        connector2Mesh.receiveShadow = true;
+        connector2Mesh.castShadow = true;
         scene.add(roadMesh);
         scene.add(connector1Mesh);
         scene.add(connector2Mesh);
