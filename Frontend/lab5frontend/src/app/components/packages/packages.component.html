@@ -26,6 +26,14 @@
           <input class="input" type="text" placeholder="Enter the value you want to filter on" [(ngModel)]="stringFilterValue" required>
         </p>
       </div>
+      <div class="field"
+        *ngIf="chosenFilter == 'placementX' || chosenFilter == 'placementY' || chosenFilter == 'placementZ'">
+        <label class="label">Value</label>
+        <p class="control is-expanded has-icons-left">
+          <input class="input" type="number" [(ngModel)]="numericFilterValue" min="0" required
+            placeholder="Enter the value you want to filter on">
+        </p>
+      </div>
       <div class="field">
         <label class="label" style="color: white;">Save filter</label>
         <button class="button is-dark" style="text-align: center;" (click)="filterData()">
@@ -57,7 +65,8 @@
       <div class="media">
         <div class="media-left">
           <figure class="image is-48x48">
-            <img src="http://blog.hireahelper.com/wp-content/uploads/2015/09/Uhaul-with-Boxes.jpg" alt="Packaging photo">
+            <img src="http://blog.hireahelper.com/wp-content/uploads/2015/09/Uhaul-with-Boxes.jpg"
+              alt="Packaging photo">
           </figure>
         </div>
         <div class="media-content">
@@ -79,7 +88,7 @@
   <div style="margin: 10px; margin-top: 35px">
     <nav class="pagination is-rounded" role="navigation" aria-label="pagination">
       <a class="pagination-previous" *ngIf="previousPage > 0" (click)="goToPreviousPage()">Previous</a>
-      <a class="pagination-next" *ngIf="nextPage <= totalAmountOfPages" (click)="goToNextPage()">Next page</a>
+      <a class="pagination-next" *ngIf="nextPage <= totalAmountOfPages" (click)="goToNextPage()">Next</a>
       <ul class="pagination-list">
         <li *ngIf="previousPage > 0"><a class="pagination-link" aria-label="Go to previous page"
             (click)="goToPreviousPage()">{{previousPage}}</a></li>
@@ -106,4 +115,3 @@
     The page will be reloaded every 5 seconds.
   </div>
 </div>
-  

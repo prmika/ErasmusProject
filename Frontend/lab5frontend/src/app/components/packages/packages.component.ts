@@ -9,10 +9,10 @@ import { PackagesService } from 'src/app/services/packages.service';
 })
 export class PackagesComponent implements OnInit {
 
-  sortfilters = ["id", "truckToPlace", "deliveryId"];
+  sortfilters = ["id", "truckToPlace", "deliveryId", "placementX", "placementY", "placementZ"];
   chosenSorting = this.sortfilters[0];
 
-  filters = ["truckToPlace", "deliveryId"];
+  filters = ["truckToPlace", "deliveryId", "placementX", "placementY", "placementZ"];
   chosenFilter = this.filters[0];
   stringFilterValue: string | undefined;
   numericFilterValue: Number | undefined;
