@@ -9,13 +9,12 @@ export class Road {
     this.city2 = city2;
     }
 
-    addToScene(circleRadius, positions, scene){
+    addToScene(circleRadius, positions, scene, texture_road){
         let roadGeometry = new THREE.BufferGeometry();
         let connector1Geometry = new THREE.BufferGeometry();
         let connector2Geometry = new THREE.BufferGeometry();
 
-        //We load the texture of the road
-        let loader = new THREE.TextureLoader();
+
 
 
         const roadWidth = 2;
@@ -66,7 +65,7 @@ export class Road {
 
         ] );
 
-        let texture_road = loader.load('./textures/texture_road3.jpg');
+
         //let texture_road = loader.load('./textures/uv_grid.jpg');
 
         //texture_road.repeat.set(1/500, 1/500);
@@ -91,8 +90,8 @@ export class Road {
 
 
 
-
-        let texture_sky = loader.load('./textures/texture_sky.jpg');
+        let textureLoader = new THREE.TextureLoader();
+        let texture_sky = textureLoader.load('./textures/texture_sky.jpg');
         scene.background = texture_sky;
         const uvs = [
             0.0, 0.0,

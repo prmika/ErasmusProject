@@ -177,7 +177,6 @@ controls.update(); //Must be called after any manual changes to the camera's tra
 
 //////////////////////////////////////////////
 ////////////IMPORT OF TRUCK MODEL/////////////
-const loader = new GLTFLoader();
 let truck;
 new GLTFLoader().load("./models/gltf/truck.glb", (truckModel) => {
     truck = truckModel.scene;
@@ -196,25 +195,26 @@ new GLTFLoader().load("./models/gltf/truck.glb", (truckModel) => {
 
 //////////////////////////////////////////////
 //////////IMPORT OF WAREHOUSE MODEL///////////
-
+const fbxLoader = new FBXLoader();
 let modelScale = 0.005; //This is the scale factor of the warehouse model, to avoid it to be huge.
 let warehouses = []; //This array will contain all the warehouses models.
 
 //We add a warehouse 3d model in the scene at the side of each city.
 for (let i = 0; i<positions.length;i++) {
-    loader.load('./models/fbx/warehouse_model.fbx', function (warehouseModel) {
-        warehouseModel.traverse(function (child) {
+    fbxLoader.load('./models/fbx/warehouse_model.fbx', function (warehouseModel) {
+        /*warehouseModel.traverse(function (child) {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
             }
-        });
+        });*/
         warehouseModel.scale.set(modelScale, modelScale, modelScale);
         warehouseModel.rotateY(1.5707963268);
         warehouseModel.rotateZ(1.5707963268);
 
         warehouses.push(warehouseModel);
         warehouses[i].position.set(positions[i][0] - circleRadius * 3, positions[i][1], positions[i][2]);
+        console.log("gloubiboulga");
         scene.add(warehouses[i]);
     });
 }
@@ -229,13 +229,16 @@ let route = new Road(1,2,3);
 console.log(route);
 
 //We connect each city to 2 other random cities.
+//We load the texture of the road
+
+let texture_road = textureLoader.load('./textures/texture_road3.jpg');
 for (let i=0; i<positions.length; i++){
     let randomCity = 0; //We generate the random id of the city.
     do{
         route.city2 = getRandomInt(positions.length);
     }while(route.city2 == i); //This makes impossible to connect a city to itself
     route.city1 = i;
-    route.addToScene(circleRadius, positions, scene);// We connect the 2 cities.
+    route.addToScene(circleRadius, positions, scene, texture_road);// We connect the 2 cities.
 /*
     do{
        route.city2 = getRandomInt(positions.length);
@@ -271,7 +274,8 @@ function onKeyDown(event) {
                 vectorDown.applyQuaternion(truck.quaternion);
                 truck.position.x = truck.position.x + truck.quaternion.x;
                 truck.position.y = truck.position.y + truck.quaternion.y;
-                console.log("World Direction:" + truckDirection);
+                console.log("World Direction:" + truck.direction);
+                console.log("World Direction:" + truck.direction);
             }
             break;
         case 81: // Q key
@@ -313,6 +317,22 @@ function onKeyDown(event) {
 //         if(truck) truck.lookAt(truck.position.clone().add(movement));
 //     }
 // }
+
+function checkCollisions() {
+    // update the raycaster with the position and direction of the truck
+    raycaster.set(truck.position, truck.direction);
+
+    // check for intersections with the road plane
+    let intersections = raycaster.intersectObjects([plane]);
+    if (intersections.length > 0) {
+        // a collision has occurred, handle it as needed
+        handleCollision();
+    }
+}
+
+function handleCollision(){
+
+}
 
 
 //This is the infinite loop that animates the scene
