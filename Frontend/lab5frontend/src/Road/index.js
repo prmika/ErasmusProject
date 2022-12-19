@@ -261,7 +261,8 @@ let rotation = new THREE.Vector3();
 
 // Event listeners to handle key down and key up events
 window.addEventListener('keydown', onKeyDown);
-
+window.addEventListener('keyup', onKeyUp);
+let fast = 1;
 function onKeyDown(event) {
     if(truck) console.log(truck.quaternion.x);
     // update the movement vector based on the key that was pressed
@@ -269,20 +270,17 @@ function onKeyDown(event) {
 
         case 90: // Z key
             if(truck) {
-                console.log(truck.quaternion);
-                let vectorDown = new THREE.Vector3(0,0,1);
-                vectorDown.applyQuaternion(truck.quaternion);
-                truck.position.x = truck.position.x + truck.quaternion.x;
-                truck.position.y = truck.position.y + truck.quaternion.y;
-                console.log("World Direction:" + truck.direction);
-                console.log("World Direction:" + truck.direction);
+                truck.translateZ(0.1 * fast);
+                if(fast < 5){
+                    fast += 0.1;
+                }
             }
             break;
         case 81: // Q key
-            if(truck) truck.rotation.y += 0.1;
+            if(truck) truck.rotation.y += 0.2;
             break;
         case 83: // S key
-            if(truck) truck.position.y -= 0.1;
+            if(truck) truck.translateZ(-0.1);
             break;
         case 68: // D key
             if(truck) truck.rotation.y -= 0.1;
@@ -290,33 +288,33 @@ function onKeyDown(event) {
     }
 }
 
-// function onKeyUp(event) {
-//     // update the movement vector based on the key that was released
-//     switch (event.keyCode) {
-//         case 90: // Z key
-//             movement.y = 0;
-//             break;
-//         case 81: // Q key
-//             if(truck) truck.rotation.z = 0;
-//             break;
-//         case 83: // S key
-//             if(truck) truck.position.y = 0.1;
-//             break;
-//         case 68: // D key
-//             rotation.z = 0;
-//             break;
-//     }
-// }
-// function updateTruck() {
-//     // update the truck's position based on the movement vector
-//     if(truck) truck.position.add(movement);
-//     //if(truck) truck.rotation.set(rotation);
-//
-//     // update the truck's direction based on the movement vector
-//     if (movement.x !== 0 || movement.z !== 0) {
-//         if(truck) truck.lookAt(truck.position.clone().add(movement));
-//     }
-// }
+function onKeyUp(event) {
+    // update the movement vector based on the key that was released
+    switch (event.keyCode) {
+        case 90: // Z key
+            fast = 1;
+            break;
+        case 81: // Q key
+            if(truck) truck.rotation.z = 0;
+            break;
+        case 83: // S key
+            if(truck) truck.position.y = 0.1;
+            break;
+        case 68: // D key
+            rotation.z = 0;
+            break;
+    }
+}
+function updateTruck() {
+    // update the truck's position based on the movement vector
+    if(truck) truck.position.add(movement);
+    //if(truck) truck.rotation.set(rotation);
+
+    // update the truck's direction based on the movement vector
+    if (movement.x !== 0 || movement.z !== 0) {
+        if(truck) truck.lookAt(truck.position.clone().add(movement));
+    }
+}
 
 function checkCollisions() {
     // update the raycaster with the position and direction of the truck
