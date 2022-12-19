@@ -37,7 +37,7 @@ export class PackagesService {
 
 
   addPackage(singlePackage: PackagingAdd): Observable<Packaging> {
-    const url = 'http://localhost:3000/api/v1/api/packages'
+    const url = 'http://localhost:3000/api/v1/packages'
     return this.http.post<Packaging>(url, singlePackage, this.httpOptions);
   }
 }
