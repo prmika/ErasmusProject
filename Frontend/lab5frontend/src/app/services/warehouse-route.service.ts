@@ -17,23 +17,23 @@ export class WarehouseRouteService {
     private http: HttpClient) { }
 
   getWarehousesRoutes(): Observable<WarehouseRoute[]> {
-    return this.http.get<WarehouseRoute[]>("http://217.160.104.201:3000/api/v1/deliverypath")
+    return this.http.get<WarehouseRoute[]>("http://localhost:3000/api/v1/deliverypath")
   }
 
   getWarehouseRoute(id: string): Observable<WarehouseRoute> {
-    const url = `http://217.160.104.201:3000/api/v1/deliverypath/${id}`;
+    const url = `http://localhost:3000/api/v1/deliverypath/${id}`;
     return this.http.get<WarehouseRoute>(url);
   }
 
 
   updateWarehouseRoute(id: string, warehouseRoute: WarehouseRoute): Observable<any> {
-    const url = `http://217.160.104.201:3000/api/v1/deliverypath/${id}`;
+    const url = `http://localhost:3000/api/v1/deliverypath/${id}`;
     return this.http.put(url, warehouseRoute, this.httpOptions);
   }
 
 
   addWarehouseRoute(warehouseRoute: WarehouseRouteAdd): Observable<WarehouseRoute> {
-    const url = 'http://217.160.104.201:3000/api/v1/deliverypath'
+    const url = 'http://localhost:3000/api/v1/deliverypath'
     return this.http.post<WarehouseRoute>(url, warehouseRoute, this.httpOptions);
   }
 }
