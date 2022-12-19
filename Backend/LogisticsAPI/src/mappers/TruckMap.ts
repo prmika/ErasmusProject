@@ -9,20 +9,20 @@ import { Truck } from "../domain/truck";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 export class TruckMap extends Mapper<Truck> {
-  
-  public static toDTO( truck: Truck): ITruckDTO {
+
+  public static toDTO(truck: Truck): ITruckDTO {
     return {
       id: truck.id.toString(),
       tare: truck.tare,
       load_capacity: truck.load_capacity,
       max_battery_charge: truck.max_battery_charge,
       autonomy: truck.autonomy,
-        fast_charging_time: truck.fast_charging_time,
-        truck_status: truck.truck_status
+      fast_charging_time: truck.fast_charging_time,
+      status: truck.status
     } as ITruckDTO;
   }
 
-  public static toDomain (truck: any | Model<ITruckPersistence & Document> ): Truck {
+  public static toDomain(truck: any | Model<ITruckPersistence & Document>): Truck {
     const truckOrError = Truck.create(
       truck,
       new UniqueEntityID(truck.domainId)
@@ -33,7 +33,7 @@ export class TruckMap extends Mapper<Truck> {
     return truckOrError.isSuccess ? truckOrError.getValue() : null;
   }
 
-  public static toPersistence (truck: Truck): any {
+  public static toPersistence(truck: Truck): any {
     return {
       domainId: truck.id.toString(),
       tare: truck.tare,
@@ -41,7 +41,7 @@ export class TruckMap extends Mapper<Truck> {
       max_battery_charge: truck.max_battery_charge,
       autonomy: truck.autonomy,
       fast_charging_time: truck.fast_charging_time,
-      truck_status: truck.truck_status
+      status: truck.status
     }
   }
 }

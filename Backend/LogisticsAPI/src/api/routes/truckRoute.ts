@@ -23,7 +23,8 @@ export default (app: Router) => {
         load_capacity: Joi.number().required(),
         max_battery_charge: Joi.number().required(),
         autonomy: Joi.number().required(),
-        fast_charging_time: Joi.number().required()
+        fast_charging_time: Joi.number().required(),
+        status: Joi.boolean().required()
       })
     }),
     (req, res, next) => ctrl.createTruck(req, res, next));
@@ -38,7 +39,8 @@ export default (app: Router) => {
         load_capacity: Joi.number().required(),
         max_battery_charge: Joi.number().required(),
         autonomy: Joi.number().required(),
-        fast_charging_time: Joi.number().required()
+        fast_charging_time: Joi.number().required(),
+        status: Joi.boolean().required()
       }),
     }),
     (req, res, next) => ctrl.updateTruck(req, res, next));
