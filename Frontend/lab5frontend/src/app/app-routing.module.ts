@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CreateuserComponent } from './components/createuser/createuser.component';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { DeliveryDetailComponent } from './components/delivery-detail/delivery-detail.component';
 import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.component';
@@ -35,6 +36,7 @@ const routes: Routes = [ //Defines all the routes users can go to
   { path: 'packages', component: PackagesComponent },
   { path: 'package/create', component: PackageaddComponent },
   { path: 'package/:id', component: PackageDetailComponent },
+  { path: 'user/create', component: CreateuserComponent },
   { path: '**', redirectTo: '/trucks', pathMatch: 'full' }] //When no route is recognized, the users will be redirected to the trucks route.
 
 @NgModule({

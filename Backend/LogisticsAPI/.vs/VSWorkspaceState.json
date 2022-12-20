@@ -1,9 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\build",
-    "\\build\\src"
+    "\\src",
+    "\\src\\core",
+    "\\src\\domain",
+    "\\src\\dto",
+    "\\src\\mappers",
+    "\\src\\persistence",
+    "\\src\\persistence\\schemas",
+    "\\src\\repos",
+    "\\src\\services"
   ],
-  "SelectedNode": "\\build\\src",
+  "SelectedNode": "\\src\\app.ts",
   "PreviewInSolutionExplorer": false
 }

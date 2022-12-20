@@ -1,0 +1,58 @@
+<div style="margin: 20px">
+  <p class="create-title"> Create new user</p>
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field" style="margin-right:20px">
+        <label class="label">Name</label>
+        <p>
+          <input class="input" type="text" [(ngModel)]="firstName">
+        </p>
+      </div>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <label class="label">Surname</label>
+        <p>
+          <input class="input" type="text" [(ngModel)]="lastName">
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-body">
+      <div class="field" style="margin-right:20px">
+        <label class="label">Email</label>
+        <p>
+          <input class="input" type="text" [(ngModel)]="email">
+        </p>
+      </div>
+    </div>
+    <div class="field-body">
+      <div class="field" style="margin-right:20px">
+        <label class="label">Password</label>
+        <p >
+          <input class="input" type="password" [(ngModel)]="password">
+        </p>
+      </div>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <label class="label">Role</label>
+        <p>
+          <input class="input" type="text" [(ngModel)]="role">
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="text-align: center; margin-top: 30px">
+    <button class="button is-info" style="text-align: center; margin-right: 10px">
+      Create an account
+    </button>
+    <button class="button is-dark" id="retButton" style="text-align: center;" routerLink="/trucks">
+      Return
+    </button>
+  </div>
+
+</div>
