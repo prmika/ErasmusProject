@@ -9,13 +9,12 @@ export class Road {
     this.city2 = city2;
     }
 
-    addToScene(circleRadius, positions, scene){
+    addToScene(circleRadius, positions, scene, texture_road){
         let roadGeometry = new THREE.BufferGeometry();
         let connector1Geometry = new THREE.BufferGeometry();
         let connector2Geometry = new THREE.BufferGeometry();
 
-        //We load the texture of the road
-        let loader = new THREE.TextureLoader();
+
 
 
         const roadWidth = 2;
@@ -66,7 +65,7 @@ export class Road {
 
         ] );
 
-        let texture_road = loader.load('./textures/texture_road3.jpg');
+
         //let texture_road = loader.load('./textures/uv_grid.jpg');
 
         //texture_road.repeat.set(1/500, 1/500);
@@ -84,15 +83,15 @@ export class Road {
         //Ajouter la rotation
         testRoad.lookAt(vecteurRoute);
         //testRoad.translate((positions[this.city1][0]+positions[this.city2][0])/2, (positions[this.city1][1]+positions[this.city2][1])/2, (positions[this.city1][2]+positions[this.city2][2])/2);
-        let testRoadMesh = new THREE.Mesh(testRoad, new THREE.MeshBasicMaterial({map: texture_road, side: THREE.DoubleSide}));
+        let testRoadMesh = new THREE.Mesh(testRoad, new THREE.MeshStandardMaterial({map: texture_road, side: THREE.DoubleSide}));
         testRoadMesh.position.set((positions[this.city1][0]+positions[this.city2][0])/2, (positions[this.city1][1]+positions[this.city2][1])/2, (positions[this.city1][2]+positions[this.city2][2])/2);
         //mesh1.rotateX(Math.pow(Math.atan((positions[this.city2][1]-positions[this.city1][1]) / (positions[this.city2][0]-positions[this.city1][0])),2));
         //scene.add(testRoadMesh);
 
 
 
-
-        let texture_sky = loader.load('./textures/texture_sky.jpg');
+        let textureLoader = new THREE.TextureLoader();
+        let texture_sky = textureLoader.load('./textures/texture_sky.jpg');
         scene.background = texture_sky;
         const uvs = [
             0.0, 0.0,
@@ -119,6 +118,12 @@ export class Road {
         const roadMesh = new THREE.Mesh( roadGeometry, roadMaterial );
         const connector1Mesh = new THREE.Mesh(connector1Geometry, roadMaterial);
         const connector2Mesh = new THREE.Mesh(connector2Geometry, roadMaterial);
+        roadMesh.receiveShadow = true;
+        roadMesh.castShadow = true;
+        connector1Mesh.receiveShadow = true;
+        connector1Mesh.castShadow = true;
+        connector2Mesh.receiveShadow = true;
+        connector2Mesh.castShadow = true;
         scene.add(roadMesh);
         scene.add(connector1Mesh);
         scene.add(connector2Mesh);

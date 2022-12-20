@@ -1,5 +1,8 @@
 :-dynamic cost_min/2.
 :-dynamic min_time/3.
+
+cls :- write('\33\[2J').
+
 %HTTP librarys
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).

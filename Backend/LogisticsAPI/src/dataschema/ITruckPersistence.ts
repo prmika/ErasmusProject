@@ -5,4 +5,5 @@ export interface ITruckPersistence {
     max_battery_charge: Number;
     autonomy: Number;
     fast_charging_time: Number;
+    status: Boolean
   }
