@@ -177,7 +177,6 @@ controls.update(); //Must be called after any manual changes to the camera's tra
 
 //////////////////////////////////////////////
 ////////////IMPORT OF TRUCK MODEL/////////////
-const loader = new GLTFLoader();
 let truck;
 new GLTFLoader().load("./models/gltf/truck.glb", (truckModel) => {
     truck = truckModel.scene;
@@ -196,25 +195,26 @@ new GLTFLoader().load("./models/gltf/truck.glb", (truckModel) => {
 
 //////////////////////////////////////////////
 //////////IMPORT OF WAREHOUSE MODEL///////////
-
+const fbxLoader = new FBXLoader();
 let modelScale = 0.005; //This is the scale factor of the warehouse model, to avoid it to be huge.
 let warehouses = []; //This array will contain all the warehouses models.
 
 //We add a warehouse 3d model in the scene at the side of each city.
 for (let i = 0; i<positions.length;i++) {
-    loader.load('./models/fbx/warehouse_model.fbx', function (warehouseModel) {
-        warehouseModel.traverse(function (child) {
+    fbxLoader.load('./models/fbx/warehouse_model.fbx', function (warehouseModel) {
+        /*warehouseModel.traverse(function (child) {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
             }
-        });
+        });*/
         warehouseModel.scale.set(modelScale, modelScale, modelScale);
         warehouseModel.rotateY(1.5707963268);
         warehouseModel.rotateZ(1.5707963268);
 
         warehouses.push(warehouseModel);
         warehouses[i].position.set(positions[i][0] - circleRadius * 3, positions[i][1], positions[i][2]);
+        console.log("gloubiboulga");
         scene.add(warehouses[i]);
     });
 }
@@ -229,13 +229,16 @@ let route = new Road(1,2,3);
 console.log(route);
 
 //We connect each city to 2 other random cities.
+//We load the texture of the road
+
+let texture_road = textureLoader.load('./textures/texture_road3.jpg');
 for (let i=0; i<positions.length; i++){
     let randomCity = 0; //We generate the random id of the city.
     do{
         route.city2 = getRandomInt(positions.length);
     }while(route.city2 == i); //This makes impossible to connect a city to itself
     route.city1 = i;
-    route.addToScene(circleRadius, positions, scene);// We connect the 2 cities.
+    route.addToScene(circleRadius, positions, scene, texture_road);// We connect the 2 cities.
 /*
     do{
        route.city2 = getRandomInt(positions.length);
@@ -258,7 +261,8 @@ let rotation = new THREE.Vector3();
 
 // Event listeners to handle key down and key up events
 window.addEventListener('keydown', onKeyDown);
-
+window.addEventListener('keyup', onKeyUp);
+let fast = 1;
 function onKeyDown(event) {
     if(truck) console.log(truck.quaternion.x);
     // update the movement vector based on the key that was pressed
@@ -266,19 +270,17 @@ function onKeyDown(event) {
 
         case 90: // Z key
             if(truck) {
-                console.log(truck.quaternion);
-                let vectorDown = new THREE.Vector3(0,0,1);
-                vectorDown.applyQuaternion(truck.quaternion);
-                truck.position.x = truck.position.x + truck.quaternion.x;
-                truck.position.y = truck.position.y + truck.quaternion.y;
-                console.log("World Direction:" + truckDirection);
+                truck.translateZ(0.1 * fast);
+                if(fast < 5){
+                    fast += 0.1;
+                }
             }
             break;
         case 81: // Q key
-            if(truck) truck.rotation.y += 0.1;
+            if(truck) truck.rotation.y += 0.2;
             break;
         case 83: // S key
-            if(truck) truck.position.y -= 0.1;
+            if(truck) truck.translateZ(-0.1);
             break;
         case 68: // D key
             if(truck) truck.rotation.y -= 0.1;
@@ -286,33 +288,49 @@ function onKeyDown(event) {
     }
 }
 
-// function onKeyUp(event) {
-//     // update the movement vector based on the key that was released
-//     switch (event.keyCode) {
-//         case 90: // Z key
-//             movement.y = 0;
-//             break;
-//         case 81: // Q key
-//             if(truck) truck.rotation.z = 0;
-//             break;
-//         case 83: // S key
-//             if(truck) truck.position.y = 0.1;
-//             break;
-//         case 68: // D key
-//             rotation.z = 0;
-//             break;
-//     }
-// }
-// function updateTruck() {
-//     // update the truck's position based on the movement vector
-//     if(truck) truck.position.add(movement);
-//     //if(truck) truck.rotation.set(rotation);
-//
-//     // update the truck's direction based on the movement vector
-//     if (movement.x !== 0 || movement.z !== 0) {
-//         if(truck) truck.lookAt(truck.position.clone().add(movement));
-//     }
-// }
+function onKeyUp(event) {
+    // update the movement vector based on the key that was released
+    switch (event.keyCode) {
+        case 90: // Z key
+            fast = 1;
+            break;
+        case 81: // Q key
+            if(truck) truck.rotation.z = 0;
+            break;
+        case 83: // S key
+            if(truck) truck.position.y = 0.1;
+            break;
+        case 68: // D key
+            rotation.z = 0;
+            break;
+    }
+}
+function updateTruck() {
+    // update the truck's position based on the movement vector
+    if(truck) truck.position.add(movement);
+    //if(truck) truck.rotation.set(rotation);
+
+    // update the truck's direction based on the movement vector
+    if (movement.x !== 0 || movement.z !== 0) {
+        if(truck) truck.lookAt(truck.position.clone().add(movement));
+    }
+}
+
+function checkCollisions() {
+    // update the raycaster with the position and direction of the truck
+    raycaster.set(truck.position, truck.direction);
+
+    // check for intersections with the road plane
+    let intersections = raycaster.intersectObjects([plane]);
+    if (intersections.length > 0) {
+        // a collision has occurred, handle it as needed
+        handleCollision();
+    }
+}
+
+function handleCollision(){
+
+}
 
 
 //This is the infinite loop that animates the scene

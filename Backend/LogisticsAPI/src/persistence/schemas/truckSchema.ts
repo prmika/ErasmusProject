@@ -37,8 +37,8 @@ const Truck = new mongoose.Schema(
             required: [true, 'Please enter a fast_charging_times'],
             index: true,
         },
-        truck_status: {
-            type: String,
+        status: {
+            type: Boolean,
             default: 'active',
             required: [true, 'Please enter the status of a truck'],
             index: true,

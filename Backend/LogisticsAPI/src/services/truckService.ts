@@ -50,7 +50,6 @@ export default class TruckService implements ITruckService {
 
   public async createTruck(truckDTO: ITruckDTO): Promise<Result<ITruckDTO>> {
     try {
-
       const truckOrError = await Truck.create(truckDTO,new TruckId(truckDTO.id));
 
       if (truckOrError.isFailure) {
@@ -81,7 +80,7 @@ export default class TruckService implements ITruckService {
           truck.max_battery_charge = truckDTO.max_battery_charge;
           truck.autonomy = truckDTO.autonomy;
           truck.fast_charging_time = truckDTO.fast_charging_time;
-          truck.truck_status = truckDTO.truck_status;
+          truck.status = truckDTO.status;
           await this.truckRepo.save(truck);
 
           const truckDTOResult = TruckMap.toDTO(truck) as ITruckDTO;
