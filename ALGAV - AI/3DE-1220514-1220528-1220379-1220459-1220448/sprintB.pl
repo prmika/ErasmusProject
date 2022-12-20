@@ -1,6 +1,8 @@
 :-dynamic cost_min/2.
 :-dynamic min_time/3.
 
+cls :- write('\33\[2J').
+
 %(Truck name, Starting warehouse, Destination warehouse, Time(minutes), Energy(kWh), Additional time(minutes))
 
 truckData(eTruck01,1,2,122,42,0).

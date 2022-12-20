@@ -39,6 +39,11 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/packagingSchema',
   };
 
+  const userController = {
+    name: config.controllers.user.name,
+    path: config.controllers.user.path
+  }
+
   const roleController = {
     name: config.controllers.role.name,
     path: config.controllers.role.path
@@ -84,6 +89,11 @@ export default async ({ expressApp }) => {
     path: config.repos.packaging.path
   }
 
+  const userService = {
+    name: config.services.user.name,
+    path: config.services.user.path
+  }
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
@@ -114,6 +124,7 @@ export default async ({ expressApp }) => {
       packagingSchema
     ],
     controllers: [
+      userController,
       roleController,
       truckController,
       deliveryPathController,
@@ -127,6 +138,7 @@ export default async ({ expressApp }) => {
       packagingRepo
     ],
     services: [
+      userService,
       roleService,
       truckService,
       deliveryPathService,

@@ -42,6 +42,10 @@ export default {
   },
 
   controllers: {
+    user: {
+      name: "UserController",
+      path: "../controllers/userController"
+    },
     role: {
       name: "RoleController",
       path: "../controllers/roleController"
@@ -84,6 +88,10 @@ export default {
   },
 
   services: {
+    user: {
+      name: "UserService",
+      path: "../services/userService"
+    },
     role: {
       name: "RoleService",
       path: "../services/roleService"

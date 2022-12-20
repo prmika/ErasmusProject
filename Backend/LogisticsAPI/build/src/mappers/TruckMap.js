@@ -12,7 +12,8 @@ class TruckMap extends Mapper_1.Mapper {
             load_capacity: truck.load_capacity,
             max_battery_charge: truck.max_battery_charge,
             autonomy: truck.autonomy,
-            fast_charging_time: truck.fast_charging_time
+            fast_charging_time: truck.fast_charging_time,
+            truck_status: truck.truck_status
         };
     }
     static toDomain(truck) {
@@ -27,7 +28,8 @@ class TruckMap extends Mapper_1.Mapper {
             load_capacity: truck.load_capacity,
             max_battery_charge: truck.max_battery_charge,
             autonomy: truck.autonomy,
-            fast_charging_time: truck.fast_charging_time
+            fast_charging_time: truck.fast_charging_time,
+            truck_status: truck.truck_status
         };
     }
 }

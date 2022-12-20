@@ -34,6 +34,13 @@ const Truck = new mongoose_1.default.Schema({
         required: [true, 'Please enter a fast_charging_times'],
         index: true,
     },
+    truck_status: {
+        type: String,
+        default:'true',
+        required: [true, 'Please enter the status of a truck'],
+        index: true,
+    },
+
 }, { timestamps: true });
 exports.default = mongoose_1.default.model('Truck', Truck);
 //# sourceMappingURL=truckSchema.js.map

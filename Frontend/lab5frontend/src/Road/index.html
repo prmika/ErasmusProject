@@ -15,10 +15,19 @@
     <script type="importmap">
         {
             "imports": {
-                "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+                "three": "../three.js-master/build/three.module.js"
+            }
+        }
+    </script>
+    <script type="importmap">
+        {
+            "imports": {
                 "OrbitControls": "https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js"
             }
         }
+    </script>
+    <script type="module">
+        import * as THREE from "three";
     </script>
     <script type="module" src="./index.js">
     </script>

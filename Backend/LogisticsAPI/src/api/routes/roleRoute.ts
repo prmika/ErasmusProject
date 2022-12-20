@@ -13,6 +13,8 @@ export default (app: Router) => {
 
   const ctrl = Container.get(config.controllers.role.name) as IRoleController;
 
+  route.get('', (req, res, next) => ctrl.getAllRoles(req, res, next));
+
   route.post('',
     celebrate({
       body: Joi.object({

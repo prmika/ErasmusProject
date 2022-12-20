@@ -18,7 +18,6 @@ export default (app: Router) => {
     route.post('',
         celebrate({
             body: Joi.object({
-                id: Joi.string().required(),
                 departure_warehouseId: Joi.string().required(),
                 destination_warehouseId: Joi.string().required(),
                 distance: Joi.number().required(),
@@ -34,7 +33,6 @@ export default (app: Router) => {
     route.put('/:deliverypathId',
         celebrate({
             body: Joi.object({
-                id: Joi.string().required(),
                 departure_warehouseId: Joi.string().required(),
                 destination_warehouseId: Joi.string().required(),
                 distance: Joi.number().required(),

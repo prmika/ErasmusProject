@@ -51,7 +51,7 @@ export default class DeliveryPathService implements IDeliveryPathService {
     public async createDeliveryPath(deliverypathDTO: IDeliveryPathDTO): Promise<Result<IDeliveryPathDTO>> {
         try {
 
-            const deliverypathOrError = await DeliveryPath.create(deliverypathDTO,new DeliveryPathId(deliverypathDTO.id));
+            const deliverypathOrError = await DeliveryPath.create(deliverypathDTO);
 
             if (deliverypathOrError.isFailure) {
                 return Result.fail<IDeliveryPathDTO>(deliverypathOrError.errorValue());

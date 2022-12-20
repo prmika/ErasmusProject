@@ -72,11 +72,11 @@ export class DeliveryPath extends AggregateRoot<DeliveryPathProps> {
         this.props.extra_time_when_charging_required = value;
     }
 
-    private constructor (props: DeliveryPathProps, id: UniqueEntityID) {
+    private constructor (props: DeliveryPathProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
-    public static create (deliverypathDTO: IDeliveryPathDTO, id: UniqueEntityID): Result<DeliveryPath> {
+    public static create (deliverypathDTO: IDeliveryPathDTO, id?: UniqueEntityID): Result<DeliveryPath> {
         const departure_warehouseId = deliverypathDTO.departure_warehouseId;
         const destination_warehouseId = deliverypathDTO.destination_warehouseId;
         const distance = deliverypathDTO.distance;
@@ -84,7 +84,7 @@ export class DeliveryPath extends AggregateRoot<DeliveryPathProps> {
         const used_battery = deliverypathDTO.used_battery;
         const extra_time_when_charging_required = deliverypathDTO.extra_time_when_charging_required;
 
-        if ((id.toValue().length <= 0 || id.toValue() == undefined) && (!!departure_warehouseId === false || departure_warehouseId === "" || departure_warehouseId == undefined) && (!!destination_warehouseId === false || destination_warehouseId === "" || destination_warehouseId == undefined) && (!!distance === false || distance === 0)
+        if ((!!departure_warehouseId === false || departure_warehouseId === "" || departure_warehouseId == undefined) && (!!destination_warehouseId === false || destination_warehouseId === "" || destination_warehouseId == undefined) && (!!distance === false || distance === 0)
             && (!!time === false || time === 0) && (!!used_battery === false || used_battery === 0) && (!!extra_time_when_charging_required === false || extra_time_when_charging_required === 0)) {
             return Result.fail<DeliveryPath>('Must provide all the delivery path properties!')
         } else {
