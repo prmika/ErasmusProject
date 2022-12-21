@@ -112,6 +112,10 @@ const positions = [
     [8.7479, 41.3517, 150],
     [8.6118, 41.1239, 500]
 ];
+
+
+
+
 //sunLight.position.set(0,0,0);
 sunLight.position.set(positions[0][0], positions[0][1], positions[0][2]+10);
 sunLight.target.updateMatrixWorld();
@@ -262,17 +266,16 @@ let rotation = new THREE.Vector3();
 // Event listeners to handle key down and key up events
 window.addEventListener('keydown', onKeyDown);
 window.addEventListener('keyup', onKeyUp);
-let fast = 1;
+let fast = 1; //Acceleration of the truck
+const fastMax = 3; //Max speed of the truck
 function onKeyDown(event) {
-    if(truck) console.log(truck.quaternion.x);
     // update the movement vector based on the key that was pressed
     switch (event.keyCode) {
-
         case 90: // Z key
             if(truck) {
                 truck.translateZ(0.1 * fast);
-                if(fast < 5){
-                    fast += 0.1;
+                if(fast < fastMax){ //We accelerate the truck until it reach its max speed
+                    fast += 0.5;
                 }
             }
             break;
@@ -280,7 +283,12 @@ function onKeyDown(event) {
             if(truck) truck.rotation.y += 0.2;
             break;
         case 83: // S key
-            if(truck) truck.translateZ(-0.1);
+            if(truck) {
+                truck.translateZ(-0.1 * fast);
+                if(fast < fastMax){ //We accelerate the truck until it reach its max speed
+                    fast += 0.5;
+                }
+            }
             break;
         case 68: // D key
             if(truck) truck.rotation.y -= 0.1;
@@ -292,49 +300,24 @@ function onKeyUp(event) {
     // update the movement vector based on the key that was released
     switch (event.keyCode) {
         case 90: // Z key
-            fast = 1;
+            fast = 1; //We reset the acceleration of the truck
             break;
         case 81: // Q key
             if(truck) truck.rotation.z = 0;
             break;
         case 83: // S key
-            if(truck) truck.position.y = 0.1;
+            fast = 1; //We reset the acceleration of the truck
             break;
         case 68: // D key
             rotation.z = 0;
             break;
     }
 }
-function updateTruck() {
-    // update the truck's position based on the movement vector
-    if(truck) truck.position.add(movement);
-    //if(truck) truck.rotation.set(rotation);
-
-    // update the truck's direction based on the movement vector
-    if (movement.x !== 0 || movement.z !== 0) {
-        if(truck) truck.lookAt(truck.position.clone().add(movement));
-    }
-}
-
-function checkCollisions() {
-    // update the raycaster with the position and direction of the truck
-    raycaster.set(truck.position, truck.direction);
-
-    // check for intersections with the road plane
-    let intersections = raycaster.intersectObjects([plane]);
-    if (intersections.length > 0) {
-        // a collision has occurred, handle it as needed
-        handleCollision();
-    }
-}
-
-function handleCollision(){
-
-}
 
 
 //This is the infinite loop that animates the scene
 function animate(){
+    if(truck) console.log(truck.collision);
     //if(truck) updateTruck();
     requestAnimationFrame(animate);
     controls.update(); //We update the orbit controller
