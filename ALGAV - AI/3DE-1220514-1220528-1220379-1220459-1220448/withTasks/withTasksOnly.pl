@@ -1,10 +1,11 @@
+:- use_module(library(statistics)).
 % Tasks (Id, processing time, deadline, weight penalty)
 task(t1,2,5,1).
 task(t2,4,7,6).
 task(t3,1,11,2).
 task(t4,3,9,3).
 task(t5,3,8,2).
-%task(t6,3,11,4).
+
 
 % Number of tasks
 tasks(5).
@@ -20,7 +21,6 @@ initialize:-write('Number of new generations: '),read(NG),
     write('Probablility of Mutation(%): '),read(P2), % mutation probability
     PM is P2/100,
     (retract(prob_mutation(_));true),assertz(prob_mutation(PM)).
-
 generate:-
     initialize,
     generate_population(Pop),
@@ -30,6 +30,51 @@ generate:-
     order_population(PopEv,PopOrd),
     generations(NG),
     generate_generation(0,NG,PopOrd).
+
+initialize_with_value:-write('Value less or equal than: '),read(NG),
+    (retract(generations(_));true),assertz(generations(NG)),
+    write('Population dimensity: '),read(DP),
+    (retract(population(_));true),assertz(population(DP)), % population dimension
+    write('Probability of Crossover(%): '),read(P1), % crossover probability
+    PC is P1/100,
+    (retract(prob_crossover(_));true),assertz(prob_crossover(PC)),
+    write('Probablility of Mutation(%): '),read(P2), % mutation probability
+    PM is P2/100,
+    (retract(prob_mutation(_));true),assertz(prob_mutation(PM)).
+generate_value:-
+    initialize_with_value,
+    generate_population(Pop),
+    write('Pop='),write(Pop),nl,
+    evaluate_population(Pop,PopEv),
+    write('PopEv='),write(PopEv),nl,
+    order_population(PopEv,PopOrd),
+    generations(NG),
+    generate_generation_value(0,NG,PopOrd).
+%dont use this does not work
+initialize_with_time:-write('Time less or equal than: '),read(NG),
+    (retract(generations(_));true),assertz(generations(NG)),
+    write('Population dimensity: '),read(DP),
+    (retract(population(_));true),assertz(population(DP)), % population dimension
+    write('Probability of Crossover(%): '),read(P1), % crossover probability
+    PC is P1/100,
+    (retract(prob_crossover(_));true),assertz(prob_crossover(PC)),
+    write('Probablility of Mutation(%): '),read(P2), % mutation probability
+    PM is P2/100,
+    (retract(prob_mutation(_));true),assertz(prob_mutation(PM)).
+%dont use this does not work at the moment.
+generate_time:-
+    initialize_with_time,
+    generate_population(Pop),
+    write('Pop='),write(Pop),nl,
+    evaluate_population(Pop,PopEv),
+    write('PopEv='),write(PopEv),nl,
+    order_population(PopEv,PopOrd),
+    generations(NG),
+    generate_generation_time(0,NG,PopOrd).
+
+
+
+
 
 generate_population(Pop):-
     population(TamPop),
@@ -62,10 +107,7 @@ evaluate_population([],[]).
 evaluate_population([Ind|Rest],[Ind*V|Rest1]):-
     evaluate(Ind,V),
 evaluate_population(Rest,Rest1).
-
-
 evaluate(Seq,V):-evaluate(Seq,0,V).
-
 evaluate([],_,0).
 evaluate([T|Rest],Inst,V):-
     task(T,Dur,Dline,Pen),
@@ -89,55 +131,94 @@ bexchange([X*VX,Y*VY|L1],[Y*VY|L2]):-
 
 bexchange([X|L1],[X|L2]):-bexchange(L1,L2).
 
+%generate_generation_time doesnt work at the time
+generate_generation_time(G,G,[H|_]):-!,
+    write('Time ended, best solution: '),nl,write(H),nl.
+generate_generation_time(N,G,[H|Pop]):-
+    write('Time left: '),write(N),write(' best solution:'),nl,write(H),nl,  
+    random_permutation(Pop, Pop1),   
+    crossover(Pop1,NPop1),
+    mutation(NPop1,NPop),   
+    evaluate_population(NPop,NPopEv),      
+    order_population(NPopEv,[H1*A|NPopOrd]),
+    ((A =< G, N1 is G);(A > G, N1 is 0),!),
+
+    generate_generation_time(N1,G,[H1*A|NPopOrd]).
+
+generate_generation_value(G,G,Pop):-!,
+    write('Given value: '),write(G),write(' reached:'),nl,write(Pop),nl.
+generate_generation_value(_,G,Pop):-
+    write('Given value: '),write(G),write(' was not reached:'),nl,write(Pop),nl,  
+    random_permutation(Pop, Pop1),   
+    crossover(Pop1,NPop1),
+    mutation(NPop1,NPop),   
+    evaluate_population(NPop,NPopEv),      
+    order_population(NPopEv,[H1*A|NPopOrd]),
+    ((A =< G, N1 is G);(A > G, N1 is 0),!),
+
+    generate_generation_value(N1,G,[H1*A|NPopOrd]).
+
+
 generate_generation(G,G,Pop):-!,
     write('Generation '),write(G),write(':'),nl,write(Pop),nl.
 generate_generation(N,G,[H|Pop]):-
     write('Generation '),write(N),write(':'),nl,write([H|Pop]),nl,
-    % random_permutation changes order of given list  
-    % this adds H every time to the list
+      
     
-    random_permutation([H|Pop], Pop1),
+    random_permutation([H|Pop], Pop1),% random_permutation changes order of given list
     
-    crossover(Pop1,NPop1),
-    mutation(NPop1,NPop),   
-    evaluate_population(NPop,NPopEv),   
-    % H is the best solution from previous generation
-    order_population([H|NPopEv],NPopOrd),
+    crossover(Pop1,NPop1), 
+    mutation(NPop1,NPop),
+
+    del_rnd_n([H|Pop],NPop3),    %deletes penalty from every element of list
+    append(NPop3,NPop, NPop2),%joint two given lists to one, we need this to get "N individuals"
+    length(NPop2, N2), %returns length of given list, This is the N individuals
+
+    evaluate_population(NPop2,NPopEv),%gives penalty for each element
+    
+    sort(2,@<, NPopEv,NPopEv1),%deletes duplicates and sort list to ascending order
+    %length(NPopEv1, T),
+
+    ((N2 >= 1, P is 0.2 * N2);%if N2 is greater than or equal to 1 P is 20% of N2
+    (N2 < 1, P is 1)),%else P is 1,
+
+    delete_p(P,NPopEv1, NPopEv2), %deletes P many elements from beginning of the list
+    add_rnd_n(NPopEv2,_,NPopR), %adds a random number to every element of the list
+    del_penalty(NPopR,NPopR1), %deletes penalty so we can order elements using the random number
+    sort(2,@=<,NPopR1,NPopS), %sorts given list ascending order by the random number and deletes duplicates if any
+    
+    del_rnd_n(NPopS,NPopR2), %deletes penalty so we can order elements using the random number
+    
+    evaluate_population(NPopR2,NPopSEv), %gives penalty for each element
+
+    %order_population(NPopEv1,NPopOrd),%order list to ascending order by the penalty
+    
     N1 is N + 1,
-    generate_generation(N1,G,NPopOrd).
+    %generate_generation(N1,G,NPopOrd).
+    generate_generation(N1,G,NPopSEv).
 
 
+add_rnd_n([],L,L).
+add_rnd_n([H|T],L,F):-
+    random(0.0,1.0,Pc),
+    add_rnd_n(T,[H*Pc|L],F),!.
 
-%this is test version
-generate_generation2(G,G,Pop):-!,
-    write('Generation '),write(G),write(':'),nl,write(Pop),nl.
-generate_generation2(N,G,[H|Pop]):-
-    write('Generation '),write(N),write(':'),nl,write([H|Pop]),nl,
-    % random_permutation changes order of given list  
-    % this adds H every time to the list
-    
-    random_permutation([H|Pop], Pop1),
-    
-    crossover(Pop1,NPop1),
-    mutation(NPop1,NPop),   
-    evaluate_population(NPop,NPopEv),   
-    testi(NPopEv, _, NPooP),
-    % H is the best solution from previous generation
-    order_population([H|NPooP],NPopOrd),
-    N1 is N + 1,
-    generate_generation2(N1,G,NPopOrd).
+del_rnd_n([],[]).
+del_rnd_n([Ind*_],[Ind]).
+del_rnd_n([Ind1*_,Ind2*_|Rest],[NInd1,NInd2|Rest1]):-
+NInd1 = Ind1,NInd2 = Ind2,
+del_rnd_n(Rest,Rest1).
 
+del_penalty([],[]).
+del_penalty([Ind*_*A],[Ind*A]).
+del_penalty([Ind1*_*A,Ind2*_*B|Rest],[NInd1*A1,NInd2*B1|Rest1]):-
+NInd1*A1 = Ind1*A,NInd2*B1 = Ind2*B,
+del_penalty(Rest,Rest1).
 
-% this predicate deletes duplicate individuals and puts them ascending order
-testi([],L,L).
-
-testi([H*A],L,LL):-
-L1 = [H*A|L],testi([],L1,LL),!.
-
-testi([H*A,H1*A1|T],L,LL):-
-    (H == H1,L1=L, testi([H1*A1|T],L1,LL);
-    L1=[H*A|L],testi([H1*A1|T],L1,LL)),!.
-
+delete_p(0,Rest1,Rest1).
+delete_p(P, [_|Rest], Rest1):-
+((P < 1, P1 is 0, delete_p(P1, Rest, Rest1));
+(P1 is P -1, delete_p(P1,Rest, Rest1),!)).
 
 generate_crossover_points(P1,P2):-generate_crossover_points1(P1,P2).
 generate_crossover_points1(P1,P2):-
@@ -149,6 +230,8 @@ generate_crossover_points1(P1,P2):-
     ((P11 < P21,!,P1 = P11,P2 = P21);P1 = P21,P2 = P11).
 generate_crossover_points1(P1,P2):-
     generate_crossover_points1(P1,P2).
+
+
 
 crossover([],[]).
 crossover([Ind*_],[Ind]).
