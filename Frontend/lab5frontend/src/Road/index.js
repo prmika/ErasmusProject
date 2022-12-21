@@ -228,21 +228,19 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-//This function add a road between the city 1 and the city 2
-let route = new Road(1,2,3);
-console.log(route);
-
 //We connect each city to 2 other random cities.
-//We load the texture of the road
-
+//We load the texture of the road and sky
+let texture_sky = textureLoader.load('./textures/texture_sky.jpg');
+scene.background = texture_sky;
 let texture_road = textureLoader.load('./textures/texture_road3.jpg');
+let routes = [];
+let randomCity2;
 for (let i=0; i<positions.length; i++){
-    let randomCity = 0; //We generate the random id of the city.
     do{
-        route.city2 = getRandomInt(positions.length);
-    }while(route.city2 == i); //This makes impossible to connect a city to itself
-    route.city1 = i;
-    route.addToScene(circleRadius, positions, scene, texture_road);// We connect the 2 cities.
+        randomCity2 = getRandomInt(positions.length);
+    }while(randomCity2 == i); //This makes impossible to connect a city to itself
+    routes.push(new Road(3, i, randomCity2, circleRadius, positions, texture_road)); //We add the road between City i and an other one in the list of roads
+    routes[i].addToScene(scene);// We connect the 2 cities.
 /*
     do{
        route.city2 = getRandomInt(positions.length);
@@ -250,7 +248,14 @@ for (let i=0; i<positions.length; i++){
     }while (route.city2 == randomCity || route.city2 == i); //This makes impossible to connect a city to itself or to the precedent city.
 */
 }
+console.log(routes);
+//This function add a road between the city 1 and the city 2
+// let route = new Road(1,2,3,circleRadius,positions,texture_road);
+// route.addToScene(scene);
+// console.log(route);
 
+
+//We put the center of the OrbitControl at the center of the cities
 controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, (positions[0][2]+positions[1][2])/2 ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
 
 
