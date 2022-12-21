@@ -223,7 +223,7 @@ for (let i = 0; i<positions.length;i++) {
     });
 }
 
-//This function allows us to generate a integer number higher than 0 and lower strictly than max.
+//This function allows us to generate an integer number higher than 0 and lower strictly than max.
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -256,12 +256,7 @@ controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, (positions[0][2]+positions[1]
 
 
 //////////////////////////////////////////
-////////////INFINITE LOOP/////////////////
-
-// Vector to represent the truck's movement
-let movement = new THREE.Vector3();
-let rotation = new THREE.Vector3();
-
+////////////TRUCK MOTION/////////////////
 
 // Event listeners to handle key down and key up events
 window.addEventListener('keydown', onKeyDown);
@@ -309,11 +304,13 @@ function onKeyUp(event) {
             fast = 1; //We reset the acceleration of the truck
             break;
         case 68: // D key
-            rotation.z = 0;
+            if(truck) truck.rotation.z = 0;
             break;
     }
 }
 
+//////////////////////////////////////////
+////////////INFINITE LOOP/////////////////
 
 //This is the infinite loop that animates the scene
 function animate(){
