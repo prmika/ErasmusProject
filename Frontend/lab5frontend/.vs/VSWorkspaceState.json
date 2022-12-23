@@ -4,9 +4,7 @@
     "\\src",
     "\\src\\app",
     "\\src\\app\\components",
-    "\\src\\app\\components\\createuser",
-    "\\src\\app\\components\\truckadd",
-    "\\src\\app\\components\\warehouses"
+    "\\src\\app\\components\\truckadd"
   ],
   "SelectedNode": "\\src\\app\\components\\truckadd\\truckadd.component.ts",
   "PreviewInSolutionExplorer": false
