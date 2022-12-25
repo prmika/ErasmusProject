@@ -26,7 +26,7 @@ export default (app: Router) => {
         email: Joi.string().required(),
         password: Joi.string().required(),
         role: Joi.string().required(),
-        phoneNr: Joi.string().required()
+        phoneNr: Joi.string().required(),
       }),
     }),
     async (req: Request, res: Response, next: NextFunction) => {
@@ -74,6 +74,10 @@ export default (app: Router) => {
       return next(e);
     }
   });
+
+  route.post('/anonymize/:id', (req: Request, res: Response, next: NextFunction) => ctrl.anonymizeUser(req,res,next));
+
+  route.get('', (req: Request, res: Response, next: NextFunction) => ctrl.getAllUsers(req, res, next));
 
   app.use('/users', route);
 

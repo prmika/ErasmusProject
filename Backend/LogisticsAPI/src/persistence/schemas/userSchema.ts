@@ -40,6 +40,11 @@ const User = new mongoose.Schema(
       type: String,
       required: [true, 'Please enter phone nr']
     },
+
+    isActive: {
+      type: Boolean,
+      required: [true, 'Please enter isActive status']
+    },
   },
   { timestamps: true },
 );
