@@ -82,4 +82,41 @@ export default class UserRepo implements IUserRepo {
     else
       return null;
   }
+
+  public async findAll (): Promise<User[]> {
+    const userRecords = await this.userSchema.find({});
+    let userRecordsMapped = [] as User[];
+    if( userRecords != null) {
+      userRecords.forEach(user => userRecordsMapped.push(UserMap.toDomain(user)))
+      return userRecordsMapped;
+    }
+    else
+      return null;
+  }
+
+  public async anonymize (id: UserId | string): Promise<User> {
+    const idX = id instanceof UserId ? (<UserId>id).id.toValue() : id;
+
+    const query = { domainId: idX }; 
+
+    const userDocument = await this.userSchema.findOne( query );
+
+    try {
+      if (userDocument === null ) {
+        return null;
+      } else {
+        userDocument.firstName = "Anonymized";
+        userDocument.lastName = "Anonymized";
+        userDocument.email = `anonymized${userDocument.id}@gmail.com`;
+        userDocument.password = "*********";
+        userDocument.phoneNr = "+00000000000";
+        userDocument.isActive = false;
+        await userDocument.save();
+
+        return UserMap.toDomain(userDocument);
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
 }

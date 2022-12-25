@@ -15,6 +15,7 @@ interface UserProps {
   password: UserPassword;
   role: Role;
   phoneNr: string;
+  isActive: Boolean
 }
 
 export class User extends AggregateRoot<UserProps> {
@@ -53,6 +54,10 @@ export class User extends AggregateRoot<UserProps> {
   get phoneNr (): string {
     return this.props.phoneNr;
   }
+
+  get isActive (): Boolean {
+    return this.props.isActive;
+  }
   
 
   private constructor (props: UserProps, id?: UniqueEntityID) {
@@ -66,7 +71,8 @@ export class User extends AggregateRoot<UserProps> {
       { argument: props.lastName, argumentName: 'lastName' },
       { argument: props.email, argumentName: 'email' },
       { argument: props.role, argumentName: 'role' },
-      { argument: props.phoneNr, argumentName: 'phoneNr' }
+      { argument: props.phoneNr, argumentName: 'phoneNr' },
+      { argument: props.isActive, argumentName: 'isActive' }
     ];
 
     const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);

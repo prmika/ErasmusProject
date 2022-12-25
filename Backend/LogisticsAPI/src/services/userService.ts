@@ -80,7 +80,8 @@ export default class UserService implements IUserService {
         email: email,
         role: role,
         password: password,
-        phoneNr: userDTO.phoneNr
+        phoneNr: userDTO.phoneNr,
+        isActive: true
       });
 
       if (userOrError.isFailure) {
@@ -168,6 +169,36 @@ export default class UserService implements IUserService {
       return Result.ok<IUserDTO>(userDTOResult);
     } else {
       return Result.fail<IUserDTO>("Couldn't find user with email =" + email);
+    }
+  }
+
+  public async findAll(): Promise<Result<IUserDTO[]>> {
+    try {
+      const users = await this.userRepo.findAll();
+
+      if (users === null) {
+        return Result.fail<IUserDTO[]>("No users were found.");
+      }
+      else {
+        let userDTOMappedResults = [] as IUserDTO[];
+        users.forEach(user => userDTOMappedResults.push(UserMap.toDTO(user) as IUserDTO))
+        return Result.ok<IUserDTO[]>(userDTOMappedResults)
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async anonymize(id: string): Promise<Result<IUserDTO>> {
+
+    const user = await this.userRepo.anonymize(id);
+    const found = !!user;
+
+    if (found) {
+      const userDTOResult = UserMap.toDTO( user ) as IUserDTO;
+      return Result.ok<IUserDTO>(userDTOResult);
+    } else {
+      return Result.fail<IUserDTO>("Anonymization is not possible as we couldn't find user with id =" + id);
     }
   }
 }

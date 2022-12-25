@@ -32,6 +32,38 @@ export default class UserController implements IUserController {
             return next(e);
         }
     };
+
+    public async getAllUsers(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userOrError = await this.userServiceInstance.findAll() as Result<IUserDTO[]>;
+
+            if (userOrError.isFailure) {
+                return res.status(402).send();
+            }
+
+            const userDTOs = userOrError.getValue();
+            return res.json(userDTOs).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
+
+    public async anonymizeUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const userOrError = await this.userServiceInstance.anonymize(req.params.id) as Result<IUserDTO>;
+
+            if (userOrError.isFailure) {
+                return res.status(404).send("Couldn't find user with given id, therefore anonymization was not performed.");
+            }
+
+            const userDTO = userOrError.getValue();
+            return res.json(userDTO).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
 }
 
 exports.getMe = async function(req, res: Response) {

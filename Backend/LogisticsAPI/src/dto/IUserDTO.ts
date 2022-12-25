@@ -6,4 +6,5 @@ export interface IUserDTO {
   password: string;
   role: string;
   phoneNr: string;
+  isActive: Boolean;
 }
