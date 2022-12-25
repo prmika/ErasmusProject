@@ -15,6 +15,8 @@ export default (app: Router) => {
 
     route.get('', (req, res, next) => ctrl.getAllDeliveryPaths(req, res, next));
 
+    route.get('/paged/:page/:numberOfItems', (req, res, next) => ctrl.getAllDeliveryPathsPaged(req, res, next));
+
     route.post('',
         celebrate({
             body: Joi.object({

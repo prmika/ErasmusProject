@@ -6,4 +6,5 @@ export default interface IDeliveryPathService  {
     updateDeliveryPath(deliverypathId: string, deliverypathDTO: IDeliveryPathDTO): Promise<Result<IDeliveryPathDTO>>;
     getDeliveryPath (deliverypathId: string): Promise<Result<IDeliveryPathDTO>>;
     getAllDeliveryPaths(): Promise<Result<IDeliveryPathDTO[]>>;
+    getAllDeliveryPathsPaged(page: Number, numberOfItems: Number): Promise<Result<IDeliveryPathDTO[]>>;
 }

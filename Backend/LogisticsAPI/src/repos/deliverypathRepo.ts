@@ -82,4 +82,16 @@ export default class DeliveryPathRepo implements IDeliveryPathRepo {
             return null;
     }
 
+    public async findAllPaged (page: number, numberOfItems : number): Promise<DeliveryPath[]> {
+        const deliverypathRecords = await this.deliverypathSchema.find({});
+        let deliverypathRecordsMapped = [] as DeliveryPath[];
+        if( deliverypathRecords != null) {
+            deliverypathRecords.forEach(deliverypath => deliverypathRecordsMapped.push(DeliveryPathMap.toDomain(deliverypath)))
+            const amountToSkip: number = (page - 1) * numberOfItems;
+            return deliverypathRecordsMapped.splice(amountToSkip,numberOfItems);
+        }
+        else
+            return null;
+    }
+
 }

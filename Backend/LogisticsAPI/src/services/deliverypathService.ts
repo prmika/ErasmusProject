@@ -48,6 +48,23 @@ export default class DeliveryPathService implements IDeliveryPathService {
         }
     }
 
+    public async getAllDeliveryPathsPaged(page: Number, numberOfItems: Number): Promise<Result<IDeliveryPathDTO[]>> {
+        try {
+            const deliverypath = await this.deliverypathRepo.findAllPaged(page, numberOfItems);
+      
+            if (deliverypath === null) {
+              return Result.fail<IDeliveryPathDTO[]>("No packages were found.");
+            }
+            else {
+              let packagingDTOMappedResults = [] as IDeliveryPathDTO[];
+              deliverypath.forEach(packaging => packagingDTOMappedResults.push(DeliveryPathMap.toDTO(packaging) as IDeliveryPathDTO))
+              return Result.ok<IDeliveryPathDTO[]>(packagingDTOMappedResults)
+            }
+          } catch (e) {
+            throw e;
+          }
+    }
+
     public async createDeliveryPath(deliverypathDTO: IDeliveryPathDTO): Promise<Result<IDeliveryPathDTO>> {
         try {
 

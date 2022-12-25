@@ -46,6 +46,22 @@ export default class DeliveryPathController implements IDeliveryPathController {
         }
     };
 
+    public async getAllDeliveryPathsPaged(req: Request, res: Response, next: NextFunction) {
+        try {
+            const deliverypathOrError = await this.deliverypathServiceInstance.getAllDeliveryPathsPaged(Number(req.params.page),Number(req.params.numberOfItems)) as Result<IDeliveryPathDTO[]>;
+
+            if (deliverypathOrError.isFailure) {
+                return res.status(402).send();
+            }
+
+            const deliverypathDTOs = deliverypathOrError.getValue();
+            return res.json(deliverypathDTOs).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
+
     public async createDeliveryPath(req: Request, res: Response, next: NextFunction) {
         try {
             const deliverypathOrError = await this.deliverypathServiceInstance.createDeliveryPath(req.body as IDeliveryPathDTO) as Result<IDeliveryPathDTO>;
