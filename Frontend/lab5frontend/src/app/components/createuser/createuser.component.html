@@ -30,7 +30,7 @@
     <div class="field-body">
       <div class="field" style="margin-right:20px">
         <label class="label">Password</label>
-        <p >
+        <p>
           <input class="input" type="password" [(ngModel)]="password">
         </p>
       </div>
@@ -47,7 +47,7 @@
 
 
   <div style="text-align: center; margin-top: 30px">
-    <button class="button is-info" style="text-align: center; margin-right: 10px">
+    <button class="button is-info" style="text-align: center; margin-right: 10px" (click)="addUser()">
       Create an account
     </button>
     <button class="button is-dark" id="retButton" style="text-align: center;" routerLink="/trucks">
@@ -55,4 +55,14 @@
     </button>
   </div>
 
+
+
+</div>
+
+<div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+  Make sure to fill in all the necessary data!
+</div>
+
+<div class="notification is-success" [hidden]="userWasSuccessfullyAddedHidden">
+  Account created successfully!
 </div>

@@ -112,6 +112,10 @@ const positions = [
     [8.7479, 41.3517, 150],
     [8.6118, 41.1239, 500]
 ];
+
+
+
+
 //sunLight.position.set(0,0,0);
 sunLight.position.set(positions[0][0], positions[0][1], positions[0][2]+10);
 sunLight.target.updateMatrixWorld();
@@ -219,26 +223,24 @@ for (let i = 0; i<positions.length;i++) {
     });
 }
 
-//This function allows us to generate a integer number higher than 0 and lower strictly than max.
+//This function allows us to generate an integer number higher than 0 and lower strictly than max.
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-//This function add a road between the city 1 and the city 2
-let route = new Road(1,2,3);
-console.log(route);
-
 //We connect each city to 2 other random cities.
-//We load the texture of the road
-
+//We load the texture of the road and sky
+let texture_sky = textureLoader.load('./textures/texture_sky.jpg');
+scene.background = texture_sky;
 let texture_road = textureLoader.load('./textures/texture_road3.jpg');
+let routes = [];
+let randomCity2;
 for (let i=0; i<positions.length; i++){
-    let randomCity = 0; //We generate the random id of the city.
     do{
-        route.city2 = getRandomInt(positions.length);
-    }while(route.city2 == i); //This makes impossible to connect a city to itself
-    route.city1 = i;
-    route.addToScene(circleRadius, positions, scene, texture_road);// We connect the 2 cities.
+        randomCity2 = getRandomInt(positions.length);
+    }while(randomCity2 == i); //This makes impossible to connect a city to itself
+    routes.push(new Road(3, i, randomCity2, circleRadius, positions, texture_road)); //We add the road between City i and an other one in the list of roads
+    routes[i].addToScene(scene);// We connect the 2 cities.
 /*
     do{
        route.city2 = getRandomInt(positions.length);
@@ -246,33 +248,34 @@ for (let i=0; i<positions.length; i++){
     }while (route.city2 == randomCity || route.city2 == i); //This makes impossible to connect a city to itself or to the precedent city.
 */
 }
+console.log(routes);
+//This function add a road between the city 1 and the city 2
+// let route = new Road(1,2,3,circleRadius,positions,texture_road);
+// route.addToScene(scene);
+// console.log(route);
 
+
+//We put the center of the OrbitControl at the center of the cities
 controls.target.set( (xMax+xMin)/2, (yMax+yMin)/2, (positions[0][2]+positions[1][2])/2 ); //We put the center of the orbit controller at the middle of the cities to  make the control more convenient.
 
 
 
 //////////////////////////////////////////
-////////////INFINITE LOOP/////////////////
-
-// Vector to represent the truck's movement
-let movement = new THREE.Vector3();
-let rotation = new THREE.Vector3();
-
+////////////TRUCK MOTION/////////////////
 
 // Event listeners to handle key down and key up events
 window.addEventListener('keydown', onKeyDown);
 window.addEventListener('keyup', onKeyUp);
-let fast = 1;
+let fast = 1; //Acceleration of the truck
+const fastMax = 3; //Max speed of the truck
 function onKeyDown(event) {
-    if(truck) console.log(truck.quaternion.x);
     // update the movement vector based on the key that was pressed
     switch (event.keyCode) {
-
         case 90: // Z key
             if(truck) {
                 truck.translateZ(0.1 * fast);
-                if(fast < 5){
-                    fast += 0.1;
+                if(fast < fastMax){ //We accelerate the truck until it reach its max speed
+                    fast += 0.5;
                 }
             }
             break;
@@ -280,7 +283,12 @@ function onKeyDown(event) {
             if(truck) truck.rotation.y += 0.2;
             break;
         case 83: // S key
-            if(truck) truck.translateZ(-0.1);
+            if(truck) {
+                truck.translateZ(-0.1 * fast);
+                if(fast < fastMax){ //We accelerate the truck until it reach its max speed
+                    fast += 0.5;
+                }
+            }
             break;
         case 68: // D key
             if(truck) truck.rotation.y -= 0.1;
@@ -292,49 +300,26 @@ function onKeyUp(event) {
     // update the movement vector based on the key that was released
     switch (event.keyCode) {
         case 90: // Z key
-            fast = 1;
+            fast = 1; //We reset the acceleration of the truck
             break;
         case 81: // Q key
             if(truck) truck.rotation.z = 0;
             break;
         case 83: // S key
-            if(truck) truck.position.y = 0.1;
+            fast = 1; //We reset the acceleration of the truck
             break;
         case 68: // D key
-            rotation.z = 0;
+            if(truck) truck.rotation.z = 0;
             break;
     }
 }
-function updateTruck() {
-    // update the truck's position based on the movement vector
-    if(truck) truck.position.add(movement);
-    //if(truck) truck.rotation.set(rotation);
 
-    // update the truck's direction based on the movement vector
-    if (movement.x !== 0 || movement.z !== 0) {
-        if(truck) truck.lookAt(truck.position.clone().add(movement));
-    }
-}
-
-function checkCollisions() {
-    // update the raycaster with the position and direction of the truck
-    raycaster.set(truck.position, truck.direction);
-
-    // check for intersections with the road plane
-    let intersections = raycaster.intersectObjects([plane]);
-    if (intersections.length > 0) {
-        // a collision has occurred, handle it as needed
-        handleCollision();
-    }
-}
-
-function handleCollision(){
-
-}
-
+//////////////////////////////////////////
+////////////INFINITE LOOP/////////////////
 
 //This is the infinite loop that animates the scene
 function animate(){
+    if(truck) console.log(truck.collision);
     //if(truck) updateTruck();
     requestAnimationFrame(animate);
     controls.update(); //We update the orbit controller
