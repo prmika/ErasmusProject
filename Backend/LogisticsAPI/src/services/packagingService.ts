@@ -55,6 +55,23 @@ export default class PackagingService implements IPackagingService {
     }
   }
 
+  public async getAllPackagesPaged(page: Number, numberOfItems: Number): Promise<Result<IPackagingDTO[]>> {
+    try {
+      const packages = await this.packagingRepo.findAllPaged(page, numberOfItems);
+
+      if (packages === null) {
+        return Result.fail<IPackagingDTO[]>("No packages were found.");
+      }
+      else {
+        let packagingDTOMappedResults = [] as IPackagingDTO[];
+        packages.forEach(packaging => packagingDTOMappedResults.push(PackagingMap.toDTO(packaging) as IPackagingDTO))
+        return Result.ok<IPackagingDTO[]>(packagingDTOMappedResults)
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   public async createPackaging(packagingDTO: IPackagingDTO): Promise<Result<IPackagingDTO>> {
     try {
       /* fetch("https://localhost:5001/api/Deliveries", {

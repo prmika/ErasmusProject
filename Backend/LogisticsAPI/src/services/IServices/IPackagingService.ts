@@ -6,4 +6,5 @@ export default interface IPackagingService  {
   updatePackaging(packagingId: string, packagingDTO: IPackagingDTO): Promise<Result<IPackagingDTO>>;
   getPackaging(packagingId: string): Promise<Result<IPackagingDTO>>;
   getAllPackages(): Promise<Result<IPackagingDTO[]>>;
+  getAllPackagesPaged(page: Number, numberOfItems: Number): Promise<Result<IPackagingDTO[]>>;
 }

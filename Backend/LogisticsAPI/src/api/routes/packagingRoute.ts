@@ -14,6 +14,8 @@ export default (app: Router) => {
   const ctrl = Container.get(config.controllers.packaging.name) as IPackagingController;
 
   route.get('', (req, res, next) => ctrl.getAllPackages(req, res, next));
+  
+  route.get('/paged/:page/:numberOfItems', (req, res, next) => ctrl.getAllPackagesPaged(req, res, next));
 
   route.post('',
     celebrate({

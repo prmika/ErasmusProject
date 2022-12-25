@@ -46,6 +46,22 @@ export default class PackagingController implements IPackagingController {
         }
     };
 
+    public async getAllPackagesPaged(req: Request, res: Response, next: NextFunction) {
+        try {
+            const packagingOrError = await this.packagingServiceInstance.getAllPackagesPaged(Number(req.params.page),Number(req.params.numberOfItems)) as Result<IPackagingDTO[]>;
+
+            if (packagingOrError.isFailure) {
+                return res.status(404).send();
+            }
+
+            const packagingDTOs = packagingOrError.getValue();
+            return res.json(packagingDTOs).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
+
     public async createPackaging(req: Request, res: Response, next: NextFunction) {
         try {
             const packagingOrError = await this.packagingServiceInstance.createPackaging(req.body as IPackagingDTO) as Result<IPackagingDTO>;

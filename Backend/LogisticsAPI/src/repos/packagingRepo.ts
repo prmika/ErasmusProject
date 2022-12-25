@@ -81,4 +81,16 @@ export default class PackagingRepo implements IPackagingRepo {
       return null;
   }
 
+  public async findAllPaged (page: number, numberOfItems: number): Promise<Packaging[]> {
+    const packagingRecords = await this.packagingSchema.find({});
+    let packagingRecordsMapped = [] as Packaging[];
+    if( packagingRecords != null) {
+      packagingRecords.forEach(packaging => packagingRecordsMapped.push(PackagingMap.toDomain(packaging)))
+      const amountToSkip: number = (page - 1) * numberOfItems;
+      return packagingRecordsMapped.splice(amountToSkip,numberOfItems);
+    }
+    else
+      return null;
+  }
+
 }
