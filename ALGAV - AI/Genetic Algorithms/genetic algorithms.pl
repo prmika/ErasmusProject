@@ -586,8 +586,8 @@ generate:-
     evaluate_population(Pop,PopEv),
     write('PopEv='),write(PopEv),nl,
 	order_population(PopEv,PopOrd),
-    generations(NG),
-    generate_generation(0,NG,PopOrd).
+    generations(NG),!,
+    generate_generation(0,NG,PopOrd,[]).
 
 generate_population([LW,LW3|Pop]):-
     population(TamPop),
@@ -641,17 +641,41 @@ bexchange([X*VX,Y*VY|L1],[Y*VY|L2]):-
 
 bexchange([X|L1],[X|L2]):-bexchange(L1,L2).
 
-generate_generation(G,G,Pop):-!,
+generate_generation(G,G,Pop,_):-!,
     write('Generation '),write(G),write(':'),nl,write(Pop),nl.
-generate_generation(N,G,Pop):-
+generate_generation(N,G,Pop,PGen):-
     write('Generation '),write(N),write(':'),nl,write(Pop),nl,
-    random_permutation(Pop,LRP),
+    append(PGen,[Pop],PGen2),
+    ((is_stable(PGen2),true);
+    (random_permutation(Pop,LRP),
     crossover(LRP,NPop1),
     mutation(NPop1,NPop),
     evaluate_population(NPop,NPopEv),
     order_population(NPopEv,NPopOrd),
     N1 is N + 1,
-    generate_generation(N1,G,NPopOrd).
+    generate_generation(N1,G,NPopOrd,PGen2))).
+
+% Is stabilized when the last populations are 10 times the same 
+is_stable(Generations) :-
+    length(Generations, N),
+    N >= 10,
+    reverse(Generations, ReversedGenerations),
+    is_stable(ReversedGenerations, 10).
+
+is_stable(_, 0).
+is_stable([Generation|Tail], NumGenerations) :-
+    is_same_gen(Generation, Tail, NumGenerations),!.
+
+is_same_gen(_,_,1).
+is_same_gen(Generation, [OtherGeneration|Tail],NumGenerations) :-
+    compare_gen(Generation, OtherGeneration),
+    NumGen2 is NumGenerations - 1,
+    is_same_gen(Generation, Tail, NumGen2).
+
+compare_gen([], []).
+compare_gen([H1|T1], [H2|T2]) :-
+    H1 == H2,
+    compare_gen(T1, T2).
 
 generate_crossover_points(P1,P2):-generate_crossover_points1(P1,P2).
 generate_crossover_points1(P1,P2):-
