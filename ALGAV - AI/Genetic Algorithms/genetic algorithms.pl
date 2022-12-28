@@ -341,6 +341,8 @@ main_warehouse(5).
 
 truck_weight(6).
 
+:-dynamic delivery/6.
+
 %delivery(id, date, weight, destWarehouse, timeToLoad, timeToUnload)
 %delivery(0,0,0,5,0,0).
 delivery(4439, 20221128, 200, 1, 8, 10).
@@ -348,8 +350,8 @@ delivery(4446, 20221128, 150, 9, 7, 9).
 delivery(4441, 20221128, 100, 3, 5, 7).
 delivery(4445, 20221128, 120, 8, 6, 8).
 delivery(4448, 20221128, 300, 11, 15, 20).
+delivery(4398, 20221205, 310, 17, 16, 20).
 
-%delivery(4398, 20221205, 310, 17, 16, 20).
 %delivery(4432, 20221205, 270, 14, 14, 18).
 %delivery(4437, 20221205, 180, 12, 9, 11).
 %delivery(4451, 20221205, 220, 6, 9, 12).
@@ -361,6 +363,8 @@ delivery(4448, 20221128, 300, 11, 15, 20).
 %delivery(4446, 20221205, 260, 4, 14, 17).
 %delivery(4456, 20221205, 330, 16, 17, 21).
 
+% Number of deliveries
+deliveries(6).
 
 % Trucks
 % truckFeatures(name, weight(kg), max_load(kg), full_charge(kWh),
@@ -564,8 +568,28 @@ compareTwoListsEqual([H|T],[H2|T2]):-
     H =:= H2,
     compareTwoListsEqual(T,T2).
 
-% Number of deliveries
-deliveries(5).
+
+add_delivery:-
+write('Id: '),read(Id),
+    write('Date: '),read(Date),
+    write('Weigth: '),read(W),
+    write('destination warehouse: '),read(W1),
+    write('Time to load: '),read(TL),
+    write('Time to unload: '),read(LU),
+    asserta(delivery(Id,Date,LP,W1,TL,TU)),%create a new delivery to the begunnung of the list
+    write('New delivery added.'),nl.
+
+change_delivery:-
+write('Id of delivery: '),read(Id),
+    write('New load: '),read(LP),
+    retractall(delivery(Id,Date,_,W1,TL,TU)),%deletes delivery we want to edit
+    asserta(delivery(Id,Date,LP,W1,TL,TU)),%adds new delivery
+    write('Delivery modified.'),nl.
+
+delete_delivery:-
+write('Id of the delivery you want to delete: '),read(Id),
+    retractall(delivery(Id,_,_,_,_,_)),%deletes delivery
+    write('Delivery deleted.'),nl.
 
 % Initialize parameters
 initialize:-write('Number of new generations: '),read(NG),
@@ -676,6 +700,88 @@ compare_gen([], []).
 compare_gen([H1|T1], [H2|T2]) :-
     H1 == H2,
     compare_gen(T1, T2).
+
+initialize_not_elitist:-write('Number of new generations: '),read(NG),
+    (retract(generations(_));true),assertz(generations(NG)),
+    write('Population dimensity: '),read(DP),
+    (retract(population(_));true),assertz(population(DP)), % population dimension
+    write('Probability of Crossover(%): '),read(P1), % crossover probability
+    PC is P1/100,
+    (retract(prob_crossover(_));true),assertz(prob_crossover(PC)),
+    write('Probablility of Mutation(%): '),read(P2), % mutation probability
+    PM is P2/100,
+    (retract(prob_mutation(_));true),assertz(prob_mutation(PM)).
+
+generate_not_elitist:-
+    initialize_not_elitist,
+    generate_population(Pop),
+    write('Pop='),write(Pop),nl,
+    evaluate_population(Pop,PopEv),
+    write('PopEv='),write(PopEv),nl,
+	order_population(PopEv,PopOrd),
+    generations(NG),!,
+    generate_generation1(0,NG,PopOrd).
+
+generate_generation1(G,G,H):-!,
+    write('Generation '),write(G),write(':'),nl,write(H),nl.
+
+generate_generation1(N,G,[H|Pop]):-
+    write('Generation '),write(N),write(':'),nl,write([H|Pop]),nl, 
+    random_permutation([H|Pop], Pop1),% random_permutation changes order of given list
+    crossover(Pop1,NPop1), 
+    mutation(NPop1,[H2|NPop]),
+    evaluate_population([H2|NPop],Npooop), %gives penalty for each element
+    order_population(Npooop, [H3|_]),%gives us the best element of descendants
+    del_rnd_n(Pop,NPop3),%deletes penalty from every element of list
+    append(NPop3,NPop, NPop2),%joint two given lists to one to get T individuals
+    length([H|Pop], N2), %returns length of given list, This is the N individuals
+    evaluate_population(NPop2,NPopEv),%gives penalty for each element
+    sort(2,@<, NPopEv,NPopEv1),%deletes duplicates and sort list to ascending order
+    length(NPopEv1, T),
+    ((N2 >= 5, P is 0.2 * N2);%if N2 is greater than or equal to 1 P is 20% of N2
+    (N2 < 5, P is 1)),%else P is 1,
+    delete_p(P,NPopEv1, NPopEv2), %deletes P many elements from beginning of the list
+    add_rnd_n(NPopEv2,_,NPopR), %adds a random number to every element of the list
+    del_penalty(NPopR,NPopR1), %deletes penalty so we can order elements using the random number
+    sort(2,@=<,NPopR1,NPopS), %sorts given list ascending order by the random number and deletes duplicates if any
+    del_rnd_n(NPopS,NPopR2), %deletes penalty so we can order elements using the random number
+    evaluate_population(NPopR2,NPopSEv), %gives penalty for each element
+    %N3 is (((N2-P)-T)*(-1)),
+    N3 is T - (N2-P),
+    delete_p(N3, NPopSEv, NPopSEv2),%deletes T - (N - P) elements from the list. 
+    sort(2,@=<, [H,H3], Best),
+    append(Best,NPopSEv2, Best1),
+    N1 is N + 1,
+    generate_generation1(N1,G,Best1).
+
+
+add_rnd_n([],L,L).
+add_rnd_n([H|T],L,F):-
+    random(0.0,1.0,Pc),
+    add_rnd_n(T,[H*Pc|L],F),!.
+
+del_rnd_n([],[]).
+del_rnd_n([Ind*_],[Ind]).
+del_rnd_n([Ind1*_,Ind2*_|Rest],[NInd1,NInd2|Rest1]):-
+NInd1 = Ind1,NInd2 = Ind2,
+del_rnd_n(Rest,Rest1).
+
+del_penalty([],[]).
+del_penalty([Ind*_*A],[Ind*A]).
+del_penalty([Ind1*_*A,Ind2*_*B|Rest],[NInd1*A1,NInd2*B1|Rest1]):-
+NInd1*A1 = Ind1*A,NInd2*B1 = Ind2*B,
+del_penalty(Rest,Rest1).
+
+delete_p(0,Rest1,Rest1).
+delete_p(P, [_|Rest], Rest1):-
+((P < 1, P1 is 0, delete_p(P1, Rest, Rest1));
+(P1 is P -1, delete_p(P1,Rest, Rest1),!)).
+
+
+
+
+
+
 
 generate_crossover_points(P1,P2):-generate_crossover_points1(P1,P2).
 generate_crossover_points1(P1,P2):-
