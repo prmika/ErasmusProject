@@ -364,7 +364,12 @@ delivery(4398, 20221205, 310, 17, 16, 20).
 %delivery(4456, 20221205, 330, 16, 17, 21).
 
 % Number of deliveries
-deliveries(6).
+deliveries(X):-
+findall(Id,delivery(Id,_,_,_,_,_),ID),
+length(ID,X),!.
+
+
+
 
 % Trucks
 % truckFeatures(name, weight(kg), max_load(kg), full_charge(kWh),
@@ -575,14 +580,15 @@ write('Id: '),read(Id),
     write('Weigth: '),read(W),
     write('destination warehouse: '),read(W1),
     write('Time to load: '),read(TL),
-    write('Time to unload: '),read(LU),
-    asserta(delivery(Id,Date,LP,W1,TL,TU)),%create a new delivery to the begunnung of the list
+    write('Time to unload: '),read(TU),
+    asserta(delivery(Id,Date,W,W1,TL,TU)),%create a new delivery to the beginning of the list
     write('New delivery added.'),nl.
 
 change_delivery:-
 write('Id of delivery: '),read(Id),
     write('New load: '),read(LP),
-    retractall(delivery(Id,Date,_,W1,TL,TU)),%deletes delivery we want to edit
+    delivery(Id,Date,_,W1,TL,TU),
+    retractall(delivery(Id,_,_,_,_,_)),%deletes delivery we want to edit
     asserta(delivery(Id,Date,LP,W1,TL,TU)),%adds new delivery
     write('Delivery modified.'),nl.
 
@@ -590,6 +596,7 @@ delete_delivery:-
 write('Id of the delivery you want to delete: '),read(Id),
     retractall(delivery(Id,_,_,_,_,_)),%deletes delivery
     write('Delivery deleted.'),nl.
+    
 
 % Initialize parameters
 initialize:-write('Number of new generations: '),read(NG),
