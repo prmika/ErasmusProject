@@ -1,105 +1,115 @@
-<div style="margin: 20px" *ngIf="min2WarehouseSuccessfullyLoaded">
-    <p class="create-title"><i class="fa fa-map-marker"></i> Create a new Warehouse Route</p>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Departure Warehouse</label>
-                <p class="control has-icons-left">
-                    <span class="select">
-                        <select [(ngModel)]="departure_warehouseId">
-                            <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
-                        </select>
-                    </span>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-home"></i>
-                    </span>
-                </p>
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'logistics_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div style="margin: 20px" *ngIf="min2WarehouseSuccessfullyLoaded">
+            <p class="create-title"><i class="fa fa-map-marker"></i> Create a new Warehouse Route</p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Departure Warehouse</label>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="departure_warehouseId">
+                                    <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Destination Warehouse</label>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="destination_warehouseId">
+                                    <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Distance (km)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 100km"
+                                [(ngModel)]="distance" min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-road"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Used Battery (kWh)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 64 kWh" 
+                                [(ngModel)]="used_battery" min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-battery-full"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-                <label class="label">Destination Warehouse</label>
-                <p class="control has-icons-left">
-                    <span class="select">
-                        <select [(ngModel)]="destination_warehouseId">
-                            <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
-                        </select>
-                    </span>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-home"></i>
-                    </span>
-                </p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Time (min)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 60 min"
+                                [(ngModel)]="time" min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Extra Time (when charging required) (min)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 20 min"
+                                [(ngModel)]="extra_time_when_charging_required" min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-                <label class="label">Distance (km)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 100km"
-                        [(ngModel)]="distance" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-road"></i>
-                    </span>
-                </p>
+            <div style="text-align: center; margin-top: 30px">
+                <button class="button is-info" style="text-align: center;" (click)="addWarehouseRoute()">
+                    Create the warehouse route
+                </button>
+                <button class="button is-dark" style="text-align: center;" routerLink="/warehouse-routes">
+                    Return
+                </button>
             </div>
-            <div class="field">
-                <label class="label">Used Battery (kWh)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 64 kWh" 
-                        [(ngModel)]="used_battery" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-battery-full"></i>
-                    </span>
-                </p>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The warehouse route couldn't be created. Make sure to fill in all the necessary data to create a Route, and that the departure and destination warehouse are different from each other.
+            </div>
+            <div class="notification is-danger" [hidden]="warehouseRouteWasNotAddedErrorHidden">
+                The warehouse route couldn't be created because of an internal Server Error. Please try again later!
+            </div>
+            <div class="notification is-success" [hidden]="warehouseRouteWasSuccessfullyAddedHidden">
+                The new warehouse route was successfully created! You will be redirected to the main warehouse routes page in 5 seconds.
+            </div>
+        </div>
+        <div *ngIf="!min2WarehouseSuccessfullyLoaded">
+            <div class="notification is-danger">
+                At the moment, no new warehouse route can be created because we are not able to retrieve at least 2 warehouses. Please try again later!
+            </div>
+            <div style="text-align: center;">
+                <button class="button is-dark" style="text-align: center;" routerLink="/warehouse-routes">
+                    Return
+                </button>
             </div>
         </div>
     </div>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Time (min)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 60 min"
-                        [(ngModel)]="time" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-clock-o"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Extra Time (when charging required) (min)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 20 min"
-                        [(ngModel)]="extra_time_when_charging_required" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-clock-o"></i>
-                    </span>
-                </p>
-            </div>
-        </div>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
     </div>
-    <div style="text-align: center; margin-top: 30px">
-        <button class="button is-info" style="text-align: center;" (click)="addWarehouseRoute()">
-            Create the warehouse route
-        </button>
-        <button class="button is-dark" style="text-align: center;" routerLink="/warehouse-routes">
-            Return
-        </button>
-    </div>
-    <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
-        The warehouse route couldn't be created. Make sure to fill in all the necessary data to create a Route, and that the departure and destination warehouse are different from each other.
-    </div>
-    <div class="notification is-danger" [hidden]="warehouseRouteWasNotAddedErrorHidden">
-        The warehouse route couldn't be created because of an internal Server Error. Please try again later!
-    </div>
-    <div class="notification is-success" [hidden]="warehouseRouteWasSuccessfullyAddedHidden">
-        The new warehouse route was successfully created! You will be redirected to the main warehouse routes page in 5 seconds.
-    </div>
-</div>
-<div *ngIf="!min2WarehouseSuccessfullyLoaded">
-    <div class="notification is-danger">
-        At the moment, no new warehouse route can be created because we are not able to retrieve at least 2 warehouses. Please try again later!
-    </div>
-    <div style="text-align: center;">
-        <button class="button is-dark" style="text-align: center;" routerLink="/warehouse-routes">
-            Return
-        </button>
-    </div>
-    
-</div>
+</ng-template>

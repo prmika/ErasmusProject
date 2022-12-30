@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
 import { WarehouseRoute } from 'src/app/interfaces/warehouse-route';
+import { UserService } from 'src/app/services/user.service';
 import { WarehouseRouteService } from 'src/app/services/warehouse-route.service';
 import { WarehouseService } from 'src/app/services/warehouse.service';
 
@@ -18,30 +20,53 @@ export class WarehouseRoutesDetailComponent implements OnInit {
   min2WarehouseSuccessfullyLoaded = false; //Stores value to hide sections, should be true when 2 warehouses where successfully loaded
   notAllFieldsHaveDataErrorHidden = true; //Stores value to show notification when not all fields have data
 
+  role: string | undefined;
+  notFoundHidden = true;
   constructor(
     private route: ActivatedRoute, //We need this to read the current route url
     private warehouseRouteService: WarehouseRouteService, //Service to work with the data. This is in connection with the warehouse route backend and the database.
-    private warehouseService: WarehouseService //Service to work with the data. This is in connection with the warehouse backend and the database.
+    private warehouseService: WarehouseService, //Service to work with the data. This is in connection with the warehouse backend and the database.
+    public auth: AuthService, private user: UserService
   ) { }
 
   ngOnInit(): void {
-    this.getWarehouseRoute(); //Load the detailed warehouse route data when loading this page
-    this.warehouseService.getWarehouses().subscribe({ //Load the warehousesIds
-      next: (v) => {
-        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each warehouse push the id to the id list
-        this.warehouseIds.sort();
-        if (this.warehouseIds.length < 2) {
-          this.min2WarehouseSuccessfullyLoaded = false; //set value to false if less than 2 warehouses were loaded
-        }
-        else {
-          this.min2WarehouseSuccessfullyLoaded = true; //set value to true if more than 2 warehouses were loaded
-        }
-      },
-      error: (e) => {
-        console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be updated at the moment. Try again later.");
-        this.min2WarehouseSuccessfullyLoaded = false; //set value to false because of loading error
-      },
-    })
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "logistics_manager") {
+                  this.getWarehouseRoute(); //Load the detailed warehouse route data when loading this page
+                  this.warehouseService.getWarehouses().subscribe({ //Load the warehousesIds
+                    next: (v) => {
+                      v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each warehouse push the id to the id list
+                      this.warehouseIds.sort();
+                      if (this.warehouseIds.length < 2) {
+                        this.min2WarehouseSuccessfullyLoaded = false; //set value to false if less than 2 warehouses were loaded
+                      }
+                      else {
+                        this.min2WarehouseSuccessfullyLoaded = true; //set value to true if more than 2 warehouses were loaded
+                      }
+                    },
+                    error: (e) => {
+                      console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be updated at the moment. Try again later.");
+                      this.min2WarehouseSuccessfullyLoaded = false; //set value to false because of loading error
+                    },
+                  })
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
 
   getWarehouseRoute(): void {

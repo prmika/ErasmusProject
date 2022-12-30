@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
 import { Delivery } from 'src/app/interfaces/delivery';
 import { DeliveryService } from 'src/app/services/delivery.service';
+import { UserService } from 'src/app/services/user.service';
 import { WarehouseService } from 'src/app/services/warehouse.service';
 
 @Component({
@@ -17,31 +19,55 @@ export class DeliveryDetailComponent implements OnInit {
   warehouseIds: string[] = []
   min1WarehouseSuccessfullyLoaded = false;
   notAllFieldsHaveDataErrorHidden = true;
+  notFoundHidden = true;
 
   deliveryDateFormatted: string = "";
 
+  role: string | undefined;
+  
   constructor(private route: ActivatedRoute, //We need this to read the current route url
     private deliveryService: DeliveryService, //Service to work with the data. This is in connection with the delivery backend and the database.
-    private warehouseService: WarehouseService) { } //Service to work with the data. This is in connection with the warehouse backend and the database.
+    private warehouseService: WarehouseService,
+    public auth: AuthService, private user: UserService) { } //Service to work with the data. This is in connection with the warehouse backend and the database.
 
   ngOnInit(): void {
-    this.getDelivery();
-    this.warehouseService.getWarehouses().subscribe({
-      next: (v) => {
-        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each reeceived warehouse the id will be pushed to the warehouseIds list.
-        this.warehouseIds.sort(); //WarehouseIds list will be sorted.
-        if (this.warehouseIds.length < 1) {
-          this.min1WarehouseSuccessfullyLoaded = false; //If less than one warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.
-        }
-        else {
-          this.min1WarehouseSuccessfullyLoaded = true; //Set to true so that the form is visible
-        }
-      },
-      error: (e) => {
-        console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no deliveries can't be updated at the moment. Try again later.");
-        this.min1WarehouseSuccessfullyLoaded = false; //When there's an error to load warehouses it shouldn't be possible to create a delivery.
-      },
-    })
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "warehouse_manager") {
+                  this.getDelivery();
+                  this.warehouseService.getWarehouses().subscribe({
+                    next: (v) => {
+                      v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each reeceived warehouse the id will be pushed to the warehouseIds list.
+                      this.warehouseIds.sort(); //WarehouseIds list will be sorted.
+                      if (this.warehouseIds.length < 1) {
+                        this.min1WarehouseSuccessfullyLoaded = false; //If less than one warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.
+                      }
+                      else {
+                        this.min1WarehouseSuccessfullyLoaded = true; //Set to true so that the form is visible
+                      }
+                    },
+                    error: (e) => {
+                      console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no deliveries can't be updated at the moment. Try again later.");
+                      this.min1WarehouseSuccessfullyLoaded = false; //When there's an error to load warehouses it shouldn't be possible to create a delivery.
+                    },
+                  })
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
 
   getDelivery(): void {
@@ -60,7 +86,7 @@ export class DeliveryDetailComponent implements OnInit {
   }
 
   updateDelivery(): void {
-    if (this.delivery) { 
+    if (this.delivery) {
       if ((this.delivery.warehouseID != undefined) && //Checks if all the necessary data is present 
         (this.delivery.weight != undefined && this.delivery.weight > 0) &&
         (this.delivery.deliveryDate != undefined) &&

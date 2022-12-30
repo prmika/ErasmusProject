@@ -5,4 +5,5 @@ export interface Truck {
     max_battery_charge: number;
     autonomy: number;
     fast_charging_time: number;
+    status: Boolean;
   }

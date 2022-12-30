@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { Delivery } from 'src/app/interfaces/delivery';
 import { Packaging } from 'src/app/interfaces/package';
 import { PackagingAdd } from 'src/app/interfaces/package-add';
 import { DeliveryService } from 'src/app/services/delivery.service';
 import { PackagesService } from 'src/app/services/packages.service';
 import { TruckService } from 'src/app/services/truck.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-packageadd',
@@ -13,11 +15,33 @@ import { TruckService } from 'src/app/services/truck.service';
 })
 export class PackageaddComponent implements OnInit {
 
-  constructor(private truckService: TruckService, private deliveryService: DeliveryService, private packagingService: PackagesService) { }
+  role: string | undefined;
+  notFoundHidden = true;
+  constructor(private truckService: TruckService, private deliveryService: DeliveryService, private packagingService: PackagesService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.loadTruckIds();
-    this.loadDeliveryIds();
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "logistics_manager") {
+                  this.loadTruckIds();
+                  this.loadDeliveryIds();
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
 
   //All the packaging fields

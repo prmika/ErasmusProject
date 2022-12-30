@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { Delivery } from 'src/app/interfaces/delivery';
 import { DeliveryService } from 'src/app/services/delivery.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-deliveries',
@@ -23,11 +25,34 @@ export class DeliveriesComponent implements OnInit {
   currentPage = 0;
   previousPage = 0;
   nextPage = 0;
+  notFoundHidden = true;
 
-  constructor(private deliveryService: DeliveryService) { }
+  role: string | undefined;
+
+  constructor(private deliveryService: DeliveryService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.getDeliveries(); //Load deliveries data when user loads this page
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated){
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if(this.role == "admin" || this.role == "warehouse_manager"){
+                  this.getDeliveries(); //Load deliveries data when user loads this page
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })      
+      }); 
   }
 
   deliveries: Delivery[] = []; //Deliveries will be stored here

@@ -1,62 +1,73 @@
-<div style="text-align: center;"><button class="button is-info" routerLink="/warehouse/create" style="margin: 15px"><i
-      class="fa fa-plus" aria-hidden="true"></i>Create new Warehouse</button></div>
-<div *ngIf="warehousesSuccessfullyLoaded && warehouses.length > 0">
-  <div class="card" *ngFor="let warehouse of warehouses">
-    <div *ngIf="warehouse.isActive">
-      <p style="float: right; margin-top: 15px; margin-right: 25px; color: green"><b>Active</b></p>
-      <div class="card-content">
-        <div class="media">
-          <div class="media-left">
-            <figure class="image is-48x48">
-              <img
-                src="https://d3ciwvs59ifrt8.cloudfront.net/d8da335c-eac5-4d57-8adc-3391f18a5c9a/3b4086d5-15d0-4b84-92cf-4aa436a5f3be_l.jpeg"
-                alt="Warehouse photo">
-            </figure>
-          </div>
-          <div class="media-content">
-            <p class="title is-4">Warehouse - {{warehouse.id}}</p>
-            <p class="subtitle is-6">Address - {{warehouse.address}}</p>
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+  <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+  <div *ngIf="(role == 'warehouse_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+    <div style="text-align: center;"><button class="button is-info" routerLink="/warehouse/create"
+        style="margin: 15px"><i class="fa fa-plus" aria-hidden="true"></i>Create new Warehouse</button></div>
+    <div *ngIf="warehousesSuccessfullyLoaded && warehouses.length > 0">
+      <div class="card" *ngFor="let warehouse of warehouses">
+        <div *ngIf="warehouse.isActive">
+          <p style="float: right; margin-top: 15px; margin-right: 25px; color: green"><b>Active</b></p>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img
+                    src="https://d3ciwvs59ifrt8.cloudfront.net/d8da335c-eac5-4d57-8adc-3391f18a5c9a/3b4086d5-15d0-4b84-92cf-4aa436a5f3be_l.jpeg"
+                    alt="Warehouse photo">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">Warehouse - {{warehouse.id}}</p>
+                <p class="subtitle is-6">Address - {{warehouse.address}}</p>
+              </div>
+            </div>
+            <div class="content">
+              <p><i class="fa fa-building"></i><b> Designation</b> - {{warehouse.designation}}</p>
+              <p><i class="fa fa-thumb-tack"></i><b> Latitude</b> - {{warehouse.latitude}}</p>
+              <p><i class="fa fa-map-marker"></i><b> Longitude</b> - {{warehouse.longitude}}</p>
+              <p><button class="button is-warning" routerLink="/warehouse/{{warehouse.id}}"><i
+                    class="fa fa-pencil-square-o" aria-hidden="true"></i>Update</button></p>
+            </div>
           </div>
         </div>
-        <div class="content">
-          <p><i class="fa fa-building"></i><b> Designation</b> - {{warehouse.designation}}</p>
-          <p><i class="fa fa-thumb-tack"></i><b> Latitude</b> - {{warehouse.latitude}}</p>
-          <p><i class="fa fa-map-marker"></i><b> Longitude</b> - {{warehouse.longitude}}</p>
-          <p><button class="button is-warning" routerLink="/warehouse/{{warehouse.id}}"><i class="fa fa-pencil-square-o"
-                aria-hidden="true"></i>Update</button></p>
+        <div class="disabledwarehouse" *ngIf="!warehouse.isActive">
+          <p style="float: right; margin: 15px; color: darkred"><b>Disabled</b></p>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img
+                    src="https://d3ciwvs59ifrt8.cloudfront.net/d8da335c-eac5-4d57-8adc-3391f18a5c9a/3b4086d5-15d0-4b84-92cf-4aa436a5f3be_l.jpeg"
+                    alt="Warehouse photo">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">Warehouse - {{warehouse.id}}</p>
+                <p class="subtitle is-6">Address - {{warehouse.address}}</p>
+              </div>
+            </div>
+            <div class="content">
+              <p><i class="fa fa-building"></i><b> Designation</b> - {{warehouse.designation}}</p>
+              <p><i class="fa fa-thumb-tack"></i><b> Latitude</b> - {{warehouse.latitude}}</p>
+              <p><i class="fa fa-map-marker"></i><b> Longitude</b> - {{warehouse.longitude}}</p>
+              <p><button class="button is-warning" routerLink="/warehouse/{{warehouse.id}}"><i
+                    class="fa fa-pencil-square-o" aria-hidden="true"></i>Update</button></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="disabledwarehouse" *ngIf="!warehouse.isActive">
-      <p style="float: right; margin: 15px; color: darkred"><b>Disabled</b></p>
-      <div class="card-content">
-        <div class="media">
-          <div class="media-left">
-            <figure class="image is-48x48">
-              <img
-                src="https://d3ciwvs59ifrt8.cloudfront.net/d8da335c-eac5-4d57-8adc-3391f18a5c9a/3b4086d5-15d0-4b84-92cf-4aa436a5f3be_l.jpeg"
-                alt="Warehouse photo">
-            </figure>
-          </div>
-          <div class="media-content">
-            <p class="title is-4">Warehouse - {{warehouse.id}}</p>
-            <p class="subtitle is-6">Address - {{warehouse.address}}</p>
-          </div>
-        </div>
-        <div class="content">
-          <p><i class="fa fa-building"></i><b> Designation</b> - {{warehouse.designation}}</p>
-          <p><i class="fa fa-thumb-tack"></i><b> Latitude</b> - {{warehouse.latitude}}</p>
-          <p><i class="fa fa-map-marker"></i><b> Longitude</b> - {{warehouse.longitude}}</p>
-          <p><button class="button is-warning" routerLink="/warehouse/{{warehouse.id}}"><i class="fa fa-pencil-square-o"
-                aria-hidden="true"></i>Update</button></p>
-        </div>
+    <div *ngIf="!warehousesSuccessfullyLoaded">
+      <div class="notification is-danger">
+        There was an error while trying to load the warehouse data. Please try again later.<br>
+        The page will be reloaded every 5 seconds.
       </div>
     </div>
   </div>
-</div>
-<div *ngIf="!warehousesSuccessfullyLoaded">
-  <div class="notification is-danger">
-    There was an error while trying to load the warehouse data. Please try again later.<br>
-    The page will be reloaded every 5 seconds.
+  <div *ngIf="!notFoundHidden">
+    <app-notfound></app-notfound>
   </div>
-</div>
+</ng-template>

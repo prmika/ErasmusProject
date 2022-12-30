@@ -1,90 +1,105 @@
-<div style="margin: 20px">
-    <p class="create-title"><i class="fa fa-truck"></i> Create a new truck</p>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Portuguese License Plate</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="text" placeholder="e.g. BE4SZ5" [(ngModel)]="id" maxlength="6" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-id-card"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Tare (kg)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 7500 kg" [(ngModel)]="tare" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-balance-scale"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Autonomy (km)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 100 km" [(ngModel)]="autonomy" min="1"
-                        required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-road"></i>
-                    </span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Load Capacity (kg)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 4300 kg" [(ngModel)]="load_capacity" min="1"
-                        required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-arrows-alt"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Fast Charging Time (min)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 60 min" [(ngModel)]="fast_charging_time"
-                        min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-clock-o"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Max Battery Charge (kWh)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 80 kWh" [(ngModel)]="max_battery_charge"
-                        min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-battery-full"></i>
-                    </span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div style="text-align: center; margin-top: 30px">
-        <button class="button is-info" style="text-align: center;" (click)="addTruck()">
-            Create the truck
-        </button>
-        <button class="button is-dark" id="retButton" style="text-align: center;" routerLink="/trucks">
-            Return
-        </button>
-    </div>
-    <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
-        The truck couldn't be created. Make sure to fill in all the necessary data to create a truck. Please notice that
-        all the values should be positive!
-    </div>
-    <div class="notification is-danger" [hidden]="truckWasNotAddedErrorHidden">
-        The truck couldn't be created because of an internal Server Error. Please try again later!
-    </div>
-    <div class="notification is-success" [hidden]="truckWasSuccessfullyAddedHidden">
-        The new truck was successfully created! You will be redirected to the main trucks page in 5 seconds.
-    </div>
-    <div class="notification is-danger" [hidden]="truckIdNotRightErrorHidden">
-        The truck couldn't be created because the License Plate was not in the right format. This plate should consist of only 6 characters.
-    </div>
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
 </div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'fleet_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div style="margin: 20px">
+            <p class="create-title"><i class="fa fa-truck"></i> Create a new truck</p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Portuguese License Plate</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. BE4SZ5" [(ngModel)]="id" maxlength="6"
+                                required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-id-card"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Tare (kg)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 7500 kg" [(ngModel)]="tare" min="1"
+                                required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-balance-scale"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Autonomy (km)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 100 km" [(ngModel)]="autonomy" min="1"
+                                required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-road"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Load Capacity (kg)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 4300 kg" [(ngModel)]="load_capacity"
+                                min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrows-alt"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Fast Charging Time (min)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 60 min"
+                                [(ngModel)]="fast_charging_time" min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Max Battery Charge (kWh)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 80 kWh"
+                                [(ngModel)]="max_battery_charge" min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-battery-full"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+                <button class="button is-info" style="text-align: center;" (click)="addTruck()">
+                    Create the truck
+                </button>
+                <button class="button is-dark" id="retButton" style="text-align: center;" routerLink="/trucks">
+                    Return
+                </button>
+            </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The truck couldn't be created. Make sure to fill in all the necessary data to create a truck. Please
+                notice that
+                all the values should be positive!
+            </div>
+            <div class="notification is-danger" [hidden]="truckWasNotAddedErrorHidden">
+                The truck couldn't be created because of an internal Server Error. Please try again later!
+            </div>
+            <div class="notification is-success" [hidden]="truckWasSuccessfullyAddedHidden">
+                The new truck was successfully created! You will be redirected to the main trucks page in 5 seconds.
+            </div>
+            <div class="notification is-danger" [hidden]="truckIdNotRightErrorHidden">
+                The truck couldn't be created because the License Plate was not in the right format. This plate should
+                consist of only 6 characters.
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
+    </div>
+</ng-template>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService, User } from '@auth0/auth0-angular';
 import { Truck } from 'src/app/interfaces/truck';
 import { TruckService } from 'src/app/services/truck.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-truck',
@@ -9,10 +11,31 @@ import { TruckService } from 'src/app/services/truck.service';
 })
 export class TruckComponent implements OnInit {
 
-  constructor(private truckService: TruckService) { }
-
+  constructor(private truckService: TruckService, public auth: AuthService, private user: UserService) { }
+  role: string | undefined;
+  notFoundHidden = true;
   ngOnInit(): void {
-    this.getTrucks(); //Load truck data when user loads this page
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated){
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if(this.role == "admin" || this.role == "fleet_manager"){
+                  this.getTrucks(); //Load truck data when user loads this page
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })      
+      }); 
   }
 
   trucks: Truck[] = []; //Trucks will be stored here

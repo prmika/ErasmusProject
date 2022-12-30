@@ -1,0 +1,47 @@
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div style="margin: 20px">
+            <p class="create-title"><i class="fa fa-role"></i> Create a new role</p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Name</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. planning_manager" [(ngModel)]="name"
+                                required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-id-card"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+                <button class="button is-info" style="text-align: center;" (click)="addRole()">
+                    Create the role
+                </button>
+                <button class="button is-dark" id="retButton" style="text-align: center;" routerLink="/roles">
+                    Return
+                </button>
+            </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The role couldn't be created. Make sure to fill in all the necessary data to create a role. Please
+                notice that
+                all the values should be positive!
+            </div>
+            <div class="notification is-danger" [hidden]="roleWasNotAddedErrorHidden">
+                The role couldn't be created because of an internal Server Error. Please try again later!
+            </div>
+            <div class="notification is-success" [hidden]="roleWasSuccessfullyAddedHidden">
+                The new role was successfully created! You will be redirected to the main roles page in 5 seconds.
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
+    </div>
+</ng-template>

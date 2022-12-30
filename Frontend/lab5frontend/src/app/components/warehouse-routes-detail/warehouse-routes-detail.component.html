@@ -1,115 +1,131 @@
-<div *ngIf="warehouseRoute && min2WarehouseSuccessfullyLoaded">
-    <div class="notification is-success" [hidden]="successnotificationHidden">
-        The warehouse route with id {{warehouseRoute.id}} was updated successfully, you'll be redirected soon.
-    </div>
-    <div class="notification is-danger" [hidden]="errornotificationHidden">
-        The warehouse route with id {{warehouseRoute.id}} couldn't be updated because of an internal Server Error. Please try again later.
-    </div>
-    <div class="card">
-        <div class="card-content">
-            <div class="media">
-                <div class="media-left">
-                    <figure class="image is-48x48">
-                        <img src="https://discountboxprinting.com/wp-content/uploads/2021/01/Custom-Shipping-Boxes-with-Logo.jpg" alt="Delivery photo">
-                    </figure>
-                </div>
-                <div class="media-content">
-                    <p class="title is-4">Warehouse Route</p>
-                    <p class="subtitle is-6">Id: {{warehouseRoute.id}}</p>
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'logistics_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div *ngIf="warehouseRoute && min2WarehouseSuccessfullyLoaded">
+            <div class="notification is-success" [hidden]="successnotificationHidden">
+                The warehouse route with id {{warehouseRoute.id}} was updated successfully, you'll be redirected soon.
+            </div>
+            <div class="notification is-danger" [hidden]="errornotificationHidden">
+                The warehouse route with id {{warehouseRoute.id}} couldn't be updated because of an internal Server
+                Error. Please try again later.
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src="https://discountboxprinting.com/wp-content/uploads/2021/01/Custom-Shipping-Boxes-with-Logo.jpg"
+                                    alt="Delivery photo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">Warehouse Route</p>
+                            <p class="subtitle is-6">Id: {{warehouseRoute.id}}</p>
+                        </div>
+                    </div>
+                    <div class="content field">
+                        <p><i class="fa fa-building"></i><b> Departure Warehouse</b></p>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="warehouseRoute.departure_warehouseId">
+                                    <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-building"></i><b> Destination Warehouse</b></p>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="warehouseRoute.destination_warehouseId">
+                                    <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-road"></i><b> Distance (km)</b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="number" placeholder="Distance" style="width: 400px;"
+                                [(ngModel)]="warehouseRoute.distance" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-battery-full"></i><b> Used Battery (kWh)</b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="number" placeholder="Designation" style="width: 400px;"
+                                [(ngModel)]="warehouseRoute.used_battery" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-clock-o"></i><b> Time (min)</b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="number" placeholder="Designation" style="width: 400px;"
+                                [(ngModel)]="warehouseRoute.time" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-clock-o"></i><b> Extra Time (when charging required) (min)</b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="number" placeholder="Designation" style="width: 400px;"
+                                [(ngModel)]="warehouseRoute.extra_time_when_charging_required" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <div class="field is-grouped is-grouped">
+                            <p class="control">
+                                <a class="button is-primary" (click)="updateWarehouseRoute()">
+                                    Save Changes
+                                </a>
+                            </p>
+                            <p class="control">
+                                <a class="button is-light" routerLink="/warehouse-routes">
+                                    Back
+                                </a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="content field">
-                <p><i class="fa fa-building"></i><b> Departure Warehouse</b></p>
-                <p class="control has-icons-left">
-                    <span class="select">
-                        <select [(ngModel)]="warehouseRoute.departure_warehouseId">
-                            <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
-                        </select>
-                    </span>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-home"></i>
-                    </span>
-                </p>
-                <p><i class="fa fa-building"></i><b> Destination Warehouse</b></p>
-                <p class="control has-icons-left">
-                    <span class="select">
-                        <select [(ngModel)]="warehouseRoute.destination_warehouseId">
-                            <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
-                        </select>
-                    </span>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-home"></i>
-                    </span>
-                </p>
-                <p><i class="fa fa-road"></i><b> Distance (km)</b></p>
-                <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="Distance" style="width: 400px;" [(ngModel)]="warehouseRoute.distance"
-                     required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-arrow-circle-right"></i>
-                    </span>
-                </p>
-                <p><i class="fa fa-battery-full"></i><b> Used Battery (kWh)</b></p>
-                <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="Designation" style="width: 400px;" [(ngModel)]="warehouseRoute.used_battery"
-                     required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-arrow-circle-right"></i>
-                    </span>
-                </p>
-                <p><i class="fa fa-clock-o"></i><b> Time (min)</b></p>
-                <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="Designation" style="width: 400px;" [(ngModel)]="warehouseRoute.time"
-                     required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-arrow-circle-right"></i>
-                    </span>
-                </p>
-                <p><i class="fa fa-clock-o"></i><b> Extra Time (when charging required) (min)</b></p>
-                <p class="control has-icons-left">
-                    <input class="input" type="number" placeholder="Designation" style="width: 400px;" [(ngModel)]="warehouseRoute.extra_time_when_charging_required"
-                     required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-arrow-circle-right"></i>
-                    </span>
-                </p>
-                <div class="field is-grouped is-grouped">
-                    <p class="control">
-                        <a class="button is-primary" (click)="updateWarehouseRoute()">
-                            Save Changes
-                        </a>
-                    </p>
-                    <p class="control">
-                        <a class="button is-light" routerLink="/warehouse-routes">
-                            Back
-                        </a>
-                    </p>
-                </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The warehouse route couldn't be updated. Make sure to fill in all the necessary data to create a Route,
+                and that the departure and destination warehouse are different from each other.
             </div>
         </div>
+        <div *ngIf="!warehouseRoute">
+            <div class="notification is-danger">
+                There was an error while trying to load the warehouse route data. Please try again later or try to go
+                back to the general
+                page with all the warehouse routes.<br>
+                The page will be reloaded every 5 seconds.<br>
+                <a class="button is-dark" routerLink="/warehouses" style="margin: 10px;">
+                    Back
+                </a>
+            </div>
+        </div>
+        <div *ngIf="!min2WarehouseSuccessfullyLoaded">
+            <div class="notification is-danger">
+                At the moment, the warehouse route can't be updated because we are not able to retrieve at least 2
+                warehouses. Please try again later!
+            </div>
+            <div style="text-align: center;">
+                <button class="button is-dark" style="text-align: center;" routerLink="/warehouse-routes">
+                    Return
+                </button>
+            </div>
+
+        </div>
     </div>
-    <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
-        The warehouse route couldn't be updated. Make sure to fill in all the necessary data to create a Route, and that the departure and destination warehouse are different from each other.
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
     </div>
-</div>
-<div *ngIf="!warehouseRoute">
-    <div class="notification is-danger">
-        There was an error while trying to load the warehouse route data. Please try again later or try to go back to the general
-        page with all the warehouse routes.<br>
-        The page will be reloaded every 5 seconds.<br>
-        <a class="button is-dark" routerLink="/warehouses" style="margin: 10px;">
-            Back
-        </a>
-    </div>
-</div>
-<div *ngIf="!min2WarehouseSuccessfullyLoaded">
-    <div class="notification is-danger">
-        At the moment, the warehouse route can't be updated because we are not able to retrieve at least 2 warehouses. Please try again later!
-    </div>
-    <div style="text-align: center;">
-        <button class="button is-dark" style="text-align: center;" routerLink="/warehouse-routes">
-            Return
-        </button>
-    </div>
-    
-</div>
+</ng-template>

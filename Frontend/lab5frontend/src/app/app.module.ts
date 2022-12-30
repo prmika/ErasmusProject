@@ -1,9 +1,16 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
+import json from 'highlight.js/lib/languages/json';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ErrorComponent } from './components/error/error.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { HomeContentComponent } from './components/home-content/home-content.component';
+import { LoadingComponent } from './components/loading/loading.component';
 import { TruckComponent } from './components/truck/truck.component';
 import { TruckDetailComponent } from './components/truck-detail/truck-detail.component';
 import { WarehousesComponent } from './components/warehouses/warehouses.component';
@@ -20,10 +27,17 @@ import { PackagesComponent } from './components/packages/packages.component';
 import { PlanningComponent } from './components/planning/planning.component';
 import { PackageaddComponent } from './components/packageadd/packageadd.component';
 import { PackageDetailComponent } from './components/package-detail/package-detail.component';
-import { CreateuserComponent } from './components/createuser/createuser.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
+import { environment as env } from '../environments/environment';
+import { FormsModule } from '@angular/forms';
+import { NotfoundComponent } from './components/notfound/notfound.component';
+import { UsersComponent } from './components/users/users.component';
+import { RolesComponent } from './components/roles/roles.component';
+import { RoleCreateComponent } from './components/role-create/role-create.component';
 
 @NgModule({
-  declarations: [ //Declares all the Components so that we can use them.
+  declarations: [
     AppComponent,
     TruckComponent,
     TruckDetailComponent,
@@ -41,15 +55,51 @@ import { CreateuserComponent } from './components/createuser/createuser.componen
     PlanningComponent,
     PackageaddComponent,
     PackageDetailComponent,
-    CreateuserComponent
+    HomeContentComponent,
+    NavBarComponent,
+    HomeContentComponent,
+    LoadingComponent,
+    ErrorComponent,
+    NotfoundComponent,
+    UsersComponent,
+    RolesComponent,
+    RoleCreateComponent
   ],
-  imports: [ //Imports certain modules that we need to have the application working correctly.
+  imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    HighlightModule,
+    FontAwesomeModule,
+    AuthModule.forRoot({
+      ...env.auth,
+      httpInterceptor: {
+        ...env.httpInterceptor,
+      },
+    }),
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true,
+    },
+    {
+      provide: Window,
+      useValue: window,
+    },
+    {
+      provide: HIGHLIGHT_OPTIONS,
+      useValue: {
+        coreLibraryLoader: () => import('highlight.js/lib/core'),
+        languages: {
+          json: () => import('highlight.js/lib/languages/json'),
+        },
+      },
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,101 +1,114 @@
-<div style="margin: 20px" *ngIf="min1WarehouseSuccessfullyLoaded">
-    <p class="create-title"><i class="fa fa-map-marker"></i> Create a new Delivery</p>
-    <div class="field is-horizontal">
-        <div class="field-body">
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'warehouse_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div style="margin: 20px" *ngIf="min1WarehouseSuccessfullyLoaded">
+            <p class="create-title"><i class="fa fa-map-marker"></i> Create a new Delivery</p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Id (D**)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="string" placeholder="e.g. D01" [(ngModel)]="id" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-tag"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Weight (kg)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 50kg" [(ngModel)]="weight" min="1"
+                                required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-balance-scale"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
             <div class="field">
-                <label class="label">Id (D**)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="string" placeholder="e.g. D01"
-                        [(ngModel)]="id" required>
+                <label class="label">WarehouseId</label>
+                <p class="control has-icons-left">
+                    <span class="select">
+                        <select [(ngModel)]="warehouseID">
+                            <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
+                        </select>
+                    </span>
                     <span class="icon is-small is-left">
-                        <i class="fa fa-tag"></i>
+                        <i class="fa fa-home"></i>
                     </span>
                 </p>
             </div>
-            <div class="field">
-                <label class="label">Weight (kg)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 50kg"
-                        [(ngModel)]="weight" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-balance-scale"></i>
-                    </span>
-                </p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Delivery Date</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="date" [(ngModel)]="deliveryDate" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Time To Place (min)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 60 min" [(ngModel)]="timeToPlace"
+                                min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Time To Pickup (min)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 30 min" [(ngModel)]="timeToPickup"
+                                min="1" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-clock-o"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+                <button class="button is-info" style="text-align: center;" (click)="addDelivery()">
+                    Create the delivery
+                </button>
+                <button class="button is-dark" style="text-align: center;" routerLink="/deliveries">
+                    Return
+                </button>
+            </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The delivery couldn't be created. Make sure to fill in all the necessary data to create a Delivery (and
+                that Id has the right format: D**).
+            </div>
+            <div class="notification is-danger" [hidden]="deliveryWasNotAddedErrorHidden">
+                The delivery couldn't be created because of an internal Server Error. Please try again later!
+            </div>
+            <div class="notification is-success" [hidden]="deliveryWasSuccessfullyAddedHidden">
+                The new delivery was successfully created! You will be redirected to the main delivery page in 5
+                seconds.
             </div>
         </div>
-    </div>
-    <div class="field">
-        <label class="label">WarehouseId</label>
-        <p class="control has-icons-left">
-            <span class="select">
-                <select [(ngModel)]="warehouseID">
-                    <option *ngFor="let option of warehouseIds" [value]="option">{{option}}</option>
-                </select>
-            </span>
-            <span class="icon is-small is-left">
-                <i class="fa fa-home"></i>
-            </span>
-        </p>
-    </div>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Delivery Date</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="date" [(ngModel)]="deliveryDate" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-calendar"></i>
-                    </span>
-                </p>
+        <div *ngIf="!min1WarehouseSuccessfullyLoaded">
+            <div class="notification is-danger">
+                At the moment, no new delivery route can be created because we are not able to retrieve at least 1
+                warehouse. Please try again later!
             </div>
-            <div class="field">
-                <label class="label">Time To Place (min)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 60 min"
-                        [(ngModel)]="timeToPlace" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-clock-o"></i>
-                    </span>
-                </p>
+            <div style="text-align: center;">
+                <button class="button is-dark" style="text-align: center;" routerLink="/deliveries">
+                    Return
+                </button>
             </div>
-            <div class="field">
-                <label class="label">Time To Pickup (min)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 30 min" 
-                        [(ngModel)]="timeToPickup" min="1" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-clock-o"></i>
-                    </span>
-                </p>
-            </div>
+
         </div>
     </div>
-    <div style="text-align: center; margin-top: 30px">
-        <button class="button is-info" style="text-align: center;" (click)="addDelivery()">
-            Create the delivery
-        </button>
-        <button class="button is-dark" style="text-align: center;" routerLink="/deliveries">
-            Return
-        </button>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
     </div>
-    <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
-        The delivery couldn't be created. Make sure to fill in all the necessary data to create a Delivery (and that Id has the right format: D**).
-    </div>
-    <div class="notification is-danger" [hidden]="deliveryWasNotAddedErrorHidden">
-        The delivery couldn't be created because of an internal Server Error. Please try again later!
-    </div>
-    <div class="notification is-success" [hidden]="deliveryWasSuccessfullyAddedHidden">
-        The new delivery was successfully created! You will be redirected to the main delivery page in 5 seconds.
-    </div>
-</div>
-<div *ngIf="!min1WarehouseSuccessfullyLoaded">
-    <div class="notification is-danger">
-        At the moment, no new delivery route can be created because we are not able to retrieve at least 1 warehouse. Please try again later!
-    </div>
-    <div style="text-align: center;">
-        <button class="button is-dark" style="text-align: center;" routerLink="/deliveries">
-            Return
-        </button>
-    </div>
-    
-</div>
+</ng-template>

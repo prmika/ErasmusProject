@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Warehouse } from 'src/app/interfaces/warehouse';
 import { ActivatedRoute } from '@angular/router';
 import { WarehouseService } from 'src/app/services/warehouse.service';
+import { AuthService } from '@auth0/auth0-angular';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-warehouse-detail',
@@ -14,13 +16,37 @@ export class WarehouseDetailComponent implements OnInit {
   successnotificationHidden = true; //Stores value to hide message (should be showed when warehouse is successfully updated)
   errornotificationHidden = true; //Stores value to hide message (should be showed when warehouse had errors while updating)
 
+  role: string | undefined;
+  notFoundHidden = true;
+
   constructor(
     private route: ActivatedRoute, //We need this to read the current route url
-    private warehouseService: WarehouseService //Service to work with the data. This is in connection with the warehouse backend and the database.
+    private warehouseService: WarehouseService, //Service to work with the data. This is in connection with the warehouse backend and the database.
+    public auth: AuthService, private user: UserService
   ) { }
 
   ngOnInit(): void {
-    this.getWarehouse(); //Load the detailed warehouse data when loading this page
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "warehouse_manager") {
+                  this.getWarehouse(); //Load the detailed warehouse data when loading this page
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });   
   }
 
   getWarehouse(): void {

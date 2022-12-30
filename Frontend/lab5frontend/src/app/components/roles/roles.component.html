@@ -1,0 +1,35 @@
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+  </div>
+  
+  <ng-template #loaded>
+    <div *ngIf="(role == 'admin') && (auth.isAuthenticated$  | async)">
+      <div style="text-align: center;"><button class="button is-info" routerLink="/role/create" style="margin: 15px"><i
+            class="fa fa-plus" aria-hidden="true"></i>Add new role</button></div>
+      <div *ngIf="rolesSuccessfullyLoaded">
+        <div class="card" *ngFor="let role of roles">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-48x48">
+                    <img src="https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/EyvF0jkPg/videoblocks-top-view-of-business-team-working-at-office-young-mixed-race-group-of-people-puts-palm-together-on-centre-slow-mo_b8rhp1vng_thumbnail-1080_01.png" alt="Role photo">
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p class="title is-4">{{role.name}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div *ngIf="!rolesSuccessfullyLoaded">
+        <div class="notification is-danger">
+          There was an error while trying to load the roles data. Please try again later.<br>
+          The page will be reloaded every 5 seconds.
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!notFoundHidden">
+      <app-notfound></app-notfound>
+    </div>
+  </ng-template>

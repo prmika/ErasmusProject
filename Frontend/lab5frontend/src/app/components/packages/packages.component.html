@@ -1,4 +1,10 @@
-<div style="text-align: center;"><button class="button is-info" routerLink="/package/create" style="margin: 15px"><i
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+  <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+  <div *ngIf="(role == 'logistics_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+    <div style="text-align: center;"><button class="button is-info" routerLink="/package/create" style="margin: 15px"><i
       class="fa fa-plus" aria-hidden="true"></i>Package a new delivery</button></div>
 <div id="filtersegment" style="margin: 20px">
   <div class="field is-horizontal">
@@ -92,7 +98,7 @@
       <ul class="pagination-list">
         <li *ngIf="previousPage > 0"><a class="pagination-link" aria-label="Go to previous page"
             (click)="goToPreviousPage()">{{previousPage}}</a></li>
-        <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">{{currentPage}}</a></li>
+        <li><a class="pagination-link is-current" style="color: white;" aria-label="Page 46" aria-current="page">{{currentPage}}</a></li>
         <li *ngIf="nextPage <= totalAmountOfPages"><a class="pagination-link" aria-label="Go to next page"
             (click)="goToNextPage()">{{nextPage}}</a></li>
       </ul>
@@ -115,3 +121,10 @@
     The page will be reloaded every 5 seconds.
   </div>
 </div>
+  </div>
+  <div *ngIf="!notFoundHidden">
+      <app-notfound></app-notfound>
+  </div>
+</ng-template>
+
+

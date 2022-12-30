@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { Truck } from 'src/app/interfaces/truck';
 import { TruckService } from 'src/app/services/truck.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-truckadd',
@@ -9,9 +11,29 @@ import { TruckService } from 'src/app/services/truck.service';
 })
 export class TruckAddComponent implements OnInit {
 
-  constructor(private truckService: TruckService) { }
+  role: string | undefined;
+  notFoundHidden = true;
+  constructor(private truckService: TruckService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role != "admin" && this.role != "fleet_manager") {
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
   //Define all the fields necessary for a truck
   id: string | undefined;
@@ -25,7 +47,7 @@ export class TruckAddComponent implements OnInit {
   truckWasSuccessfullyAddedHidden = true; //Show success message when truck was successfully created
   truckWasNotAddedErrorHidden = true; //Show failure message when there were errors while trying to create the truck
   truckIdNotRightErrorHidden = true; //Show error message when the id is not right
-
+  
   addTruck(): void { //Function to create a new truck
     if ((this.id != undefined && this.id.length == 6)) { //Id needs to have 6 characters.      
       if ((this.tare != undefined && this.tare >= 1) && //Will check if none of the fields are undefined and in the right format, if so the code will continue executing.
@@ -39,7 +61,8 @@ export class TruckAddComponent implements OnInit {
           "load_capacity": this.load_capacity,
           "max_battery_charge": this.max_battery_charge,
           "autonomy": this.autonomy,
-          "fast_charging_time": this.fast_charging_time
+          "fast_charging_time": this.fast_charging_time,
+          "status": true
         }
         this.truckService.addTruck(body as Truck).subscribe({ //Will call the service to create the truck
           next: (v) => {

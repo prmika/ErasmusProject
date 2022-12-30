@@ -1,104 +1,116 @@
-<div style="margin: 20px" *ngIf="min1TruckSuccessfullyLoaded && min1DeliverySuccessfullyLoaded">
-    <p class="create-title"><i class="fa fa-map-marker"></i> Do some packaging</p>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">TruckId</label>
-                <p class="control has-icons-left">
-                    <span class="select">
-                        <select [(ngModel)]="truckToPlace">
-                            <option *ngFor="let option of truckIds" [value]="option">{{option}}</option>
-                        </select>
-                    </span>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-truck"></i>
-                    </span>
-                </p>
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'logistics_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div style="margin: 20px" *ngIf="min1TruckSuccessfullyLoaded && min1DeliverySuccessfullyLoaded">
+            <p class="create-title"><i class="fa fa-map-marker"></i> Do some packaging</p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">TruckId</label>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="truckToPlace">
+                                    <option *ngFor="let option of truckIds" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-truck"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">DeliveryId</label>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="deliveryId">
+                                    <option *ngFor="let option of deliveryIds" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-map-marker"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-                <label class="label">DeliveryId</label>
-                <p class="control has-icons-left">
-                    <span class="select">
-                        <select [(ngModel)]="deliveryId">
-                            <option *ngFor="let option of deliveryIds" [value]="option">{{option}}</option>
-                        </select>
-                    </span>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-map-marker"></i>
-                    </span>
-                </p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Position in truck (X)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 25"
+                                [(ngModel)]="placementX" min="0" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-expand"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Position in truck (Y)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 3"
+                                [(ngModel)]="placementY" min="0" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-expand"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Position in truck (Z)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 0"
+                                [(ngModel)]="placementZ" min="0" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-expand"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+                <button class="button is-info" style="text-align: center;" (click)="doPackaging()">
+                    Package the delivery
+                </button>
+                <button class="button is-dark" style="text-align: center;" routerLink="/packages">
+                    Return
+                </button>
+            </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The delivery couldn't be packaged. Make sure to fill in all the necessary data to package deliveries.
+            </div>
+            <div class="notification is-danger" [hidden]="packagingWasNotDoneErrorHidden">
+                The delivery couldn't be packaged because of an internal Server Error. Please try again later!
+            </div>
+            <div class="notification is-success" [hidden]="packagingWasSuccessfullyDoneHidden">
+                The delivery was successfully packaged in truck with id {{truckToPlace}}! You will be redirected to the main packages page in 5 seconds.
             </div>
         </div>
-    </div>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Position in truck (X)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 25"
-                        [(ngModel)]="placementX" min="0" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-expand"></i>
-                    </span>
-                </p>
+        <div *ngIf="!min1TruckSuccessfullyLoaded">
+            <div class="notification is-danger">
+                At the moment, no delivery can be packed because we are not able to retrieve at least 1 available truck. Please try again later!
             </div>
-            <div class="field">
-                <label class="label">Position in truck (Y)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 3"
-                        [(ngModel)]="placementY" min="0" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-expand"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Position in truck (Z)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 0"
-                        [(ngModel)]="placementZ" min="0" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-expand"></i>
-                    </span>
-                </p>
+            <div style="text-align: center;">
+                <button class="button is-dark" style="text-align: center;" routerLink="/packages">
+                    Return
+                </button>
             </div>
         </div>
+        <div *ngIf="!min1DeliverySuccessfullyLoaded">
+            <div class="notification is-danger">
+                At the moment, no new deliveries are available to be packaged! Come back as soon as new deliveries are created to package them.
+            </div>
+            <div style="text-align: center;">
+                <button class="button is-dark" style="text-align: center;" routerLink="/packages">
+                    Return
+                </button>
+            </div>
+        </div>        
     </div>
-    <div style="text-align: center; margin-top: 30px">
-        <button class="button is-info" style="text-align: center;" (click)="doPackaging()">
-            Package the delivery
-        </button>
-        <button class="button is-dark" style="text-align: center;" routerLink="/packages">
-            Return
-        </button>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
     </div>
-    <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
-        The delivery couldn't be packaged. Make sure to fill in all the necessary data to package deliveries.
-    </div>
-    <div class="notification is-danger" [hidden]="packagingWasNotDoneErrorHidden">
-        The delivery couldn't be packaged because of an internal Server Error. Please try again later!
-    </div>
-    <div class="notification is-success" [hidden]="packagingWasSuccessfullyDoneHidden">
-        The delivery was successfully packaged in truck with id {{truckToPlace}}! You will be redirected to the main packages page in 5 seconds.
-    </div>
-</div>
-<div *ngIf="!min1TruckSuccessfullyLoaded">
-    <div class="notification is-danger">
-        At the moment, no delivery can be packed because we are not able to retrieve at least 1 available truck. Please try again later!
-    </div>
-    <div style="text-align: center;">
-        <button class="button is-dark" style="text-align: center;" routerLink="/packages">
-            Return
-        </button>
-    </div>
-</div>
-<div *ngIf="!min1DeliverySuccessfullyLoaded">
-    <div class="notification is-danger">
-        At the moment, no new deliveries are available to be packaged! Come back as soon as new deliveries are created to package them.
-    </div>
-    <div style="text-align: center;">
-        <button class="button is-dark" style="text-align: center;" routerLink="/packages">
-            Return
-        </button>
-    </div>
-</div>
+</ng-template>
+

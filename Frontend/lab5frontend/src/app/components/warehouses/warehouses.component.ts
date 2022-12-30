@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { Warehouse } from 'src/app/interfaces/warehouse';
+import { UserService } from 'src/app/services/user.service';
 import { WarehouseService } from 'src/app/services/warehouse.service';
 
 @Component({
@@ -8,11 +10,32 @@ import { WarehouseService } from 'src/app/services/warehouse.service';
   styleUrls: ['./warehouses.component.css']
 })
 export class WarehousesComponent implements OnInit {
-
-  constructor(private warehouseService: WarehouseService) { }
+  role: string | undefined;
+  notFoundHidden = true;
+  constructor(private warehouseService: WarehouseService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.getWarehouses(); //Load warehouse data when user loads this page
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "warehouse_manager") {
+                  this.getWarehouses(); //Load warehouse data when user loads this page
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
 
   warehouses: Warehouse[] = []; //Warehouses will be stored here
@@ -22,9 +45,9 @@ export class WarehousesComponent implements OnInit {
       next: (v) => {
         this.warehouses = v
         this.warehouses.sort((w1, w2) => { //Sort loaded warehouse data
-          if(w1.id > w2.id) {
+          if (w1.id > w2.id) {
             return 1;
-          } else if(w1.id < w2.id) {
+          } else if (w1.id < w2.id) {
             return -1;
           } else {
             return 0;

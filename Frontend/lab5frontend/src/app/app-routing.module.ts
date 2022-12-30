@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { CreateuserComponent } from './components/createuser/createuser.component';
+import { Routes, RouterModule } from '@angular/router';
+import { ErrorComponent } from './components/error/error.component';
+import { AuthGuard } from '@auth0/auth0-angular';
+import { HomeContentComponent } from './components/home-content/home-content.component';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { DeliveryDetailComponent } from './components/delivery-detail/delivery-detail.component';
 import { DeliveryaddComponent } from './components/deliveryadd/deliveryadd.component';
@@ -17,30 +19,73 @@ import { WarehouseRoutesComponent } from './components/warehouse-routes/warehous
 import { WarehouseRoutesaddComponent } from './components/warehouse-routesadd/warehouse-routesadd.component';
 import { WarehouseAddComponent } from './components/warehouseadd/warehouseadd.component';
 import { WarehousesComponent } from './components/warehouses/warehouses.component';
+import { UsersComponent } from './components/users/users.component';
+import { RolesComponent } from './components/roles/roles.component';
+import { RoleCreateComponent } from './components/role-create/role-create.component';
 
-const routes: Routes = [ //Defines all the routes users can go to
-  { path: '', redirectTo: '/trucks', pathMatch: 'full' },
-  { path: 'deliveries', component: DeliveriesComponent },
-  { path: 'delivery/create', component: DeliveryaddComponent },
-  { path: 'delivery/:id', component: DeliveryDetailComponent },
-  { path: 'trucks', component: TruckComponent },
-  { path: 'truck/create', component: TruckAddComponent},
-  { path: 'truck/:id', component: TruckDetailComponent },
-  { path: 'warehouses', component: WarehousesComponent }, //Go to page that shows all the warehouses
-  { path: 'warehouse/create', component: WarehouseAddComponent}, //Go to page to create a warehouse
-  { path: 'warehouse/:id', component: WarehouseDetailComponent }, //Go to page that shows a specific warehouse with a form to edit the data
-  { path: 'warehouse-routes', component: WarehouseRoutesComponent },
-  { path: 'warehouse-route/create', component: WarehouseRoutesaddComponent },
-  { path: 'warehouse-route/:id', component: WarehouseRoutesDetailComponent },
-  { path: 'planning', component: PlanningComponent },
-  { path: 'packages', component: PackagesComponent },
-  { path: 'package/create', component: PackageaddComponent },
-  { path: 'package/:id', component: PackageDetailComponent },
-  { path: 'user/create', component: CreateuserComponent },
-  { path: '**', redirectTo: '/trucks', pathMatch: 'full' }] //When no route is recognized, the users will be redirected to the trucks route.
+const routes: Routes = [
+  {
+    path: '',
+    component: HomeContentComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'error',
+    component: ErrorComponent,
+  },
+  { path: 'deliveries', component: DeliveriesComponent,
+  canActivate: [AuthGuard], },
+  { path: 'delivery/create', component: DeliveryaddComponent,
+  canActivate: [AuthGuard], },
+  { path: 'delivery/:id', component: DeliveryDetailComponent,
+  canActivate: [AuthGuard], },
+  { path: 'trucks', component: TruckComponent,
+  canActivate: [AuthGuard], },
+  { path: 'truck/create', component: TruckAddComponent,
+  canActivate: [AuthGuard],},
+  { path: 'truck/:id', component: TruckDetailComponent,
+  canActivate: [AuthGuard], },
+  { path: 'warehouses', component: WarehousesComponent,
+  canActivate: [AuthGuard], }, //Go to page that shows all the warehouses
+  { path: 'warehouse/create', component: WarehouseAddComponent,
+  canActivate: [AuthGuard],}, //Go to page to create a warehouse
+  { path: 'warehouse/:id', component: WarehouseDetailComponent,
+  canActivate: [AuthGuard], }, //Go to page that shows a specific warehouse with a form to edit the data
+  { path: 'warehouse-routes', component: WarehouseRoutesComponent,
+  canActivate: [AuthGuard], },
+  { path: 'warehouse-route/create', component: WarehouseRoutesaddComponent,
+  canActivate: [AuthGuard], },
+  { path: 'warehouse-route/:id', component: WarehouseRoutesDetailComponent,
+  canActivate: [AuthGuard], },
+  { path: 'planning', component: PlanningComponent,
+  canActivate: [AuthGuard], },
+  { path: 'packages', component: PackagesComponent,
+  canActivate: [AuthGuard], },
+  { path: 'package/create', component: PackageaddComponent,
+  canActivate: [AuthGuard], },
+  { path: 'package/:id', component: PackageDetailComponent,
+  canActivate: [AuthGuard], },
+  {
+    path: 'users',
+    component: UsersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'roles',
+    component: RolesComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'role/create',
+    component: RoleCreateComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
+  
+];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)], //Declares that this module should use the previously defined routes.
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, {})],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

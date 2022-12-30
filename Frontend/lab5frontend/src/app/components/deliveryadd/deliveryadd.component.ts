@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { Delivery } from 'src/app/interfaces/delivery';
 import { DeliveryService } from 'src/app/services/delivery.service';
+import { UserService } from 'src/app/services/user.service';
 import { WarehouseService } from 'src/app/services/warehouse.service';
 
 @Component({
@@ -10,26 +12,48 @@ import { WarehouseService } from 'src/app/services/warehouse.service';
 })
 export class DeliveryaddComponent implements OnInit {
 
-  constructor(private warehouseService: WarehouseService, private deliveryService: DeliveryService) { }
+  role: string | undefined;
+  notFoundHidden = true;
+  constructor(private warehouseService: WarehouseService, private deliveryService: DeliveryService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.warehouseService.getWarehouses().subscribe({
-      next: (v) => {
-        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each received warehouse the id will be pushed to the warehouseIds list.
-        this.warehouseIds.sort(); //WarehouseIds list will be sorted.
-        if(this.warehouseIds.length < 1){
-          this.min1WarehouseSuccessfullyLoaded = false; //If less than one warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.
-        }   
-        else{
-          this.warehouseID = this.warehouseIds[0]; //Default selected warehouseID is the first warehouse in the id list
-          this.min1WarehouseSuccessfullyLoaded = true; //Set to true so that the form is visible
-        }
-      },
-      error: (e) => {
-        console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be added at the moment. Try again later.");
-        this.min1WarehouseSuccessfullyLoaded = false; //When there's an error to load warehouses it shouldn't be possible to create a delivery.
-      },
-    })
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "warehouse_manager") {
+                  this.warehouseService.getWarehouses().subscribe({
+                    next: (v) => {
+                      v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each received warehouse the id will be pushed to the warehouseIds list.
+                      this.warehouseIds.sort(); //WarehouseIds list will be sorted.
+                      if(this.warehouseIds.length < 1){
+                        this.min1WarehouseSuccessfullyLoaded = false; //If less than one warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.
+                      }   
+                      else{
+                        this.warehouseID = this.warehouseIds[0]; //Default selected warehouseID is the first warehouse in the id list
+                        this.min1WarehouseSuccessfullyLoaded = true; //Set to true so that the form is visible
+                      }
+                    },
+                    error: (e) => {
+                      console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be added at the moment. Try again later.");
+                      this.min1WarehouseSuccessfullyLoaded = false; //When there's an error to load warehouses it shouldn't be possible to create a delivery.
+                    },
+                  })
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
 
   //All the delivery fields

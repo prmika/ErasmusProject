@@ -15,9 +15,14 @@ export class RoleService {
   constructor(
     private http: HttpClient) { }
 
-  getRoles(): Observable<Role>{
+  getRoles(): Observable<Role[]>{
     const url = 'http://localhost:3000/api/roles'
-    return this.http.get<Role>(url, this.httpOptions);
+    return this.http.get<Role[]>(url, this.httpOptions);
+  }
+
+  addRole(role: Role): Observable<Role>{
+    const url = 'http://localhost:3000/api/roles'
+    return this.http.post<Role>(url, role, this.httpOptions);
   }
 
 }

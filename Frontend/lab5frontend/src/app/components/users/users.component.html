@@ -1,0 +1,82 @@
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+  <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+  <div *ngIf="(role == 'admin') && (auth.isAuthenticated$  | async)">
+    <div *ngIf="usersSuccessfullyLoaded">
+      <div class="card" *ngFor="let user of users">
+        <div *ngIf="user.isActive">
+          <div class="notification is-danger" *ngIf="selectedForAnonymizingId == user.id && successAnonymizedHidden">
+            Are you sure you want to anonymize this account?
+            <a class="button is-success" style="margin: 10px;" (click)="executeAnonymizing()">
+              Confirm
+            </a>
+            <a class="button is-dark" style="margin: 10px;" (click)="cancelAnonymizing()">
+              Cancel
+            </a>
+          </div>
+          <div class="notification is-success" *ngIf="!successAnonymizedHidden && selectedForAnonymizingId == user.id">
+            This account was anonymized successfully. The page will be reloaded in a few seconds.
+          </div>
+          <div class="notification is-danger" *ngIf="!usersAnonymizedErrorHidden && selectedForAnonymizingId == user.id">
+            There were errors while trying to anonymize the account.
+          </div>
+          <button type="button" class="btn btn-danger"
+            style="float: right; margin-top: 15px; margin-right: 25px;" (click)="showAnonymizingNotification(user.id)">Anonymize</button>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="https://static.vecteezy.com/system/resources/previews/000/649/115/original/user-icon-symbol-sign-vector.jpg" alt="User photo">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">User</p>
+                <p class="subtitle is-6">Id - {{user.id}}</p>
+              </div>
+            </div>
+            <div class="content">
+              <p><i class="fa fa-tag"></i><b> First Name</b> - {{user.firstName}}</p>
+              <p><i class="fa fa-tag"></i><b> Last Name</b> - {{user.lastName}}</p>
+              <p><i class="fa fa-envelope"></i><b> Email</b> - {{user.email}}</p>
+              <p><i class="fa fa-phone"></i><b> Phone Nr</b> - {{user.phoneNr}}</p>
+              <p><i class="fa fa-flag"></i><b> Role</b> - {{user.role}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="disableduser" *ngIf="!user.isActive">
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img src="https://cdn4.iconfinder.com/data/icons/gray-toolbar-8/512/xxx046-512.png" alt="User photo">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="title is-4">User</p>
+                <p class="subtitle is-6">Id - {{user.id}}</p>
+              </div>
+            </div>
+            <div class="content">
+              <p><i class="fa fa-tag"></i><b> First Name</b> - {{user.firstName}}</p>
+              <p><i class="fa fa-tag"></i><b> Last Name</b> - {{user.lastName}}</p>
+              <p><i class="fa fa-envelope"></i><b> Email</b> - {{user.email}}</p>
+              <p><i class="fa fa-phone"></i><b> Phone Nr</b> - {{user.phoneNr}}</p>
+              <p><i class="fa fa-flag"></i><b> Role</b> - {{user.role}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!usersSuccessfullyLoaded">
+      <div class="notification is-danger">
+        There was an error while trying to load the users data. Please try again later.<br>
+        The page will be reloaded every 5 seconds.
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!notFoundHidden">
+    <app-notfound></app-notfound>
+  </div>
+</ng-template>

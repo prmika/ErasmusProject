@@ -1,78 +1,92 @@
-<div style="margin: 20px">
-    <p class="create-title"><i class="fa fa-home"></i> Create a new Warehouse</p>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Id (W**)</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="text" placeholder="e.g. W01" [(ngModel)]="id"
-                     required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-tag"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Designation</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="text" placeholder="e.g. Arouca" [(ngModel)]="designation"
-                     required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-building"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Address</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="text" placeholder="e.g. R. Catassol 23, 4465-743"
-                        [(ngModel)]="address" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-location-arrow"></i>
-                    </span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="field is-horizontal">
-        <div class="field-body">
-            <div class="field">
-                <label class="label">Latitude</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. 41.216039"
-                        [(ngModel)]="latitude" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-thumb-tack"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="field">
-                <label class="label">Longitude</label>
-                <p class="control is-expanded has-icons-left">
-                    <input class="input" type="number" placeholder="e.g. -8.614372"
-                        [(ngModel)]="longitude" required>
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-map-marker"></i>
-                    </span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div style="text-align: center; margin-top: 30px">
-        <button class="button is-info" style="text-align: center;" (click)="addWarehouse()">
-            Create the warehouse
-        </button>
-        <button class="button is-dark" id="retButton" style="text-align: center;" routerLink="/warehouses">
-            Return
-        </button>
-    </div>
-    <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
-        The warehouse couldn't be created. Make sure to fill in all the necessary data to create a warehouse.
-    </div>
-    <div class="notification is-danger" [hidden]="warehouseWasNotAddedErrorHidden">
-        The warehouse couldn't be created because of an internal Server Error. Please try again later!
-    </div>
-    <div class="notification is-success" [hidden]="warehouseWasSuccessfullyAddedHidden">
-        The new warehouse was successfully created! You will be redirected to the main warehouses page in 5 seconds.
-    </div>
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
 </div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'warehouse_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div style="margin: 20px">
+            <p class="create-title"><i class="fa fa-home"></i> Create a new Warehouse</p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Id (W**)</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. W01" [(ngModel)]="id"
+                             required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-tag"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Designation</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. Arouca" [(ngModel)]="designation"
+                             required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-building"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Address</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. R. Catassol 23, 4465-743"
+                                [(ngModel)]="address" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-location-arrow"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Latitude</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. 41.216039"
+                                [(ngModel)]="latitude" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-thumb-tack"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Longitude</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="number" placeholder="e.g. -8.614372"
+                                [(ngModel)]="longitude" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-map-marker"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+                <button class="button is-info" style="text-align: center;" (click)="addWarehouse()">
+                    Create the warehouse
+                </button>
+                <button class="button is-dark" id="retButton" style="text-align: center;" routerLink="/warehouses">
+                    Return
+                </button>
+            </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The warehouse couldn't be created. Make sure to fill in all the necessary data to create a warehouse.
+            </div>
+            <div class="notification is-danger" [hidden]="warehouseWasNotAddedErrorHidden">
+                The warehouse couldn't be created because of an internal Server Error. Please try again later!
+            </div>
+            <div class="notification is-success" [hidden]="warehouseWasSuccessfullyAddedHidden">
+                The new warehouse was successfully created! You will be redirected to the main warehouses page in 5 seconds.
+            </div>
+        </div>        
+    </div>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
+    </div>
+</ng-template>
+
+
+

@@ -4,6 +4,8 @@ import { Truck } from 'src/app/interfaces/truck';
 import { TruckService } from 'src/app/services/truck.service';
 import { Location } from '@angular/common';
 import { Router } from 'express';
+import { AuthService } from '@auth0/auth0-angular';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -18,13 +20,36 @@ export class TruckDetailComponent implements OnInit {
   successnotificationHidden = true;
   errornotificationHidden = true;
 
+  role: string | undefined;
+  notFoundHidden = true;
   constructor(
     private route: ActivatedRoute, //We need this to read the current route url
     private truckService: TruckService, //Service to work with the data. This is in connection with the truck backend and the database.
+    public auth: AuthService, private user: UserService
   ) { }
 
   ngOnInit(): void {
-    this.getTruck(); //Load the detailed truck data when loading this page
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "fleet_manager") {
+                  this.getTruck(); //Load the detailed truck data when loading this page
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
 
   getTruck(): void {

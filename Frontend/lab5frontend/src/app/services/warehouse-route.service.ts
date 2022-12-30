@@ -25,6 +25,9 @@ export class WarehouseRouteService {
     return this.http.get<WarehouseRoute>(url);
   }
 
+  getWarehousesRoutesPaged(page: Number, amount: Number): Observable<WarehouseRoute[]> {
+    return this.http.get<WarehouseRoute[]>(`http://localhost:3000/api/v1/deliverypath/paged/${page}/${amount}`)
+  }
 
   updateWarehouseRoute(id: string, warehouseRoute: WarehouseRoute): Observable<any> {
     const url = `http://localhost:3000/api/v1/deliverypath/${id}`;

@@ -1,8 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { User } from '@auth0/auth0-angular';
 import { Observable } from 'rxjs';
-import { Truck } from '../interfaces/truck';
-import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -16,21 +15,18 @@ export class UserService {
   constructor(
     private http: HttpClient) { }
 
-  logUserIn(email: string, password: string): Observable<User>{
-    const url = 'http://localhost:3000/api/auth/signin'
-    return this.http.post<User>(url, {"email": email,"password": password}, this.httpOptions);
+  getUser(email: string): Observable<User> {
+    const url = `http://localhost:3000/api/auth/user/${email}`;
+    return this.http.get<User>(url);
   }
 
-  addUser(user: User): Observable<User> {
-    const url = 'http://localhost:3000/api/auth/signup'
-    return this.http.post<User>(url, user, this.httpOptions);
+  getUsers(): Observable<User[]> {
+    const url = `http://localhost:3000/api/auth`;
+    return this.http.get<User[]>(url);
   }
 
-  getCurrentUser(token: string): Observable<User> {
-    const url = 'http://localhost:3000/api/users/me'
-    const httpOptionsWithToken = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token })
-    };
-    return this.http.get<User>(url, httpOptionsWithToken);
+  anonymizeUser(id: string): Observable<User[]> {
+    const url = `http://localhost:3000/api/auth/anonymize/${id}`;
+    return this.http.post<User[]>(url,null);
   }
 }

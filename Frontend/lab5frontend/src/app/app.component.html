@@ -1,56 +1,7 @@
-<nav class="navbar is-link" role="navigation" aria-label="main navigation"> <!-- This whole nav section shows the navbar that will be on top of each page/component -->
-  <div class="navbar-brand">
-    <div class="navbar-item" style="cursor: default;">
-      <i class="fa fa-truck" aria-hidden="true" style="margin-right: 5px;"></i>
-      <p><b>ElectricGo</b></p>
-    </div>
+<div class="d-flex flex-column h-100">
+  <app-nav-bar></app-nav-bar>
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
+  <div class="container flex-grow-1 flex-shrink-1">
+    <router-outlet></router-outlet>
   </div>
-
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-      <a class="navbar-item" id="trucks" routerLink="/trucks">
-        Trucks
-      </a>
-
-      <a class="navbar-item" id="war" routerLink="/warehouses">
-        Warehouses
-      </a>
-
-      <a class="navbar-item" id="deliver" routerLink="/deliveries">
-        Deliveries
-      </a>
-
-      <a class="navbar-item" id="routes" routerLink="/warehouse-routes">
-        Warehouse Routes
-      </a>
-
-      <a class="navbar-item" id="package" routerLink="/packages">
-        Packages
-      </a>
-
-      <a class="navbar-item" id="plan" routerLink="/planning">
-        Planning
-      </a>
-    </div>
-
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-primary" routerLink="/user/create">
-            <strong>Sign up</strong>
-          </a>
-          <a class="button is-dark">
-            Log in
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>
-<router-outlet></router-outlet> <!-- Makes it possible to switch between pages/components-->
+</div>

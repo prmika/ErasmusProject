@@ -1,0 +1,11 @@
+.card{
+    margin: 10px;
+}
+
+.notification{
+    margin: 10px
+}
+
+.disableduser{
+    background: rgba(191, 191, 191, 0.1);
+}

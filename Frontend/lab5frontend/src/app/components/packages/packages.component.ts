@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { Packaging } from 'src/app/interfaces/package';
 import { PackagesService } from 'src/app/services/packages.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-packages',
@@ -24,10 +26,32 @@ export class PackagesComponent implements OnInit {
   previousPage = 0;
   nextPage = 0;
 
-  constructor(private packageService: PackagesService) { }
+  role: string | undefined;
+  notFoundHidden = true;
+  constructor(private packageService: PackagesService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.getPackages(); //Load package data when user loads this page
+    this.auth.user$.subscribe(
+      (profile) => {
+        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+          if (isAuthenticated) {
+            this.user.getUser(profile.email).subscribe({
+              next: (data) => {
+                this.role = data.role;
+                if (this.role == "admin" || this.role == "logistics_manager") {
+                  this.getPackages(); //Load package data when user loads this page
+                }
+                else{
+                  this.notFoundHidden = false;
+                }
+              }
+            });
+          }
+          else{
+            this.notFoundHidden = false;
+          }
+        })
+      });
   }
 
   packages: Packaging[] = []; //Packages will be stored here
