@@ -597,6 +597,29 @@ write('Id of the delivery you want to delete: '),read(Id),
     retractall(delivery(Id,_,_,_,_,_)),%deletes delivery
     write('Delivery deleted.'),nl.
     
+changes:-
+write('Do you want to make changes to deliveries?'),nl,
+write('1 = add a delivery,2 = change a delivery,3 = delete a delivery, 0 = end: '),read(X),
+((X == 1, add_delivery, generate_dynamic1);
+(X == 2, change_delivery, generate_dynamic1);
+(X == 3, delete_delivery, generate_dynamic1);
+true).  
+
+generate_dynamic:-
+    initialize,
+    generate_dynamic1.
+
+
+generate_dynamic1:-
+    generate_population(Pop),
+    write('Pop='),write(Pop),nl,
+    evaluate_population(Pop,PopEv),
+    write('PopEv='),write(PopEv),nl,
+	order_population(PopEv,PopOrd),
+    generations(NG),!,
+    generate_generation(0,NG,PopOrd,[]),
+    changes.
+
 
 % Initialize parameters
 initialize:-write('Number of new generations: '),read(NG),
