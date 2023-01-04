@@ -345,12 +345,14 @@ truck_weight(6).
 
 %delivery(id, date, weight, destWarehouse, timeToLoad, timeToUnload)
 %delivery(0,0,0,5,0,0).
-delivery(4439, 20221128, 200, 1, 8, 10).
-delivery(4446, 20221128, 150, 9, 7, 9).
-delivery(4441, 20221128, 100, 3, 5, 7).
-delivery(4445, 20221128, 120, 8, 6, 8).
-delivery(4448, 20221128, 300, 11, 15, 20).
-delivery(4398, 20221205, 310, 17, 16, 20).
+
+%delivery(4439, 20221128, 200, 1, 8, 10).
+%delivery(4446, 20221128, 150, 9, 7, 9).
+%delivery(4441, 20221128, 100, 3, 5, 7).
+%delivery(4445, 20221128, 120, 8, 6, 8).
+%delivery(4448, 20221128, 300, 11, 15, 20).
+%delivery(4398, 20221205, 310, 17, 16, 20).
+
 
 %delivery(4432, 20221205, 270, 14, 14, 18).
 %delivery(4437, 20221205, 180, 12, 9, 11).
@@ -362,6 +364,26 @@ delivery(4398, 20221205, 310, 17, 16, 20).
 %delivery(4454, 20221205, 350, 10, 18, 22).
 %delivery(4446, 20221205, 260, 4, 14, 17).
 %delivery(4456, 20221205, 330, 16, 17, 21).
+
+
+delivery(6439, 20230110, 200, 1, 8, 10).
+delivery(6438, 20230110, 750, 9, 25, 30).
+delivery(6445, 20230110, 1600, 3, 53, 62).
+delivery(6443, 20230110, 120, 8, 6, 8).
+delivery(6449, 20230110, 300, 11, 15, 20).
+delivery(6398, 20230110, 310, 17, 16, 20).
+delivery(6432, 20230110, 1700, 14, 55, 65).
+delivery(6437, 20230110, 900, 12, 30, 35).
+delivery(6451, 20230110, 440, 6, 18, 24).
+delivery(6452, 20230110, 1400, 13, 47, 58).
+delivery(6444, 20230110, 380, 2, 20, 25).
+delivery(6455, 20230110, 560, 7, 28, 38).
+delivery(6399, 20230110, 260, 15, 13, 18).
+delivery(6454, 20230110, 350, 10, 18, 22).
+delivery(6446, 20230110, 260, 4, 14, 17).
+delivery(6456, 20230110, 850, 16, 27, 31).
+
+
 
 % Number of deliveries
 deliveries(X):-
@@ -440,7 +462,6 @@ get_by_weight(WarL,WeightL,WarList,F):-
     WarList1 = [War1|WarList],
     get_by_weight(WarL1,WeightL1,WarList1,F).
 
-
 %deletes given item from list
 del(X,[X|L_t],L_t).
 del(X,[Y|L_t],[Y|L1_t]):-del(X,L_t,L1_t).
@@ -454,9 +475,6 @@ calculate_cost(LW,Time,LWCharging):-
     Autonomy is Autonomy1 * 0.8,
     sum_weights(LW,LWe,_),
     add_truck_weight(TruckWeight,LWe,LWeT),
-
-    %write('Time='),write(Time),nl,
-
     starting_point(SP),
    % get_all_times(LW,SP,WList),
     append([SP|LW],[SP],LWcomplete),
@@ -510,18 +528,6 @@ run:-
     update(LWPerm,Time,LWCharging),
     fail.
 
-%this has to be edited
-byTimes(_Request):-
-    heuristics_by_time(LW,LCharging,Time),
-    format('Content-type: text/plain~n~n'),
-    format('User registered!~n'),
-    format('LW: ~w~nLCharging: ~w~nTime: ~w~n',[LW,LCharging,Time]).
-
-%this has to be edited
-byWeight(_Request):-
-        heuristics_by_weight(LW,LWCharging,Time),
-        prolog_to_json([LW,LWCharging,Time],JSONObject5),
-        reply_json(JSONObject5).
 
 heuristics_by_time(LW,LCharging,Time):-(run1;true),min_time(LW,LCharging,Time).
 run1:-
@@ -532,7 +538,7 @@ run1:-
     get_by_times(LWarehouses,5,_,_,_,LWPerm1),
     reverse(LWPerm1,LWPerm,[]),!,
     calculate_cost(LWPerm,Time,LWCharging),
-    update(LWPerm,Time,LWCharging),
+    update1(LWPerm,Time,LWCharging),
     fail.
 
 heuristics_by_weight(LW,LCharging,Time):-(run2;true),min_time(LW,LCharging,Time).
@@ -621,6 +627,10 @@ generate_dynamic1:-
     changes.
 
 
+
+
+
+
 % Initialize parameters
 initialize:-write('Number of new generations: '),read(NG),
     (retract(generations(_));true),assertz(generations(NG)),
@@ -642,6 +652,68 @@ generate:-
 	order_population(PopEv,PopOrd),
     generations(NG),!,
     generate_generation(0,NG,PopOrd,[]).
+
+
+several_trucks:-
+    initialize,
+    truck_multiplier(X),
+    X1 is X -1,
+    generate_population(Pop),
+    write('Pop='),write(Pop),nl,
+    separate_pop1(Pop,X1,_,Npop),
+    evaluate_population1(Npop,PopEv),
+    write('PopEv='),write(PopEv),nl,
+    order_population1(PopEv,PopOrd),
+    write('Popord='),write(PopOrd),nl,
+    generations(NG),!,
+    generate_generation_truck(0,NG,PopOrd).
+
+generate_generation_truck(N,0,Pop):-!,
+    write('Entiiä '),write(N),write(' vittu of mulltiple trucks GA:'),nl,write(Pop),nl.
+generate_generation_truck(N,G,[H|Pop]):-
+    generate_generation9(0,G,H),
+    N1 is N +1,
+    ((Pop = [],G1 is 0);
+    (G1 is G)),!,
+    generate_generation_truck(N1,G1,Pop).
+
+generate_generation9(G,G,Pop,_):-!,
+    write('Generation '),write(G),write(' of original GA:'),nl,write(Pop),nl.
+generate_generation9(N,G,Pop):-
+    write('Generation '),write(N),write(':'),nl,write(Pop),nl,
+    crossover(Pop,NPop1),
+    mutation(NPop1,NPop),
+    evaluate_population(NPop,NPopEv),
+    order_population(NPopEv,NPopOrd),
+    N1 is N + 1,
+    generate_generation9(N1,G,NPopOrd).
+
+separate_pop1([],_,Z,Z).
+separate_pop1([H|Rest],X,L1,Z):-
+    separate_pop(H,X,6,_,_,L),
+    L2 = [L|L1],
+    separate_pop1(Rest,X,L2,Z).
+
+
+separate_pop(0,0,_,_,Z,Z):-!.
+separate_pop(Pop,M,0,Npop,L,Z):-
+    M1 is M -1, 
+    ((M1 < 1,Pop1 = 0, Npop1 = [Pop,Npop|L]);
+    (Npop1 = [Npop|L], Pop1 = Pop)),!, 
+    separate_pop(Pop1,M1,6,_,Npop1,Z).
+
+separate_pop([H|Rest],M,X,Rest1,L,Z):-
+        X1 is X -1,
+        separate_pop(Rest,M,X1,[H|Rest1],L,Z).
+
+truck_multiplier(X):-
+    findall(City,delivery(_,_,_,City,_,_),LW),
+    sum_weights(LW,[LWe|_],_),
+    Y is LWe / 4300,%Y is sum of the load of every delivery divided by max load of a truck (4300)
+    ((Y >= 2.9, X is 4);%if Y is close to 3, X is 3
+    (Y <2.9, Y >=1.9, X is 3);
+    (Y <1.9, Y >=0.9, X is 2);
+    (X is 1)),!.
 
 generate_population([LW,LW3|Pop]):-
     population(TamPop),
@@ -680,6 +752,34 @@ evaluate_population([Ind|Rest],[Ind*Time|Rest1]):-
     calculate_cost(Ind,Time,_),
     evaluate_population(Rest,Rest1).
 
+evaluate_population1([],[]).
+evaluate_population1([Ind|Rest],[Ind1|Rest1]):-
+    evaluate_population(Ind,Ind1),
+    evaluate_population1(Rest,Rest1).
+
+order_population1([],[]).
+order_population1([PopEv|Rest],[L|PopEvOrd]):-
+    sort(2,@>, PopEv,L),
+    %order_population2(PopEv,L),
+    order_population1(Rest,PopEvOrd).
+
+order_population2(PopEv,PopEvOrd):-
+    bsort2(PopEv,PopEvOrd).
+
+bsort2([[X]],[[X]]):-!.
+bsort2([[X|_]|Xs],Ys):-
+    bsort2(Xs,Zs),
+    bexchange2([X|Zs],Ys).
+
+bexchange2([X],[X]):-!.
+bexchange2([X*VX,Y*VY|L1],[Y*VY|L2]):-
+    VX > VY,!,
+    bexchange2([X*VX|L1],L2).
+
+bexchange2([X|L1],[X|L2]):-bexchange2(L1,L2).
+
+
+
 order_population(PopEv,PopEvOrd):-
     bsort(PopEv,PopEvOrd).
 
@@ -696,7 +796,7 @@ bexchange([X*VX,Y*VY|L1],[Y*VY|L2]):-
 bexchange([X|L1],[X|L2]):-bexchange(L1,L2).
 
 generate_generation(G,G,Pop,_):-!,
-    write('Generation '),write(G),write(':'),nl,write(Pop),nl.
+    write('Generation '),write(G),write(' of original GA:'),nl,write(Pop),nl.
 generate_generation(N,G,Pop,PGen):-
     write('Generation '),write(N),write(':'),nl,write(Pop),nl,
     append(PGen,[Pop],PGen2),
@@ -731,19 +831,9 @@ compare_gen([H1|T1], [H2|T2]) :-
     H1 == H2,
     compare_gen(T1, T2).
 
-initialize_not_elitist:-write('Number of new generations: '),read(NG),
-    (retract(generations(_));true),assertz(generations(NG)),
-    write('Population dimensity: '),read(DP),
-    (retract(population(_));true),assertz(population(DP)), % population dimension
-    write('Probability of Crossover(%): '),read(P1), % crossover probability
-    PC is P1/100,
-    (retract(prob_crossover(_));true),assertz(prob_crossover(PC)),
-    write('Probablility of Mutation(%): '),read(P2), % mutation probability
-    PM is P2/100,
-    (retract(prob_mutation(_));true),assertz(prob_mutation(PM)).
 
 generate_not_elitist:-
-    initialize_not_elitist,
+    initialize,
     generate_population(Pop),
     write('Pop='),write(Pop),nl,
     evaluate_population(Pop,PopEv),
@@ -753,14 +843,14 @@ generate_not_elitist:-
     generate_generation1(0,NG,PopOrd).
 
 generate_generation1(G,G,H):-!,
-    write('Generation '),write(G),write(':'),nl,write(H),nl.
+    write('Generation '),write(G),write(' of not elitist solution:'),nl,write(H),nl.
 
 generate_generation1(N,G,[H|Pop]):-
     write('Generation '),write(N),write(':'),nl,write([H|Pop]),nl, 
     random_permutation([H|Pop], Pop1),% random_permutation changes order of given list
     crossover(Pop1,NPop1), 
-    mutation(NPop1,[H2|NPop]),
-    evaluate_population([H2|NPop],Npooop), %gives penalty for each element
+    mutation(NPop1,NPop),
+    evaluate_population(NPop,Npooop), %gives penalty for each element
     order_population(Npooop, [H3|_]),%gives us the best element of descendants
     del_rnd_n(Pop,NPop3),%deletes penalty from every element of list
     append(NPop3,NPop, NPop2),%joint two given lists to one to get T individuals
@@ -776,13 +866,13 @@ generate_generation1(N,G,[H|Pop]):-
     sort(2,@=<,NPopR1,NPopS), %sorts given list ascending order by the random number and deletes duplicates if any
     del_rnd_n(NPopS,NPopR2), %deletes penalty so we can order elements using the random number
     evaluate_population(NPopR2,NPopSEv), %gives penalty for each element
-    %N3 is (((N2-P)-T)*(-1)),
-    N3 is T - (N2-P),
+    N3 is T - (N2-P),%number of elements which foes to the nex generation
     delete_p(N3, NPopSEv, NPopSEv2),%deletes T - (N - P) elements from the list. 
-    sort(2,@=<, [H,H3], Best),
-    append(Best,NPopSEv2, Best1),
+    sort(2,@=<, [H,H3], Best),%sorts best elements so the better one is first
+    append(Best,NPopSEv2, Best1),%joint best elements to the rest of elements
     N1 is N + 1,
-    generate_generation1(N1,G,Best1).
+    sort(2,@=<, Best1, Best2),
+    generate_generation1(N1,G,Best2).
 
 
 add_rnd_n([],L,L).
@@ -803,15 +893,9 @@ NInd1*A1 = Ind1*A,NInd2*B1 = Ind2*B,
 del_penalty(Rest,Rest1).
 
 delete_p(0,Rest1,Rest1).
-delete_p(P, [_|Rest], Rest1):-
-((P < 1, P1 is 0, delete_p(P1, Rest, Rest1));
+delete_p(P, [H|Rest], Rest1):-
+((P < 1, P1 is 0, delete_p(P1, [H|Rest], Rest1));
 (P1 is P -1, delete_p(P1,Rest, Rest1),!)).
-
-
-
-
-
-
 
 generate_crossover_points(P1,P2):-generate_crossover_points1(P1,P2).
 generate_crossover_points1(P1,P2):-
@@ -916,3 +1000,16 @@ mutation23(G1,1,[G2|Ind],G2,[G1|Ind]):-!.
 mutation23(G1,P,[G|Ind],G2,[G|NInd]):-
     P1 is P - 1,
     mutation23(G1,P1,Ind,G2,NInd).
+
+%this has to be edited
+byTimes(_Request):-
+    heuristics_by_time(LW,LCharging,Time),
+    format('Content-type: text/plain~n~n'),
+    format('User registered!~n'),
+    format('LW: ~w~nLCharging: ~w~nTime: ~w~n',[LW,LCharging,Time]).
+
+%this has to be edited
+byWeight(_Request):-
+        heuristics_by_weight(LW,LWCharging,Time),
+        prolog_to_json([LW,LWCharging,Time],JSONObject5),
+        reply_json(JSONObject5).
