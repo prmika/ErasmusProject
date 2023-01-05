@@ -30,7 +30,8 @@ jobs:
       working-directory: ./Frontend/lab5frontend
       run: | 
         npm install
-        npm install -g @angular/cli@latest --force
+        npm config set legacy-peer-deps true
+        npm install -g @angular/cli@latest
     - name: Pm2 job runner
       run: | 
         pm2 start ecosystemAll.config.js
