@@ -626,11 +626,6 @@ generate_dynamic1:-
     generate_generation(0,NG,PopOrd,[]),
     changes.
 
-
-
-
-
-
 % Initialize parameters
 initialize:-write('Number of new generations: '),read(NG),
     (retract(generations(_));true),assertz(generations(NG)),
@@ -668,25 +663,23 @@ several_trucks:-
     generations(NG),!,
     generate_generation_truck(0,NG,PopOrd).
 
-generate_generation_truck(N,0,Pop):-!,
-    write('Entiiä '),write(N),write(' vittu of mulltiple trucks GA:'),nl,write(Pop),nl.
+generate_generation_truck(G,G,Pop):-!,
+    write('trucks '),write(G),write(':'),nl,write(Pop),nl.
 generate_generation_truck(N,G,[H|Pop]):-
     generate_generation9(0,G,H),
     N1 is N +1,
-    ((Pop = [],G1 is 0);
-    (G1 is G)),!,
-    generate_generation_truck(N1,G1,Pop).
+    generate_generation_truck(N1,G,Pop).
 
 generate_generation9(G,G,Pop,_):-!,
     write('Generation '),write(G),write(' of original GA:'),nl,write(Pop),nl.
 generate_generation9(N,G,Pop):-
-    write('Generation '),write(N),write(':'),nl,write(Pop),nl,
+    write('Final generation: '),nl,write(Pop),nl,
     crossover(Pop,NPop1),
     mutation(NPop1,NPop),
     evaluate_population(NPop,NPopEv),
     order_population(NPopEv,NPopOrd),
     N1 is N + 1,
-    generate_generation9(N1,G,NPopOrd).
+    generate_generation9(N1,G,NPopOrd),true.
 
 separate_pop1([],_,Z,Z).
 separate_pop1([H|Rest],X,L1,Z):-
