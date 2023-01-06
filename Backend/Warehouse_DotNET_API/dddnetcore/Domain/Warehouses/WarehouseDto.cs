@@ -10,5 +10,6 @@ namespace DDDSample1.Domain.Warehouses
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool IsActive { get; set; }
+        public double Altitude { get; set; }
     }
 }

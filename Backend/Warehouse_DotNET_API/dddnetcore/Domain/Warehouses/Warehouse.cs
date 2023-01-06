@@ -11,6 +11,7 @@ namespace DDDNetCore.Domain.Warehouses
         public double Latitude { get; private set; }
         public double Longitude { get; private set; }
         public bool IsActive { get; private set; }
+        public double Altitude { get; private set; }
 
 
         private Warehouse()
@@ -18,7 +19,7 @@ namespace DDDNetCore.Domain.Warehouses
 
         }
 
-        public Warehouse(string id,  string des, string add, double lat, double longt, bool active)
+        public Warehouse(string id,  string des, string add, double lat, double longt, bool active, double alt)
         {
             this.Id = id;
             this.Designation = des;
@@ -26,6 +27,7 @@ namespace DDDNetCore.Domain.Warehouses
             this.Latitude = lat;
             this.Longitude = longt;
             this.IsActive = active;
+            this.Altitude = alt;
         }
 
         
