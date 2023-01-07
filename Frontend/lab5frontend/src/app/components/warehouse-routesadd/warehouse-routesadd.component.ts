@@ -18,44 +18,46 @@ export class WarehouseRoutesaddComponent implements OnInit {
   constructor(private warehouseService: WarehouseService, private warehouseRouteService: WarehouseRouteService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated) {
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if (this.role == "admin" || this.role == "logistics_manager") {
-                  this.warehouseService.getWarehouses().subscribe({
-                    next: (v) => {
-                      v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each received warehouse the id will be pushed to the warehouseIds list.
-                      this.warehouseIds.sort(); //WarehouseIds list will be sorted.
-                      if (this.warehouseIds.length < 2) {
-                        this.min2WarehouseSuccessfullyLoaded = false; //If less than two warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.
-                      }
-                      else {
-                        this.departure_warehouseId = this.warehouseIds[0]; //Default selected departure warehouse is the first warehouse in the id list
-                        this.destination_warehouseId = this.warehouseIds[1]; //Default selected destination warehouse is the second warehouse in the id list
-                        this.min2WarehouseSuccessfullyLoaded = true; //Set to true so that the form is visible
-                      }
-                    },
-                    error: (e) => {
-                      console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be added at the moment. Try again later.");
-                      this.min2WarehouseSuccessfullyLoaded = false; //When there's an error to load warehouses it shouldn't be possible to create a warehouse route.
-                    },
-                  })
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role == "admin" || this.role == "logistics_manager") {
+                    this.warehouseService.getWarehouses().subscribe({
+                      next: (v) => {
+                        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each received warehouse the id will be pushed to the warehouseIds list.
+                        this.warehouseIds.sort(); //WarehouseIds list will be sorted.
+                        if (this.warehouseIds.length < 2) {
+                          this.min2WarehouseSuccessfullyLoaded = false; //If less than two warehouse exists this variable should be false so that on the html page the form won't be visible to create a new delivery.
+                        }
+                        else {
+                          this.departure_warehouseId = this.warehouseIds[0]; //Default selected departure warehouse is the first warehouse in the id list
+                          this.destination_warehouseId = this.warehouseIds[1]; //Default selected destination warehouse is the second warehouse in the id list
+                          this.min2WarehouseSuccessfullyLoaded = true; //Set to true so that the form is visible
+                        }
+                      },
+                      error: (e) => {
+                        console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be added at the moment. Try again later.");
+                        this.min2WarehouseSuccessfullyLoaded = false; //When there's an error to load warehouses it shouldn't be possible to create a warehouse route.
+                      },
+                    })
+                  }
+                  else {
+                    this.notFoundHidden = false;
+                  }
                 }
-                else{
-                  this.notFoundHidden = false;
-                }
-              }
-            });
-          }
-          else{
-            this.notFoundHidden = false;
-          }
-        })
-      });
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
   }
 
   //All the delivery fields

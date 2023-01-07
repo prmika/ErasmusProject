@@ -23,27 +23,29 @@ export class WarehouseRoutesComponent implements OnInit {
   constructor(private warehouseRouteService: WarehouseRouteService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated) {
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if (this.role == "admin" || this.role == "logistics_manager") {
-                  this.getWarehouseRoutes(); //Load warehouse routes data when user loads this page
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role == "admin" || this.role == "logistics_manager") {
+                    this.getWarehouseRoutes(); //Load warehouse routes data when user loads this page
+                  }
+                  else {
+                    this.notFoundHidden = false;
+                  }
                 }
-                else{
-                  this.notFoundHidden = false;
-                }
-              }
-            });
-          }
-          else{
-            this.notFoundHidden = false;
-          }
-        })
-      });
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
   }
 
   warehouseRoutes: WarehouseRoute[] = []; //Warehouses routes will be stored here

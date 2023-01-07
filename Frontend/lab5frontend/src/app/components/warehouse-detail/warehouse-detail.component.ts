@@ -26,27 +26,29 @@ export class WarehouseDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated) {
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if (this.role == "admin" || this.role == "warehouse_manager") {
-                  this.getWarehouse(); //Load the detailed warehouse data when loading this page
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role == "admin" || this.role == "warehouse_manager") {
+                    this.getWarehouse(); //Load the detailed warehouse data when loading this page
+                  }
+                  else {
+                    this.notFoundHidden = false;
+                  }
                 }
-                else{
-                  this.notFoundHidden = false;
-                }
-              }
-            });
-          }
-          else{
-            this.notFoundHidden = false;
-          }
-        })
-      });   
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
   }
 
   getWarehouse(): void {

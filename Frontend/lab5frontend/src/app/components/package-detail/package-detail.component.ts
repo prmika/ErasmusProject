@@ -20,30 +20,31 @@ export class PackageDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private truckService: TruckService, private deliveryService: DeliveryService, private packagingService: PackagesService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated) {
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if (this.role == "admin" || this.role == "logistics_manager") {
-                  this.getPackage();
-                  this.loadTruckIds();
-                  this.loadDeliveryIds();
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role == "admin" || this.role == "logistics_manager") {
+                    this.getPackage();
+                    this.loadTruckIds();
+                    this.loadDeliveryIds();
+                  }
+                  else {
+                    this.notFoundHidden = false;
+                  }
                 }
-                else {
-                  this.notFoundHidden = false;
-                }
-              }
-            });
-          }
-          else {
-            this.notFoundHidden = false;
-          }
-        })
-      });
-  }
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
+  
 
   //All the packaging fields
   singlePackage: Packaging | undefined;

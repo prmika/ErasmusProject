@@ -1,14 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlanningComponent } from './planning.component';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { AuthService } from '@auth0/auth0-angular';
+
 
 describe('PlanningComponent', () => {
   let component: PlanningComponent;
   let fixture: ComponentFixture<PlanningComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['loginWithRedirect']);
+
     await TestBed.configureTestingModule({
-      declarations: [ PlanningComponent ]
+      imports: [HttpClientTestingModule],
+      declarations: [PlanningComponent],
+      providers: [{ provide: AuthService, useValue: authServiceSpy }]
+
     })
     .compileComponents();
 

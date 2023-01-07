@@ -15,27 +15,29 @@ export class WarehousesComponent implements OnInit {
   constructor(private warehouseService: WarehouseService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated) {
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if (this.role == "admin" || this.role == "warehouse_manager") {
-                  this.getWarehouses(); //Load warehouse data when user loads this page
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role == "admin" || this.role == "warehouse_manager") {
+                    this.getWarehouses(); //Load warehouse data when user loads this page
+                  }
+                  else {
+                    this.notFoundHidden = false;
+                  }
                 }
-                else{
-                  this.notFoundHidden = false;
-                }
-              }
-            });
-          }
-          else{
-            this.notFoundHidden = false;
-          }
-        })
-      });
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
   }
 
   warehouses: Warehouse[] = []; //Warehouses will be stored here

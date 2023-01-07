@@ -15,27 +15,29 @@ export class TruckComponent implements OnInit {
   role: string | undefined;
   notFoundHidden = true;
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated){
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if(this.role == "admin" || this.role == "fleet_manager"){
-                  this.getTrucks(); //Load truck data when user loads this page
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role == "admin" || this.role == "fleet_manager") {
+                    this.getTrucks(); //Load truck data when user loads this page
+                  }
+                  else {
+                    this.notFoundHidden = false;
+                  }
                 }
-                else{
-                  this.notFoundHidden = false;
-                }
-              }
-            });
-          }
-          else{
-            this.notFoundHidden = false;
-          }
-        })      
-      }); 
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
   }
 
   trucks: Truck[] = []; //Trucks will be stored here

@@ -81,6 +81,7 @@ import { RoleCreateComponent } from './components/role-create/role-create.compon
     }),
   ],
   providers: [
+    HttpClientModule,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,

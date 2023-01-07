@@ -23,18 +23,20 @@ export class NavBarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated){
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-              }
-            });
-          };
-        })      
-      });
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                }
+              });
+            };
+          })
+        });
+    }
   }
 
   loginWithRedirect() {

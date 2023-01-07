@@ -30,43 +30,45 @@ export class WarehouseRoutesDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated) {
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if (this.role == "admin" || this.role == "logistics_manager") {
-                  this.getWarehouseRoute(); //Load the detailed warehouse route data when loading this page
-                  this.warehouseService.getWarehouses().subscribe({ //Load the warehousesIds
-                    next: (v) => {
-                      v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each warehouse push the id to the id list
-                      this.warehouseIds.sort();
-                      if (this.warehouseIds.length < 2) {
-                        this.min2WarehouseSuccessfullyLoaded = false; //set value to false if less than 2 warehouses were loaded
-                      }
-                      else {
-                        this.min2WarehouseSuccessfullyLoaded = true; //set value to true if more than 2 warehouses were loaded
-                      }
-                    },
-                    error: (e) => {
-                      console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be updated at the moment. Try again later.");
-                      this.min2WarehouseSuccessfullyLoaded = false; //set value to false because of loading error
-                    },
-                  })
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role == "admin" || this.role == "logistics_manager") {
+                    this.getWarehouseRoute(); //Load the detailed warehouse route data when loading this page
+                    this.warehouseService.getWarehouses().subscribe({ //Load the warehousesIds
+                      next: (v) => {
+                        v.forEach(warehouse => this.warehouseIds.push(warehouse.id)); //For each warehouse push the id to the id list
+                        this.warehouseIds.sort();
+                        if (this.warehouseIds.length < 2) {
+                          this.min2WarehouseSuccessfullyLoaded = false; //set value to false if less than 2 warehouses were loaded
+                        }
+                        else {
+                          this.min2WarehouseSuccessfullyLoaded = true; //set value to true if more than 2 warehouses were loaded
+                        }
+                      },
+                      error: (e) => {
+                        console.error("Internal Server Error, the GET request for warehouses couldn't be processed, which means no routes can't be updated at the moment. Try again later.");
+                        this.min2WarehouseSuccessfullyLoaded = false; //set value to false because of loading error
+                      },
+                    })
+                  }
+                  else {
+                    this.notFoundHidden = false;
+                  }
                 }
-                else{
-                  this.notFoundHidden = false;
-                }
-              }
-            });
-          }
-          else{
-            this.notFoundHidden = false;
-          }
-        })
-      });
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
   }
 
   getWarehouseRoute(): void {

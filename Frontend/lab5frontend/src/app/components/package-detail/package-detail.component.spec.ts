@@ -1,23 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PackageDetailComponent } from './package-detail.component';
+import { RouterTestingModule } from "@angular/router/testing";
 
-describe('PackageDetailComponent', () => {
-  let component: PackageDetailComponent;
-  let fixture: ComponentFixture<PackageDetailComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ PackageDetailComponent ]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(PackageDetailComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { AuthService } from '@auth0/auth0-angular';

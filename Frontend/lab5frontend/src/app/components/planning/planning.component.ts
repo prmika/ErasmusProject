@@ -17,24 +17,26 @@ export class PlanningComponent implements OnInit {
   constructor(private warehouseService: WarehouseService, private planningService: PlanningService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
-    this.auth.user$.subscribe(
-      (profile) => {
-        this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-          if (isAuthenticated) {
-            this.user.getUser(profile.email).subscribe({
-              next: (data) => {
-                this.role = data.role;
-                if (this.role != "logistics_manager" && this.role != "admin") {
-                  this.notFoundHidden = false;
+    if (this.auth.user$) {
+      this.auth.user$.subscribe(
+        (profile) => {
+          this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+            if (isAuthenticated) {
+              this.user.getUser(profile.email).subscribe({
+                next: (data) => {
+                  this.role = data.role;
+                  if (this.role != "logistics_manager" && this.role != "admin") {
+                    this.notFoundHidden = false;
+                  }
                 }
-              }
-            });
-          }
-          else {
-            this.notFoundHidden = false;
-          }
-        })
-      });
+              });
+            }
+            else {
+              this.notFoundHidden = false;
+            }
+          })
+        });
+    }
   }
 
   selectedDate: string | undefined; //The date the user selects via the field

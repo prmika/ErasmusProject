@@ -1,14 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeliveryaddComponent } from './deliveryadd.component';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { AuthService } from '@auth0/auth0-angular';
 
 describe('DeliveryaddComponent', () => {
   let component: DeliveryaddComponent;
   let fixture: ComponentFixture<DeliveryaddComponent>;
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['loginWithRedirect']);
+
     await TestBed.configureTestingModule({
-      declarations: [ DeliveryaddComponent ]
+      declarations: [DeliveryaddComponent],
+      imports: [HttpClientTestingModule],
+      providers: [{ provide: AuthService, useValue: authServiceSpy }]
     })
     .compileComponents();
 
