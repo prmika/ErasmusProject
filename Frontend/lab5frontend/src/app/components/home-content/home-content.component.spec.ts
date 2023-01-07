@@ -27,7 +27,13 @@ describe('HomeContentComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Component contains right title of the site', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    expect(compiled.querySelector('p').textContent).toContain('ElectricGo');
+  });
+  
 });

@@ -25,7 +25,16 @@ describe('TruckDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfullu', () => {
     expect(component).toBeTruthy();
   });
+
+  it('GetTruck exists and works', () => {
+    expect(component.getTruck).toBeTruthy();
+  });
+
+  it('UpdateTruck exists in the component', () => {
+    expect(component.updateTruck).toBeTruthy();
+  });
+
 });

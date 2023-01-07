@@ -24,7 +24,17 @@ describe('RoleCreateComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
   });
+
+  it('AddRole function exists and works', () => {
+    expect(component.addRole).toBeTruthy();
+    expect(component.roleWasSuccessfullyAddedHidden).toBeTrue();
+    fixture.detectChanges();
+  });
+
+
+
+
 });

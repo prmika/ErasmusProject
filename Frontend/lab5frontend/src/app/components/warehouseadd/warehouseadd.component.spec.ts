@@ -24,7 +24,11 @@ describe('WarehouseAddComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('Option to add a warehouse exists', () => {
+    expect(component.addWarehouse).toBeTruthy();
   });
 });

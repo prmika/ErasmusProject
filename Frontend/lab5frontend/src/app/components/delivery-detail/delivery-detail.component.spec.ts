@@ -25,7 +25,16 @@ describe('DeliveryDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successffully', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('GetDelivery exists and works', () => {
+    expect(component.getDelivery).toBeTruthy();
+  });
+
+  it('UpdateDelivery exists and works', () => {
+    expect(component.updateDelivery).toBeTruthy();
+    expect(component.successnotificationHidden).toBeTrue();
   });
 });

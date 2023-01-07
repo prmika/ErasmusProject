@@ -23,7 +23,15 @@ describe('UsersComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Function concerning users exist in the component', () => {
+    expect(component.getUsers).toBeTruthy();
+    expect(component.executeAnonymizing).toBeTruthy();
+    expect(component.cancelAnonymizing).toBeTruthy();
+    expect(component.showAnonymizingNotification).toBeTruthy();
+  });
+
 });

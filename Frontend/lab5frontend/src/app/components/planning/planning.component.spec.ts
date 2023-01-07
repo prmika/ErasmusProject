@@ -26,7 +26,11 @@ describe('PlanningComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
+  });
+  it('RetrievePlanning function exists and works', () => {
+    expect(component.retrievePlanning).toBeTruthy();
+    fixture.detectChanges();
   });
 });

@@ -25,7 +25,16 @@ describe('RolesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('At least 1 role exists', () => {
+    expect(component.roles).toBeTruthy();
+  });
+
+  it('GetRoles function works properly', () => {
+    expect(component.getRoles).toBeTruthy();
+    fixture.detectChanges();
   });
 });

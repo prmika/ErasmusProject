@@ -24,7 +24,15 @@ describe('TruckComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('Array of trucks exists in the component', () => {
+    expect(component.trucks).toBeTruthy();
+  });
+
+  it('GetTrucks method exists in the component', () => {
+    expect(component.getTrucks).toBeTruthy();
   });
 });

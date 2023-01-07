@@ -24,7 +24,12 @@ describe('TruckAddComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('There is an option to add a truck', () => {
+    expect(component.addTruck).toBeTruthy();
+    expect(component.truckWasSuccessfullyAddedHidden).toBeTrue();
   });
 });

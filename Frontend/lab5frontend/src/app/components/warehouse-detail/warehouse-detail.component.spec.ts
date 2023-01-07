@@ -25,7 +25,13 @@ describe('WarehouseDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('Functions concerning warehouses exist', () => {
+    expect(component.getWarehouse).toBeTruthy();
+    expect(component.updateWarehouse).toBeTruthy();
+    fixture.detectChanges();
   });
 });

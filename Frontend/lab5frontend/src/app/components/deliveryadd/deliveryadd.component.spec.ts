@@ -24,7 +24,12 @@ describe('DeliveryaddComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('Component created successfully', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('Function addDelivery exists and works', () => {
+    expect(component.addDelivery).toBeTruthy();
+    expect(component.deliveryWasSuccessfullyAddedHidden).toBeTrue();
   });
 });
