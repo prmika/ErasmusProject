@@ -671,9 +671,9 @@ generate_generation_truck(N,G,[H|Pop]):-
     generate_generation_truck(N1,G,Pop).
 
 generate_generation9(G,G,Pop,_):-!,
-    write('Final generation '),write(G),nl,write(Pop),nl.
+    write('Several trucks: '),write(G),nl,write(Pop),nl.
 generate_generation9(N,G,Pop):-
-    write('Final generation: '),nl,write(Pop),nl,
+    write('Several trucks: '),nl,write(Pop),nl,
     crossover(Pop,NPop1),
     mutation(NPop1,NPop),
     evaluate_population(NPop,NPopEv),
