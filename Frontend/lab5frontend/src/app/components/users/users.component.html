@@ -4,6 +4,8 @@
 
 <ng-template #loaded>
   <div *ngIf="(role == 'admin') && (auth.isAuthenticated$  | async)">
+    <div style="text-align: center;"><button class="button is-info" routerLink="/user/create"
+      style="margin: 15px"><i class="fa fa-user" aria-hidden="true"></i>Create new User</button></div>
     <div *ngIf="usersSuccessfullyLoaded">
       <div class="card" *ngFor="let user of users">
         <div *ngIf="user.isActive">

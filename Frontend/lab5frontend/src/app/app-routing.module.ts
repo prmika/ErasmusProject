@@ -22,6 +22,7 @@ import { WarehousesComponent } from './components/warehouses/warehouses.componen
 import { UsersComponent } from './components/users/users.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { RoleCreateComponent } from './components/role-create/role-create.component';
+import { UseraddComponent } from './components/useradd/useradd.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,11 @@ const routes: Routes = [
   {
     path: 'users',
     component: UsersComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'user/create',
+    component: UseraddComponent,
     canActivate: [AuthGuard],
   },
   {

@@ -35,6 +35,7 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { UsersComponent } from './components/users/users.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { RoleCreateComponent } from './components/role-create/role-create.component';
+import { UseraddComponent } from './components/useradd/useradd.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { RoleCreateComponent } from './components/role-create/role-create.compon
     NotfoundComponent,
     UsersComponent,
     RolesComponent,
-    RoleCreateComponent
+    RoleCreateComponent,
+    UseraddComponent
   ],
   imports: [
     BrowserModule,

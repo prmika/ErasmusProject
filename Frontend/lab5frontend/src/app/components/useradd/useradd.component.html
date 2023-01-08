@@ -1,0 +1,112 @@
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div style="margin: 20px" *ngIf="min1RoleSuccessfullyLoaded">
+            <p class="create-title"><i class="fa fa-user"></i> Create a new User</p>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">First Name</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. Peter"
+                                [(ngModel)]="firstName" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-tag"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Last Name</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. Merksems"
+                                [(ngModel)]="lastName" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-tag"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">PhoneNr</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="text" placeholder="e.g. +32468524598"
+                                [(ngModel)]="phoneNr" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-phone"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="field is-horizontal">
+                <div class="field-body">
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="email" placeholder="e.g. petermerkems@gmail.com"
+                                [(ngModel)]="email" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <p class="control is-expanded has-icons-left">
+                            <input class="input" type="password" placeholder="e.g. verysafepassword"
+                                [(ngModel)]="password" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-key"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Role</label>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="userRole">
+                                    <option *ngFor="let option of roleNames" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-flag"></i>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px">
+                <button class="button is-info" style="text-align: center;" (click)="addUser()">
+                    Create the user
+                </button>
+                <button class="button is-dark" style="text-align: center;" routerLink="/users">
+                    Return
+                </button>
+            </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The user couldn't be created. Make sure to fill in all the necessary data to create a User.
+            </div>
+            <div class="notification is-danger" [hidden]="userWasNotAddedErrorHidden">
+                The user couldn't be created because of an internal Server Error. Please try again later!
+            </div>
+            <div class="notification is-success" [hidden]="userWasSuccessfullyAddedHidden">
+                The new user was successfully created! You will be redirected to the main users page in 5 seconds.
+            </div>
+        </div>
+        <div *ngIf="!min1RoleSuccessfullyLoaded">
+            <div class="notification is-danger">
+                At the moment, no new user can be created because we are not able to retrieve at least 1 role. Please try again later!
+            </div>
+            <div style="text-align: center;">
+                <button class="button is-dark" style="text-align: center;" routerLink="/users">
+                    Return
+                </button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
+    </div>
+</ng-template>

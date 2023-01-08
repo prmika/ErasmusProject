@@ -29,4 +29,9 @@ export class UserService {
     const url = `http://localhost:3000/api/auth/anonymize/${id}`;
     return this.http.post<User[]>(url,null);
   }
+
+  addUser(user: User): Observable<User> {
+    const url = 'http://localhost:3000/api/auth/signup'
+    return this.http.post<User>(url, user, this.httpOptions);
+  }
 }
