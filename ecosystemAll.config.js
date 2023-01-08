@@ -13,6 +13,11 @@ module.exports = {
     name   : "Frontend",
     script : "ng serve --host 0.0.0.0",
     cwd    : "./Frontend/lab5frontend"
+  },
+  {
+    name   : "Road",
+    script : "five-server . -p 5500",
+    cwd    : "./Frontend/lab5frontend/src/Road"
   }
 ]
 }

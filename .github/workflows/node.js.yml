@@ -29,8 +29,8 @@ jobs:
     - name: install angular dependencies
       working-directory: ./Frontend/lab5frontend
       run: | 
-        npm install
         npm config set legacy-peer-deps true
+        npm install
         npm install -g @angular/cli@latest
     - name: Pm2 job runner
       run: | 
