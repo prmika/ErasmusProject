@@ -341,19 +341,10 @@ main_warehouse(5).
 
 truck_weight(6).
 
-:-dynamic delivery/6.
+:-dynamic delivery/6. 
 
 %delivery(id, date, weight, destWarehouse, timeToLoad, timeToUnload)
 %delivery(0,0,0,5,0,0).
-
-%delivery(4439, 20221128, 200, 1, 8, 10).
-%delivery(4446, 20221128, 150, 9, 7, 9).
-%delivery(4441, 20221128, 100, 3, 5, 7).
-%delivery(4445, 20221128, 120, 8, 6, 8).
-%delivery(4448, 20221128, 300, 11, 15, 20).
-%delivery(4398, 20221205, 310, 17, 16, 20).
-
-
 %delivery(4432, 20221205, 270, 14, 14, 18).
 %delivery(4437, 20221205, 180, 12, 9, 11).
 %delivery(4451, 20221205, 220, 6, 9, 12).
@@ -366,22 +357,30 @@ truck_weight(6).
 %delivery(4456, 20221205, 330, 16, 17, 21).
 
 
-delivery(6439, 20230110, 200, 1, 8, 10).
-delivery(6438, 20230110, 750, 9, 25, 30).
-delivery(6445, 20230110, 1600, 3, 53, 62).
-delivery(6443, 20230110, 120, 8, 6, 8).
-delivery(6449, 20230110, 300, 11, 15, 20).
-delivery(6398, 20230110, 310, 17, 16, 20).
-delivery(6432, 20230110, 1700, 14, 55, 65).
-delivery(6437, 20230110, 900, 12, 30, 35).
-delivery(6451, 20230110, 440, 6, 18, 24).
-delivery(6452, 20230110, 1400, 13, 47, 58).
-delivery(6444, 20230110, 380, 2, 20, 25).
-delivery(6455, 20230110, 560, 7, 28, 38).
-delivery(6399, 20230110, 260, 15, 13, 18).
-delivery(6454, 20230110, 350, 10, 18, 22).
-delivery(6446, 20230110, 260, 4, 14, 17).
-delivery(6456, 20230110, 850, 16, 27, 31).
+delivery(4439, 20221128, 200, 1, 8, 10).
+delivery(4446, 20221128, 150, 9, 7, 9).
+delivery(4441, 20221128, 100, 3, 5, 7).
+delivery(4445, 20221128, 120, 8, 6, 8).
+delivery(4448, 20221128, 300, 11, 15, 20).
+delivery(4398, 20221205, 310, 17, 16, 20).
+
+
+%delivery(6439, 20230110, 200, 1, 8, 10).
+%delivery(6438, 20230110, 750, 9, 25, 30).
+%delivery(6445, 20230110, 1600, 3, 53, 62).
+%delivery(6443, 20230110, 120, 8, 6, 8).
+%delivery(6449, 20230110, 300, 11, 15, 20).
+%delivery(6398, 20230110, 310, 17, 16, 20).
+%delivery(6432, 20230110, 1700, 14, 55, 65).
+%delivery(6437, 20230110, 900, 12, 30, 35).
+%delivery(6451, 20230110, 440, 6, 18, 24).
+%delivery(6452, 20230110, 1400, 13, 47, 58).
+%delivery(6444, 20230110, 380, 2, 20, 25).
+%delivery(6455, 20230110, 560, 7, 28, 38).
+%delivery(6399, 20230110, 260, 15, 13, 18).
+%delivery(6454, 20230110, 350, 10, 18, 22).
+%delivery(6446, 20230110, 260, 4, 14, 17).
+%delivery(6456, 20230110, 850, 16, 27, 31).
 
 
 
@@ -579,7 +578,7 @@ compareTwoListsEqual([H|T],[H2|T2]):-
     H =:= H2,
     compareTwoListsEqual(T,T2).
 
-
+%predicate to add delivery
 add_delivery:-
 write('Id: '),read(Id),
     write('Date: '),read(Date),
@@ -590,6 +589,7 @@ write('Id: '),read(Id),
     asserta(delivery(Id,Date,W,W1,TL,TU)),%create a new delivery to the beginning of the list
     write('New delivery added.'),nl.
 
+%predicate to edit delivery
 change_delivery:-
 write('Id of delivery: '),read(Id),
     write('New load: '),read(LP),
@@ -598,11 +598,13 @@ write('Id of delivery: '),read(Id),
     asserta(delivery(Id,Date,LP,W1,TL,TU)),%adds new delivery
     write('Delivery modified.'),nl.
 
+%predicate to delete delivery
 delete_delivery:-
 write('Id of the delivery you want to delete: '),read(Id),
     retractall(delivery(Id,_,_,_,_,_)),%deletes delivery
     write('Delivery deleted.'),nl.
-    
+
+%predicate where we can choose what we want to do to the deliveries
 changes:-
 write('Do you want to make changes to deliveries?'),nl,
 write('1 = add a delivery,2 = change a delivery,3 = delete a delivery, 0 = end: '),read(X),
@@ -648,18 +650,16 @@ generate:-
     generations(NG),!,
     generate_generation(0,NG,PopOrd,[]).
 
-
 several_trucks:-
     initialize,
-    truck_multiplier(X),
-    X1 is X -1,
+    truck_multiplier(X),%this gives how many trucks we need
+    X1 is X -1, 
     generate_population(Pop),
     write('Pop='),write(Pop),nl,
-    separate_pop1(Pop,X1,_,Npop),
+    separate_pop1(Pop,X1,_,Npop),%this separates elements from population to every truck
     evaluate_population1(Npop,PopEv),
     write('PopEv='),write(PopEv),nl,
     order_population1(PopEv,PopOrd),
-    write('Popord='),write(PopOrd),nl,
     generations(NG),!,
     generate_generation_truck(0,NG,PopOrd).
 
@@ -671,7 +671,7 @@ generate_generation_truck(N,G,[H|Pop]):-
     generate_generation_truck(N1,G,Pop).
 
 generate_generation9(G,G,Pop,_):-!,
-    write('Generation '),write(G),write(' of original GA:'),nl,write(Pop),nl.
+    write('Final generation '),write(G),nl,write(Pop),nl.
 generate_generation9(N,G,Pop):-
     write('Final generation: '),nl,write(Pop),nl,
     crossover(Pop,NPop1),
@@ -683,7 +683,7 @@ generate_generation9(N,G,Pop):-
 
 separate_pop1([],_,Z,Z).
 separate_pop1([H|Rest],X,L1,Z):-
-    separate_pop(H,X,6,_,_,L),
+    separate_pop(H,X,4,_,_,L),
     L2 = [L|L1],
     separate_pop1(Rest,X,L2,Z).
 
@@ -693,7 +693,7 @@ separate_pop(Pop,M,0,Npop,L,Z):-
     M1 is M -1, 
     ((M1 < 1,Pop1 = 0, Npop1 = [Pop,Npop|L]);
     (Npop1 = [Npop|L], Pop1 = Pop)),!, 
-    separate_pop(Pop1,M1,6,_,Npop1,Z).
+    separate_pop(Pop1,M1,4,_,Npop1,Z).
 
 separate_pop([H|Rest],M,X,Rest1,L,Z):-
         X1 is X -1,
@@ -703,10 +703,10 @@ truck_multiplier(X):-
     findall(City,delivery(_,_,_,City,_,_),LW),
     sum_weights(LW,[LWe|_],_),
     Y is LWe / 4300,%Y is sum of the load of every delivery divided by max load of a truck (4300)
-    ((Y >= 2.9, X is 4);%if Y is close to 3, X is 3
-    (Y <2.9, Y >=1.9, X is 3);
-    (Y <1.9, Y >=0.9, X is 2);
-    (X is 1)),!.
+    ((Y >= 2.9, X is 5);%if Y is close to 3, X is 3
+    (Y <2.9, Y >=1.9, X is 4);
+    (Y <1.9, Y >=0.9, X is 3);
+    (X is 2)),!.
 
 generate_population([LW,LW3|Pop]):-
     population(TamPop),
