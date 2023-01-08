@@ -65,6 +65,9 @@ sunLight.shadow.mapSize.height = 512; // default
 sunLight.shadow.camera.near = 0.5; // default
 sunLight.shadow.camera.far = 500; // default
 
+let directionalTruckLight = new THREE.DirectionalLight(0xffffff, 0.4);
+scene.add(directionalTruckLight);
+
 /////////////////////////////////////////////////////////
 /////////////CREATION OF CAMERA CONTROLLER///////////////
 
@@ -344,6 +347,7 @@ function onKeyDown(event) {
             if(truck) truck.rotation.y -= 0.1;
             break;
     }
+    directionalTruckLight.position.set(truck.position.x, truck.position.y, truck.position.z); //We correct the position of the lights of the truck
 }
 
 function onKeyUp(event) {
