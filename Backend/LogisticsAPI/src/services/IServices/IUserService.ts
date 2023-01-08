@@ -7,4 +7,5 @@ export default interface IUserService  {
   getUser(email: string): Promise<Result<IUserDTO>>
   findAll(): Promise<Result<IUserDTO[]>>
   anonymize(id: string): Promise<Result<IUserDTO>>
+  updateUser(userId: string, userDTO: IUserDTO): Promise<Result<IUserDTO>>;
 }

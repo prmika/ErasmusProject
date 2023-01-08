@@ -31,16 +31,32 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.email;
   }
 
+  set email(value: UserEmail) {
+    this.props.email = value;
+  }
+
   get firstName (): string {
     return this.props.firstName
+  }
+
+  set firstName(value: string) {
+    this.props.firstName = value;
   }
 
   get lastName (): string {
     return this.props.lastName;
   }
 
+  set lastName(value: string) {
+    this.props.lastName = value;
+  }
+
   get password (): UserPassword {
     return this.props.password;
+  }
+
+  set password (value: UserPassword) {
+    this.props.password = value;
   }
 
   get role (): Role {
@@ -53,6 +69,10 @@ export class User extends AggregateRoot<UserProps> {
 
   get phoneNr (): string {
     return this.props.phoneNr;
+  }
+
+  set phoneNr (value: string) {
+    this.props.phoneNr = value;
   }
 
   get isActive (): Boolean {

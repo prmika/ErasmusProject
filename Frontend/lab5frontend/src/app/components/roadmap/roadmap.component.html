@@ -1,0 +1,11 @@
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+  </div>
+  
+  <ng-template #loaded>
+    <div *ngIf="auth.isAuthenticated$  | async">
+      <div style="text-align: center;"><button class="button is-info"
+          style="margin: 15px;"><a href="http://217.160.104.201:5500" style="color: white;">Load the roadmap</a></button>
+          </div>
+    </div>
+  </ng-template>

@@ -36,6 +36,8 @@ import { UsersComponent } from './components/users/users.component';
 import { RolesComponent } from './components/roles/roles.component';
 import { RoleCreateComponent } from './components/role-create/role-create.component';
 import { UseraddComponent } from './components/useradd/useradd.component';
+import { RoadmapComponent } from './components/roadmap/roadmap.component';
+import { UserDetailComponent } from './components/user-detail/user-detail.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +67,9 @@ import { UseraddComponent } from './components/useradd/useradd.component';
     UsersComponent,
     RolesComponent,
     RoleCreateComponent,
-    UseraddComponent
+    UseraddComponent,
+    RoadmapComponent,
+    UserDetailComponent
   ],
   imports: [
     BrowserModule,

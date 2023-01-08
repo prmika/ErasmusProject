@@ -43,6 +43,7 @@ export class WarehouseAddComponent implements OnInit {
   address: string | undefined;
   latitude: number | undefined;
   longitude: number | undefined;
+  altitude: number | undefined;
 
   notAllFieldsHaveDataErrorHidden = true; //Shows error when not all data was given
   warehouseWasSuccessfullyAddedHidden = true; //Show success message when warehouse was successfully created
@@ -59,7 +60,8 @@ export class WarehouseAddComponent implements OnInit {
         "address": this.address,
         "latitude": this.latitude,
         "longitude": this.longitude,
-        "isActive": true
+        "isActive": true,
+        "altitude": 1
       }
       this.warehouseService.addWarehouse(body as Warehouse).subscribe({ //Will call the service to create the warehouse
         next: (v) => {

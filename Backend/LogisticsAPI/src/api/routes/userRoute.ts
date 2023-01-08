@@ -31,7 +31,7 @@ export default (app: Router) => {
     }),
     async (req: Request, res: Response, next: NextFunction) => {
       const logger = Container.get('logger') as winston.Logger;
-      logger.debug('Calling Sign-Up endpoint with body: %o', req.body )
+      logger.debug('Calling Sign-Up endpoint with body: %o', req.body)
 
       try {
         const authServiceInstance = Container.get(AuthService);
@@ -41,8 +41,8 @@ export default (app: Router) => {
           logger.debug(userOrError.errorValue())
           return res.status(401).send(userOrError.errorValue());
         }
-    
-        const {userDTO, token} = userOrError.getValue();
+
+        const { userDTO, token } = userOrError.getValue();
 
         return res.status(201).json({ userDTO, token });
       } catch (e) {
@@ -51,6 +51,19 @@ export default (app: Router) => {
       }
     },
   );
+  
+  route.put('/user/:email',
+    celebrate({
+      body: Joi.object({
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required(),
+        email: Joi.string().required(),
+        password: Joi.string().required(),
+        role: Joi.string().required(),
+        phoneNr: Joi.string().required(),
+      }),
+    }),
+    (req, res, next) => ctrl.updateUser(req, res, next));
 
   route.get('/user/:email', (req, res, next) => ctrl.getUser(req, res, next));
 
@@ -75,7 +88,7 @@ export default (app: Router) => {
     }
   });
 
-  route.post('/anonymize/:id', (req: Request, res: Response, next: NextFunction) => ctrl.anonymizeUser(req,res,next));
+  route.post('/anonymize/:id', (req: Request, res: Response, next: NextFunction) => ctrl.anonymizeUser(req, res, next));
 
   route.get('', (req: Request, res: Response, next: NextFunction) => ctrl.getAllUsers(req, res, next));
 

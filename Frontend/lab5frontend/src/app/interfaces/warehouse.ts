@@ -5,4 +5,5 @@ export interface Warehouse {
     latitude: number;
     longitude: number;
     isActive: Boolean;
+    altitude: number;
 }

@@ -1,0 +1,126 @@
+<div class="container" *ngIf="auth.isLoading$ | async; else loaded">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #loaded>
+    <div *ngIf="(role == 'logistics_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
+        <div *ngIf="currentUser && min1RoleSuccessfullyLoaded">
+            <div class="notification is-success" [hidden]="successnotificationHidden">
+                The user with email {{currentUser.email}} was updated successfully, you'll be redirected soon.
+            </div>
+            <div class="notification is-danger" [hidden]="errornotificationHidden">
+                The user with email {{currentUser.email}} couldn't be updated because of an internal Server
+                Error. Please try again later.
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src="https://static.vecteezy.com/system/resources/previews/000/649/115/original/user-icon-symbol-sign-vector.jpg"
+                                    alt="User photo">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">User</p>
+                            <p class="subtitle is-6">Id: {{currentUser.id}}</p>
+                        </div>
+                    </div>
+                    <div class="content field">
+                        <p><i class="fa fa-tag"></i><b> First Name </b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="text" placeholder="First Name" style="width: 400px;"
+                                [(ngModel)]="currentUser.firstName" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-tag"></i><b> Last Name </b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="text" placeholder="Last Name" style="width: 400px;"
+                                [(ngModel)]="currentUser.lastName" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-envelope"></i><b> Email </b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="email" placeholder="Email" style="width: 400px;"
+                                [(ngModel)]="currentUser.email" disabled>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-road"></i><b> Password </b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="password" placeholder="Password" style="width: 400px;"
+                                [(ngModel)]="currentUser.password" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-phone"></i><b> PhoneNr </b></p>
+                        <p class="control has-icons-left">
+                            <input class="input" type="text" placeholder="PhoneNr" style="width: 400px;"
+                                [(ngModel)]="currentUser.phoneNr" required>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </span>
+                        </p>
+                        <p><i class="fa fa-flag"></i><b> Role</b></p>
+                        <p class="control has-icons-left">
+                            <span class="select">
+                                <select [(ngModel)]="currentUser.role">
+                                    <option *ngFor="let option of roleNames" [value]="option">{{option}}</option>
+                                </select>
+                            </span>
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </p>
+                        <div class="field is-grouped is-grouped">
+                            <p class="control">
+                                <a class="button is-primary" (click)="updateUser()">
+                                    Save Changes
+                                </a>
+                            </p>
+                            <p class="control">
+                                <a class="button is-light" routerLink="/users">
+                                    Back
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="notification is-danger" [hidden]="notAllFieldsHaveDataErrorHidden">
+                The user couldn't be updated. Make sure to fill in all the necessary data to create a User.
+            </div>
+        </div>
+        <div *ngIf="!currentUser">
+            <div class="notification is-danger">
+                There was an error while trying to load the user data. Please try again later or try to go
+                back to the general
+                page with all the warehouse routes.<br>
+                The page will be reloaded every 5 seconds.<br>
+                <a class="button is-dark" routerLink="/users" style="margin: 10px;">
+                    Back
+                </a>
+            </div>
+        </div>
+        <div *ngIf="!min1RoleSuccessfullyLoaded">
+            <div class="notification is-danger">
+                At the moment, the user can't be updated because we are not able to retrieve at least 1 role. Please try again later!
+            </div>
+            <div style="text-align: center;">
+                <button class="button is-dark" style="text-align: center;" routerLink="/users">
+                    Return
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="!notFoundHidden">
+        <app-notfound></app-notfound>
+    </div>
+</ng-template>

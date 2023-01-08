@@ -164,7 +164,7 @@ export default class UserService implements IUserService {
     const found = !!user;
 
     if (found) {
-      const userDTOResult = UserMap.toDTO( user ) as IUserDTO;
+      const userDTOResult = UserMap.toDTO(user) as IUserDTO;
       userDTOResult.password = "Not readable"
       return Result.ok<IUserDTO>(userDTOResult);
     } else {
@@ -195,10 +195,42 @@ export default class UserService implements IUserService {
     const found = !!user;
 
     if (found) {
-      const userDTOResult = UserMap.toDTO( user ) as IUserDTO;
+      const userDTOResult = UserMap.toDTO(user) as IUserDTO;
       return Result.ok<IUserDTO>(userDTOResult);
     } else {
       return Result.fail<IUserDTO>("Anonymization is not possible as we couldn't find user with id =" + id);
+    }
+  }
+
+  public async updateUser(email: string, userDTO: IUserDTO): Promise<Result<IUserDTO>> {
+    try {
+      if (email == userDTO.email) {
+        const user = await this.userRepo.findByEmail(userDTO.email);
+        if (user === null) {
+          return Result.fail<IUserDTO>("User not found");
+        }
+        else {
+          const salt = randomBytes(32);
+          const hashedPassword = await bcrypt.hash(userDTO.password, 10);
+          const password = await UserPassword.create({ value: hashedPassword, hashed: true }).getValue();
+          const roleOrError = await this.getRole(userDTO.role);
+          
+          user.firstName = userDTO.firstName;
+          user.lastName = userDTO.lastName;
+          user.password = password;
+          user.phoneNr = userDTO.phoneNr;
+          user.role = roleOrError.getValue();
+          await this.userRepo.save(user);
+
+          const userDTOResult = UserMap.toDTO(user) as IUserDTO;
+          return Result.ok<IUserDTO>(userDTOResult)
+        }
+      }
+      else {
+        return Result.fail<IUserDTO>("Email doesn't match with Email in URL. Please make sure both match.");
+      }
+    } catch (e) {
+      throw e;
     }
   }
 }
