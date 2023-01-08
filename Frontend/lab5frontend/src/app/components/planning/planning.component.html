@@ -24,7 +24,7 @@
           Retrieve planning
         </button>
       </div>
-      <div class="card" *ngIf="planning">
+      <div class="card" *ngIf="planningLoaded">
         <div class="card-content">
           <div class="media">
             <div class="media-left">
@@ -34,14 +34,19 @@
             </div>
             <div class="media-content">
               <p class="title is-4">Planning</p>
-              <p class="subtitle is-6">The truck will do the following warehouses (in order of presence):</p>
+              <p class="subtitle is-6">The trucks will do the following route (in order of presence):</p>
             </div>
           </div>
           <div class="content">
             <ol>
-              <li *ngFor="let warehouseName of planning"> {{warehouseName}}</li>
+              <li *ngFor="let item of planning | keyvalue">
+                Truck: {{item.key}}
+                <div *ngFor='let id of item.value'>
+                  {{ id }}
+                </div>
+              </li>
             </ol>
-    
+
           </div>
         </div>
       </div>
@@ -54,9 +59,6 @@
     </div>
   </div>
   <div *ngIf="!notFoundHidden">
-      <app-notfound></app-notfound>
+    <app-notfound></app-notfound>
   </div>
 </ng-template>
-
-
-

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { Delivery } from 'src/app/interfaces/delivery';
+import { Truck } from 'src/app/interfaces/truck';
+import { DeliveryService } from 'src/app/services/delivery.service';
 import { PlanningService } from 'src/app/services/planning.service';
 import { TruckService } from 'src/app/services/truck.service';
 import { UserService } from 'src/app/services/user.service';
@@ -14,7 +17,7 @@ export class PlanningComponent implements OnInit {
 
   role: string | undefined;
   notFoundHidden = true;
-  constructor(private warehouseService: WarehouseService, private planningService: PlanningService, public auth: AuthService, private user: UserService) { }
+  constructor(private deliveryService: DeliveryService, private truckService: TruckService, public auth: AuthService, private user: UserService) { }
 
   ngOnInit(): void {
     if (this.auth.user$) {
@@ -40,24 +43,66 @@ export class PlanningComponent implements OnInit {
   }
 
   selectedDate: string | undefined; //The date the user selects via the field
-  planning: string[] | undefined; //Best path data will be stored here
   deliveryDataNotFoundHidden = true; //Hides error that will only be shown when no data could be found for a selected date.
 
   retrievePlanning() {
     if (this.selectedDate != undefined) {
-      if (this.selectedDate == "2022-12-05") { //Only possible date for now
-        let planningWarehouses = this.planningService.getPlanning();
-        this.warehouseService.getWarehouses().subscribe({
-          next: (v) => {
-            //Will read warehouse ids and convert it to readable names.
-            this.planning = v.filter(warehouse => planningWarehouses.includes(Number.parseInt(warehouse.id.charAt(2))) || planningWarehouses.includes(Number.parseInt(warehouse.id.slice(1)))).map(warehouse => warehouse.designation);
-          }
-        })
-      }
-      else {
-        this.deliveryDataNotFoundHidden = false; //Show no data error
-        setTimeout(() => this.deliveryDataNotFoundHidden = true, 5000); //Hides error again after 5 seconds
-      }
+        this.getPlanning();
     }
   }
+
+  deliveries: Delivery[] = [];
+  trucks: Truck[] = [];
+  planning = {};
+  planningLoaded = false;
+
+  getPlanning(): void { //Will load the planning data
+    let date1 = new Date(this.selectedDate).getTime();
+    this.deliveryService.getDeliveries().subscribe({
+      next: (v) => {
+        console.log(v);
+          this.deliveries = v;
+          this.truckService.getTrucks().subscribe({
+            next: (t) => {
+                this.planning = {};
+                this.trucks = t;
+                this.trucks.forEach(truck => {
+                  this.planning[truck.id] = ['W05'];
+                })
+                this.deliveries.forEach(delivery => {
+                  let isDone = false;  
+                  while (!isDone) {
+                    let truck = this.trucks[Math.floor(Math.random() * this.trucks.length)];
+                    let date2 = new Date(delivery.deliveryDate).getTime();
+                    if (delivery.weight <= truck.load_capacity && truck.status && date1 == date2){
+                      isDone = true;
+                      truck.load_capacity -= delivery.weight;
+                      this.planning[truck.id].push(delivery.warehouseID)
+                    }
+                    else if (!truck.status || date1 != date2){
+                      isDone = true;
+                    }
+                  }
+                });
+                this.trucks.forEach(truck => {
+                  if(this.planning[truck.id].length > 1){
+                    this.planning[truck.id].push('W05');
+                  }
+                  else{
+                    this.planning[truck.id] = ["Doesn't have to drive"]
+                  }
+                })
+                this.planningLoaded = true;
+            },
+            error: (e) => {
+              this.planning = null;
+            },
+          });
+      },
+      error: (e) => {
+        this.planning = null;
+      },
+    });
+  }
 }
+

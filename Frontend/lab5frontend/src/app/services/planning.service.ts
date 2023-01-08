@@ -1,6 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Delivery } from '../interfaces/delivery';
+import { Truck } from '../interfaces/truck';
+import { DeliveryService } from './delivery.service';
+import { TruckService } from './truck.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +16,6 @@ export class PlanningService {
   };
 
   constructor(
-    private http: HttpClient) { }
-
-  getPlanning(): Number[] {
-    return [17, 8, 3, 12, 1, 14, 11, 9]; //Only returns static data now, as no http server could be set up.
-  }
+    private http: HttpClient, private deliveryService: DeliveryService, private truckService: TruckService) { }
+  
 }
