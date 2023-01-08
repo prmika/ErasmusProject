@@ -4,7 +4,7 @@
 
 <ng-template #loaded>
   <div *ngIf="(role == 'logistics_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
-    <div style="text-align: center;"><button class="button is-info" routerLink="/warehouse-route/create"
+    <div style="text-align: center;"><button class="button is-info" id="roAdd" routerLink="/warehouse-route/create"
         style="margin: 15px"><i class="fa fa-plus" aria-hidden="true"></i>Create new Warehouse Route</button></div>
     <div *ngIf="warehouseRoutesSuccessfullyLoaded && warehouseRoutes.length > 0">
       <div class="card" *ngFor="let warehouseRoute of warehouseRoutes">

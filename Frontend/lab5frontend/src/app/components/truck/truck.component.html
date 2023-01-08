@@ -4,7 +4,7 @@
 
 <ng-template #loaded>
   <div *ngIf="(role == 'fleet_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
-    <div style="text-align: center;"><button class="button is-info" routerLink="/truck/create" style="margin: 15px"><i
+    <div style="text-align: center;"><button class="button is-info" id="trAdd" routerLink="/truck/create" style="margin: 15px"><i
           class="fa fa-plus" aria-hidden="true"></i>Create new Truck</button></div>
     <div *ngIf="trucksSuccessfullyLoaded">
       <div class="card" *ngFor="let truck of trucks">

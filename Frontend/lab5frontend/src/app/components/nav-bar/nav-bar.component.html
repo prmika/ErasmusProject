@@ -28,7 +28,7 @@
           </li>
           
           <li class="nav-item" *ngIf="(role == 'fleet_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
-            <a class="nav-link active"  routerLink="/trucks">
+            <a class="nav-link active" id="trucks"  routerLink="/trucks">
               Trucks
             </a>
           </li>

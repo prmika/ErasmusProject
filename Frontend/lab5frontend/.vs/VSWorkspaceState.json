@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\cypress",
+    "\\cypress\\fixtures",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\components",
+    "\\src\\app\\components\\nav-bar",
+    "\\src\\app\\components\\packages",
+    "\\src\\app\\components\\warehouse-routes",
+    "\\src\\app\\components\\warehouses"
+  ],
+  "SelectedNode": "\\src\\app\\components\\packages\\packages.component.html",
+  "PreviewInSolutionExplorer": false
+}

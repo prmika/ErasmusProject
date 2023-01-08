@@ -4,7 +4,7 @@
 
 <ng-template #loaded>
   <div *ngIf="(role == 'warehouse_manager' || role == 'admin') && (auth.isAuthenticated$  | async)">
-    <div style="text-align: center;"><button class="button is-info" routerLink="/delivery/create"
+    <div style="text-align: center;"><button class="button is-info" id="delAdd" routerLink="/delivery/create"
         style="margin: 15px"><i class="fa fa-plus" aria-hidden="true"></i>Create new Delivery</button></div>
     <div id="filtersegment" style="margin: 20px">
       <div class="field is-horizontal">
