@@ -11,7 +11,7 @@ module.exports = {
   },
   {
     name   : "Frontend",
-    script : "ng serve --host 0.0.0.0",
+    script : "ng serve --host 0.0.0.0 --ssl",
     cwd    : "./Frontend/lab5frontend"
   },
   {
