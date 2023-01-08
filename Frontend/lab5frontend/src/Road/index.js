@@ -38,17 +38,18 @@ renderer.shadowMapHeight = 1024;
 
 //////////////////////////////////////////////
 ///////////CREATION OF A SUN//////////////////
-const skyColor = 0xB1E1FF;  // light blue
-const groundColor = 0xB97A20;  // brownish orange
+const sky = 0xAEF1F3; //blue
+const ground = 0xB78824;  // Orange
 const intensity = 0.5;
-const hemispherelight = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+const hemispherelight = new THREE.HemisphereLight(sky, ground, intensity);
 scene.add(hemispherelight);
 
+let ambiantLight = new THREE.AmbientLight(0xffffff, 0.2);
+scene.add(ambiantLight);
 
 let sunLight = new THREE.DirectionalLight(0xffffff, 1);
 sunLight.castShadow = true; //We enable the shadows
-//const cameraHelper = new THREE.CameraHelper(sunLight.shadow.camera);
-//scene.add(cameraHelper);
+
 let d = 100;
 sunLight.shadow.camera.left = -d;
 sunLight.shadow.camera.right = d;
@@ -88,12 +89,43 @@ const visibleWidthAtZDepth = ( depth, camera ) => {
     const height = visibleHeightAtZDepth( depth, camera );
     return height * camera.aspect;
 };
+let newListOfWarehouses;
+let currentListOfWarehouses;
+//////////////////////////////////
+//TEST JSON
 
+const getWarehouses = async() => {
+    // const response = await fetch('http://217.160.104.201:5000/api/warehouses');
+    // const data = await response.json();
+    // //const jsondata = await JSON.parse(data);
+    // return data;
+    fetch('http://217.160.104.201:5000/api/warehouses')
+        .then(response => response.json())
+        .then(data => {
+            // data is the resolved value of the promise, which is the JSON representation of the response body
+            console.log(data[0].altitude);
+            newListOfWarehouses = data;
+            if(currentListOfWarehouses != newListOfWarehouses){
+                currentListOfWarehouses = newListOfWarehouses;
+                updatePositions();
+            }
+        })
+}
+
+function updatePositions(){
+
+    positions = [];
+    for(let i=0; i < currentListOfWarehouses.length; i++){
+        positions.push([currentListOfWarehouses[i].longitude, currentListOfWarehouses[i].latitude, currentListOfWarehouses[i].altitude]);
+    }
+
+
+}
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////DEFINITION OF WAREHOUSES LOCATIONS////////////////////////////
 
 //Warehouses longitude, latitude, altitude OR in three js axis : z, x, y
-const positions = [
+let positions = [
     [8.2451,40.9321,250],
     [8.6410,41.0072,550],
     [8.7613,42.1115,200],
@@ -136,6 +168,7 @@ let cities = [];
 //These values will allow us to replace the camera and the center of the orbit controller according to the positions of the cities.
 let xMin = 0, xMax = 0, yMin = 0, yMax = 0, zMax = 0;
 
+
 //We convert Geographical coordinates into Cartesian coordinates
 for (let i = 0; i < positions.length; i++){
     //Formula x=... in the doc Data.pdf
@@ -162,10 +195,6 @@ for (let i = 0; i < positions.length; i++){
 for (let i = 0; i < positions.length; i++){
     positions[i][2] = positions[i][2] - 2 * zMax - 3;
 }
-
-//We create a visual representation of the 3 axis to debug
-const axesHelper = new THREE.AxesHelper( 5 );
-scene.add( axesHelper );
 
 //We add the circles representing the cities in the scene.
 for (let i=0; i < positions.length; i++){
@@ -244,7 +273,6 @@ for (let i=0; i<positions.length; i++){
     }while(randomCity2 == i); //This makes impossible to connect a city to itself
     routes.push(new Road(3, i, randomCity2, circleRadius, positions, texture_road)); //We add the road between City i and an other one in the list of roads
     routes[i].roadGeometry.computeBoundingBox();
-    scene.add(new THREE.BoxHelper( routes[0].roadMesh, 0xffff00 ));
     routes[i].addToScene(scene);// We connect the 2 cities.
 /*
     do{
@@ -286,7 +314,22 @@ function onKeyDown(event) {
                 }
             }
             break;
+        case 87: // W key
+            if(truck) {
+
+                if(checkCollisionWarehouses() == false && checkCollisionRoads() == false){
+                    truck.translateZ(0.1 * fast);
+                    if(fast < fastMax){ //We accelerate the truck until it reach its max speed
+                        fast += 0.5;
+                    }
+
+                }
+            }
+            break;
         case 81: // Q key
+            if(truck) truck.rotation.y += 0.2;
+            break;
+        case 65: // A key
             if(truck) truck.rotation.y += 0.2;
             break;
         case 83: // S key
@@ -309,7 +352,13 @@ function onKeyUp(event) {
         case 90: // Z key
             fast = 1; //We reset the acceleration of the truck
             break;
+        case 87: // W key
+            fast = 1; //We reset the acceleration of the truck
+            break;
         case 81: // Q key
+            if(truck) truck.rotation.z = 0;
+            break;
+        case 65: // A key
             if(truck) truck.rotation.z = 0;
             break;
         case 83: // S key
@@ -354,7 +403,6 @@ function checkCollisionRoads(){
         for(let j = 0; j<routes.length;j++){
             let truckObject = truck;
             let roadObject = routes[j].roadMesh;
-            roadObject.userData.obb.copy(roadObject.geometry.userData.obb);
             let firstBB = new THREE.Box3().setFromObject(truckObject);
             let secondBB = new THREE.Box3().setFromObject(roadObject);
 
@@ -374,28 +422,20 @@ function checkCollisionRoads(){
 }
 
 
-//////////////////////////////////
-//TEST JSON
-async function getWarehouses() {
-    const response = await fetch('http://217.160.104.201:5000/api/warehouses');
-    const data = await response.json();
-    const jsondata = await JSON.parse(data);
-    return data;
-}
-let warehousesList = getWarehouses();
-
 
 
 //////////////////////////////////////////
 ////////////INFINITE LOOP/////////////////
-
+setInterval(getWarehouses, 5000); //We update the warehouses each 5 seconds
+setInterval(updatePositions, 5000);
 //This is the infinite loop that animates the scene
 function animate(){
+    //console.log(listOfWarehouses);
     //if(truck) updateTruck();
     requestAnimationFrame(animate);
     controls.update(); //We update the orbit controller
 
-    console.log(warehousesList);
+    //getWarehouses();
     renderer.render(scene, camera);
 }
 
