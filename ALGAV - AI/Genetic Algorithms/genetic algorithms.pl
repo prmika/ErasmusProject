@@ -661,25 +661,30 @@ several_trucks:-
     write('PopEv='),write(PopEv),nl,
     order_population1(PopEv,PopOrd),
     generations(NG),!,
-    generate_generation_truck(0,NG,PopOrd).
+    generate_generation_truck(0,NG,PopOrd,_).
+    
 
-generate_generation_truck(G,G,Pop):-!,
-    write('trucks '),write(G),write(':'),nl,write(Pop),nl.
-generate_generation_truck(N,G,[H|Pop]):-
+generate_generation_truck(G,G,_,X):-!,
+    write('final solution '),write(':'),nl,write(X),nl.
+
+generate_generation_truck(N,G,[H|Pop],X):-
+    %length(H,HL),
     generate_generation9(0,G,H),
     N1 is N +1,
-    generate_generation_truck(N1,G,Pop).
+    X1 = [H|X],
+    generate_generation_truck(N1,G,Pop,X1).
 
-generate_generation9(G,G,Pop,_):-!,
+generate_generation9(G,G,Pop):-!,
     write('Several trucks: '),write(G),nl,write(Pop),nl.
 generate_generation9(N,G,Pop):-
     write('Several trucks: '),nl,write(Pop),nl,
     crossover(Pop,NPop1),
     mutation(NPop1,NPop),
+    %del_rnd_n(Pop,NPop),
     evaluate_population(NPop,NPopEv),
     order_population(NPopEv,NPopOrd),
     N1 is N + 1,
-    generate_generation9(N1,G,NPopOrd),true.
+    generate_generation9(N1,G,NPopOrd).
 
 separate_pop1([],_,Z,Z).
 separate_pop1([H|Rest],X,L1,Z):-
