@@ -35,6 +35,7 @@ describe('DeliveryDetailComponent', () => {
 
   it('UpdateDelivery exists and works', () => {
     expect(component.updateDelivery).toBeTruthy();
+    fixture.detectChanges();
     expect(component.successnotificationHidden).toBeTrue();
   });
 });

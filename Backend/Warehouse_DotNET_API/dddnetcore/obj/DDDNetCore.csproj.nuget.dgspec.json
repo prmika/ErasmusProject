@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {}
+    "C:\\Users\\Patryk\\Desktop\\New folder\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {
+    "C:\\Users\\Patryk\\Desktop\\New folder\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+        "projectUniqueName": "C:\\Users\\Patryk\\Desktop\\New folder\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
         "projectName": "DDDNetCore",
-        "projectPath": "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+        "projectPath": "C:\\Users\\Patryk\\Desktop\\New folder\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
         "packagesPath": "C:\\Users\\Patryk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\obj\\",
+        "outputPath": "C:\\Users\\Patryk\\Desktop\\New folder\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Patryk\\AppData\\Roaming\\NuGet\\NuGet.Config",

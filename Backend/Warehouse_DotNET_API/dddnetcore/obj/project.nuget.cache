@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZJ3JAh8GRaOZYi83nq669LgbOhxqwB7RLphYkSZbV7i9BF1qG6vWVYE/lNyCIK8NczqoHyIPJYmz4e2YYvisxA==",
+  "dgSpecHash": "bEo+2mlO/2VFsoicIGbeTAG9hU1Rub83kTddIFnME3Gr1LXqc/uHKya3vEwYsl+XrGv5tcBqkjMjGz0ZgGr2qQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Patryk\\Desktop\\PROJECTS\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
+  "projectFilePath": "C:\\Users\\Patryk\\Desktop\\New folder\\Lab5Project\\Backend\\Warehouse_DotNET_API\\dddnetcore\\DDDNetCore.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Patryk\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Patryk\\.nuget\\packages\\microsoft.aspnet.cors\\5.2.9\\microsoft.aspnet.cors.5.2.9.nupkg.sha512",
